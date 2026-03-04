@@ -12,6 +12,8 @@ export default function Question({
   setAnswers,
   onPrevious,
   onNext,
+  onAnalyticsEvent,
+  onAnalyticsPatch,
   isFirst,
   sessionKey
 }) {
@@ -41,7 +43,11 @@ export default function Question({
   }, [canProceed, validationMessage])
 
   const handleNext = () => {
+    const questionId = String(question.id)
+
     if (!canProceed) {
+      onAnalyticsEvent(questionId, 'next_clicked_blocked')
+
       if (question.type === 'ranked-choice') {
         setValidationMessage('Please finish ranking your choices before proceeding.')
       } else if (question.type === 'range-sliders') {
@@ -58,9 +64,20 @@ export default function Question({
 
     setValidationMessage('')
 
+    let answerForAnalytics = committedAnswer
+
     if (!isImmediateQuestion && draftAnswer !== null) {
+      answerForAnalytics = draftAnswer
       setAnswers(prev => ({ ...prev, [question.id]: draftAnswer }))
     }
+
+    const now = Date.now()
+    onAnalyticsEvent(questionId, 'next_clicked_allowed', { answerSnapshot: answerForAnalytics })
+    onAnalyticsPatch(questionId, {
+      answerCommittedAt: now,
+      nextClickedAt: now,
+    })
+
     onNext()
   }
 
@@ -73,6 +90,7 @@ export default function Question({
             answer={committedAnswer}
             setAnswers={setAnswers}
             sessionKey={sessionKey}
+            onAnalyticsEvent={onAnalyticsEvent}
           />
         ) : question.type === 'ranked-choice' ? (
           <RankedChoice
@@ -80,6 +98,7 @@ export default function Question({
             sessionKey={sessionKey}
             onDraftChange={setDraftAnswer}
             onReadyChange={setCanProceedLocal}
+            onAnalyticsEvent={onAnalyticsEvent}
           />
         ) : question.type === 'range-sliders' ? (
           <RangeSliders
@@ -87,6 +106,7 @@ export default function Question({
             sessionKey={sessionKey}
             onDraftChange={setDraftAnswer}
             onReadyChange={setCanProceedLocal}
+            onAnalyticsEvent={onAnalyticsEvent}
           />
         ) : question.type === 'slide-select' || question.type === 'SlideSelect' ? (
           <SlideSelect
@@ -94,6 +114,7 @@ export default function Question({
             sessionKey={sessionKey}
             onDraftChange={setDraftAnswer}
             onReadyChange={setCanProceedLocal}
+            onAnalyticsEvent={onAnalyticsEvent}
           />
         ) : null
       }</div>

@@ -2,15 +2,19 @@ import React, { useEffect, useMemo, useState } from "react"
 import { getSelectRule, getSelectionInstruction, normalizeSelections, shuffle } from '../utils'
 import './index.scss'
 
-export default function MultipleChoice({ question, answer, setAnswers, sessionKey }) {
+export default function MultipleChoice({ question, answer, setAnswers, sessionKey, onAnalyticsEvent }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
   const selectRule = useMemo(() => getSelectRule(question.select), [question.select])
   const selections = normalizeSelections(answer)
   const isPhotoQuestion = question.type === 'multiple-choice-image'
 
   useEffect(() => {
-    setOrderedOptions(shuffle(question.answers))
-  }, [question.id, sessionKey])
+    const nextOrder = shuffle(question.answers)
+    setOrderedOptions(nextOrder)
+    onAnalyticsEvent(String(question.id), 'answers_presented_order', {
+      order: nextOrder.map(option => option.id),
+    })
+  }, [question.id, question.answers, sessionKey, onAnalyticsEvent])
 
   const isSelected = (optionId) => selections.includes(optionId)
 
@@ -23,24 +27,41 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
     setAnswers(prev => ({ ...prev, [question.id]: nextSelections }))
   }
 
-  const handleSelect = (optionId) => {
+  const handleSelect = (optionId, event) => {
+    const questionId = String(question.id)
     const currentlySelected = isSelected(optionId)
 
+    onAnalyticsEvent(questionId, 'pointer_down', {
+      optionId,
+      pressure: typeof event?.pressure === 'number' ? event.pressure : 0,
+      pointerType: event?.pointerType ?? 'mouse',
+    })
+
+    let nextSelections = selections
+
     if (selectRule.mode === 'exact' && selectRule.count === 1) {
-      commitSelections([optionId])
+      nextSelections = [optionId]
+    } else if (currentlySelected) {
+      nextSelections = selections.filter(id => id !== optionId)
+    } else if (selectRule.mode === 'exact' && selections.length >= selectRule.count) {
+      onAnalyticsEvent(questionId, 'selection_limit_reached', {
+        selectRule,
+        attemptedOptionId: optionId,
+      })
       return
+    } else {
+      nextSelections = [...selections, optionId]
     }
 
-    if (currentlySelected) {
-      commitSelections(selections.filter(id => id !== optionId))
-      return
-    }
+    commitSelections(nextSelections)
 
-    if (selectRule.mode === 'exact' && selections.length >= selectRule.count) {
-      return
-    }
-
-    commitSelections([...selections, optionId])
+    onAnalyticsEvent(questionId, 'answer_changed', {
+      optionId,
+      selected: !currentlySelected || (selectRule.mode === 'exact' && selectRule.count === 1),
+      selectionCount: nextSelections.length,
+      selections: nextSelections,
+      selectRule,
+    })
   }
 
   return (
@@ -53,7 +74,7 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
             key={option.id}
             type="button"
             className={`multiple-choice-answers-answer ${isSelected(option.id) ? 'selected' : ''}`}
-            onClick={() => handleSelect(option.id)}
+            onPointerDown={(event) => handleSelect(option.id, event)}
           >
             {isPhotoQuestion ? (
               <img

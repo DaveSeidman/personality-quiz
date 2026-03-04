@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { shuffle } from '../utils'
 import './index.scss'
 
-export default function RangeSliders({ question, sessionKey, onDraftChange, onReadyChange }) {
+export default function RangeSliders({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
   const [values, setValues] = useState({})
   const [touched, setTouched] = useState({})
@@ -14,7 +14,11 @@ export default function RangeSliders({ question, sessionKey, onDraftChange, onRe
     setTouched({})
     onDraftChange(null)
     onReadyChange(false)
-  }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange])
+
+    onAnalyticsEvent(String(question.id), 'answers_presented_order', {
+      order: nextOrder.map(option => option.id),
+    })
+  }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent])
 
   useEffect(() => {
     const touchedCount = Object.keys(touched).length
@@ -41,6 +45,11 @@ export default function RangeSliders({ question, sessionKey, onDraftChange, onRe
 
   const updateValue = (optionId, nextValue) => {
     setValues(prev => ({ ...prev, [optionId]: Number(nextValue) }))
+    onAnalyticsEvent(String(question.id), 'answer_changed', {
+      interaction: 'slider_change',
+      optionId,
+      value: Number(nextValue),
+    })
   }
 
   return (
@@ -61,7 +70,20 @@ export default function RangeSliders({ question, sessionKey, onDraftChange, onRe
                 max="1"
                 step="1"
                 value={values[option.id] ?? 0}
-                onPointerDown={() => markTouched(option.id)}
+                onPointerDown={(event) => {
+                  markTouched(option.id)
+                  onAnalyticsEvent(String(question.id), 'pointer_down', {
+                    optionId: option.id,
+                    pressure: typeof event.pressure === 'number' ? event.pressure : 0,
+                    pointerType: event.pointerType ?? 'mouse',
+                  })
+                }}
+                onPointerUp={(event) => {
+                  onAnalyticsEvent(String(question.id), 'pointer_up', {
+                    optionId: option.id,
+                    pressure: typeof event.pressure === 'number' ? event.pressure : 0,
+                  })
+                }}
                 onChange={(event) => {
                   markTouched(option.id)
                   updateValue(option.id, event.target.value)

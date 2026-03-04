@@ -9,12 +9,16 @@ export default function App() {
 
   const [attract, setAttract] = useState(true)
   const [answers, setAnswers] = useState({})
+  const [analytics, setAnalytics] = useState({})
+  const [showAnalysis, setShowAnalysis] = useState(false)
   const activityTimeoutRef = useRef(null)
   const INACTIVITY_TIMEOUT = 120000
+  const isProduction = import.meta.env.PROD
 
   const activityTimeout = () => {
     setAttract(true)
     setAnswers({})
+    setAnalytics({})
   }
 
   const resetInactivityTimeout = () => {
@@ -39,8 +43,19 @@ export default function App() {
         questions={quizData.questions}
         answers={answers}
         setAnswers={setAnswers}
+        analytics={analytics}
+        setAnalytics={setAnalytics}
       />
-      <Analysis answers={answers} />
+
+      {!isProduction ? (
+        <Analysis
+          answers={answers}
+          analytics={analytics}
+          visible={showAnalysis}
+          onToggle={() => setShowAnalysis(prev => !prev)}
+        />
+      ) : null}
+
       <Attract attract={attract} />
     </div>
   )

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './index.scss'
 
-export default function Results({ answers, onPrevious, onSubmit }) {
+export default function Results({ answers, analytics, confidenceWeights, onPrevious, onSubmit }) {
   const [status, setStatus] = useState('idle')
 
   const handleSubmit = async () => {
@@ -20,7 +20,7 @@ export default function Results({ answers, onPrevious, onSubmit }) {
       <h2 className="results-title">Review & Submit</h2>
       <p className="results-instruction">You can go back to change anything before submitting.</p>
 
-      <pre className="results-payload">{JSON.stringify(answers, null, 2)}</pre>
+      <pre className="results-payload">{JSON.stringify({ answers, analytics, confidenceWeights }, null, 2)}</pre>
 
       <div className="results-navigation">
         <button onClick={onPrevious}>Previous</button>

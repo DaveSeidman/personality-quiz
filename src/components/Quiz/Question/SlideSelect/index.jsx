@@ -10,7 +10,7 @@ import './index.scss'
 
 const CONFIRM_THRESHOLD = 0.5
 
-export default function SlideSelect({ question, sessionKey, onDraftChange, onReadyChange }) {
+export default function SlideSelect({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
   const [progressById, setProgressById] = useState({})
   const [confirmedIds, setConfirmedIds] = useState([])
@@ -22,14 +22,19 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
   const selectRule = useMemo(() => getSelectRule(question.select), [question.select])
 
   useEffect(() => {
-    setOrderedOptions(shuffle(question.answers))
+    const nextOrder = shuffle(question.answers)
+    setOrderedOptions(nextOrder)
     setProgressById({})
     setConfirmedIds([])
     setDraggingId(null)
     pointerRef.current = { pointerId: null, optionId: null }
     onDraftChange(null)
     onReadyChange(false)
-  }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange])
+
+    onAnalyticsEvent(String(question.id), 'answers_presented_order', {
+      order: nextOrder.map(option => option.id),
+    })
+  }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent])
 
   useEffect(() => {
     onReadyChange(isSelectionComplete(confirmedIds, question.select))
@@ -71,6 +76,12 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
     event.preventDefault()
     event.currentTarget.setPointerCapture(event.pointerId)
 
+    onAnalyticsEvent(String(question.id), 'pointer_down', {
+      optionId,
+      pressure: typeof event.pressure === 'number' ? event.pressure : 0,
+      pointerType: event.pointerType ?? 'mouse',
+    })
+
     pointerRef.current = { pointerId: event.pointerId, optionId }
     setDraggingId(optionId)
 
@@ -82,6 +93,11 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
     const pointer = pointerRef.current
     if (!pointer.pointerId || pointer.pointerId !== event.pointerId || pointer.optionId !== optionId) return
 
+    onAnalyticsEvent(String(question.id), 'pointer_move', {
+      optionId,
+      pressure: typeof event.pressure === 'number' ? event.pressure : 0,
+    })
+
     const nextProgress = getProgressFromPoint(optionId, event.clientX)
     setProgress(optionId, nextProgress)
   }
@@ -89,6 +105,11 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
   const handlePointerUpOrCancel = (event, optionId) => {
     const pointer = pointerRef.current
     if (!pointer.pointerId || pointer.pointerId !== event.pointerId || pointer.optionId !== optionId) return
+
+    onAnalyticsEvent(String(question.id), 'pointer_up', {
+      optionId,
+      pressure: typeof event.pressure === 'number' ? event.pressure : 0,
+    })
 
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId)
@@ -99,7 +120,14 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
 
     if (!didConfirm) {
       setProgress(optionId, 0)
-      setConfirmedIds(prev => prev.filter(id => id !== optionId))
+      const nextSelections = confirmedIds.filter(id => id !== optionId)
+      setConfirmedIds(nextSelections)
+      onAnalyticsEvent(String(question.id), 'answer_changed', {
+        interaction: 'slide_rejected',
+        optionId,
+        selections: nextSelections,
+        progress: optionProgress,
+      })
     } else if (selectRule.mode === 'exact' && selectRule.count === 1) {
       setProgressById(prev => {
         const reset = Object.keys(prev).reduce((acc, id) => {
@@ -109,18 +137,34 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
         return { ...reset, [optionId]: 1 }
       })
       setConfirmedIds([optionId])
-    } else {
-      setConfirmedIds(prev => {
-        const next = prev.filter(id => id !== optionId)
-
-        if (selectRule.mode === 'exact' && next.length >= selectRule.count) {
-          setProgress(optionId, 0)
-          return next
-        }
-
-        setProgress(optionId, 1)
-        return [...next, optionId]
+      onAnalyticsEvent(String(question.id), 'answer_changed', {
+        interaction: 'slide_confirmed',
+        optionId,
+        selections: [optionId],
+        progress: optionProgress,
       })
+    } else {
+      const base = confirmedIds.filter(id => id !== optionId)
+
+      if (selectRule.mode === 'exact' && base.length >= selectRule.count) {
+        setProgress(optionId, 0)
+        setConfirmedIds(base)
+        onAnalyticsEvent(String(question.id), 'selection_limit_reached', {
+          attemptedOptionId: optionId,
+          selectRule,
+          selections: base,
+        })
+      } else {
+        setProgress(optionId, 1)
+        const committed = [...base, optionId]
+        setConfirmedIds(committed)
+        onAnalyticsEvent(String(question.id), 'answer_changed', {
+          interaction: 'slide_confirmed',
+          optionId,
+          selections: committed,
+          progress: optionProgress,
+        })
+      }
     }
 
     pointerRef.current = { pointerId: null, optionId: null }

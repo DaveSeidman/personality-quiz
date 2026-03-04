@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { shuffle } from '../utils'
 import './index.scss'
 
-export default function RankedChoice({ question, sessionKey, onDraftChange, onReadyChange }) {
+export default function RankedChoice({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
   const [draggingId, setDraggingId] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -16,7 +16,11 @@ export default function RankedChoice({ question, sessionKey, onDraftChange, onRe
     setTouchedIds({})
     onDraftChange(nextOrder.map(option => option.id))
     onReadyChange(false)
-  }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange])
+
+    onAnalyticsEvent(String(question.id), 'answers_presented_order', {
+      order: nextOrder.map(option => option.id),
+    })
+  }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent])
 
   useEffect(() => {
     onDraftChange(orderedOptions.map(option => option.id))
@@ -33,6 +37,12 @@ export default function RankedChoice({ question, sessionKey, onDraftChange, onRe
     event.preventDefault()
     event.currentTarget.setPointerCapture(event.pointerId)
 
+    onAnalyticsEvent(String(question.id), 'pointer_down', {
+      optionId,
+      pressure: typeof event.pressure === 'number' ? event.pressure : 0,
+      pointerType: event.pointerType ?? 'mouse',
+    })
+
     setTouchedIds(prev => ({ ...prev, [optionId]: true }))
     dragRef.current = { pointerId: event.pointerId, optionId }
     setDraggingId(optionId)
@@ -43,10 +53,17 @@ export default function RankedChoice({ question, sessionKey, onDraftChange, onRe
     const drag = dragRef.current
     if (!isDragging || drag.pointerId !== event.pointerId || !drag.optionId) return
 
+    onAnalyticsEvent(String(question.id), 'pointer_move', {
+      optionId: drag.optionId,
+      pressure: typeof event.pressure === 'number' ? event.pressure : 0,
+    })
+
     const element = document.elementFromPoint(event.clientX, event.clientY)
     const row = element?.closest('[data-option-id]')
     const hoverId = row?.getAttribute('data-option-id')
     if (!hoverId || hoverId === drag.optionId) return
+
+    let changeEvent = null
 
     setOrderedOptions(prev => {
       const from = prev.findIndex(option => option.id === drag.optionId)
@@ -56,11 +73,31 @@ export default function RankedChoice({ question, sessionKey, onDraftChange, onRe
       const next = [...prev]
       const [moved] = next.splice(from, 1)
       next.splice(to, 0, moved)
+
+      changeEvent = {
+        interaction: 'reorder',
+        movedId: moved.id,
+        from,
+        to,
+        order: next.map(option => option.id),
+      }
+
       return next
     })
+
+    if (changeEvent) {
+      onAnalyticsEvent(String(question.id), 'answer_changed', changeEvent)
+    }
   }
 
   const clearPointerState = (event) => {
+    const optionId = dragRef.current.optionId
+
+    onAnalyticsEvent(String(question.id), 'pointer_up', {
+      optionId,
+      pressure: typeof event.pressure === 'number' ? event.pressure : 0,
+    })
+
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId)
     }
