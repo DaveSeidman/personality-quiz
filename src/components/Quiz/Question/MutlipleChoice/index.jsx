@@ -6,6 +6,7 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
   const selectRule = useMemo(() => getSelectRule(question.select), [question.select])
   const selections = normalizeSelections(answer)
+  const isPhotoQuestion = question.type === 'multiple-choice-image'
 
   useEffect(() => {
     setOrderedOptions(shuffle(question.answers))
@@ -43,18 +44,27 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
   }
 
   return (
-    <div className="question multiple-choice">
+    <div className={`question multiple-choice ${isPhotoQuestion ? 'photo' : ''}`}>
       <h2>{question.text}</h2>
       <p className="multiple-choice-instruction">{getSelectionInstruction(question.select)}</p>
       <div className="multiple-choice-answers">
         {orderedOptions.map((option) => (
-          <span
+          <button
             key={option.id}
+            type="button"
             className={`multiple-choice-answers-answer ${isSelected(option.id) ? 'selected' : ''}`}
             onClick={() => handleSelect(option.id)}
           >
-            {option.content}
-          </span>
+            {isPhotoQuestion ? (
+              <img
+                className="multiple-choice-answers-answer-image"
+                src={`${option.content}`}
+                alt={option.id}
+              />
+            ) : (
+              option.content
+            )}
+          </button>
         ))}
       </div>
     </div>

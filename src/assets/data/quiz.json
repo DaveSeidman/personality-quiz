@@ -97,9 +97,9 @@
     },
     {
       "id": 5,
-      "text": "Pick the snack that sounds best right now.",
+      "text": "Pick the snacks that sounds best right now.",
       "type": "slide-select",
-      "select": "single",
+      "select": "3",
       "answers": [
         {
           "content": "Salty chips",
