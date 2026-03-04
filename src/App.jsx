@@ -10,7 +10,7 @@ export default function App() {
   const [attract, setAttract] = useState(true)
   const [answers, setAnswers] = useState({})
   const activityTimeoutRef = useRef(null)
-  const INACTIVITY_TIMEOUT = 60000
+  const INACTIVITY_TIMEOUT = 120000
 
   const activityTimeout = () => {
     setAttract(true)

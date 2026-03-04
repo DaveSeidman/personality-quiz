@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react"
+import { shuffle } from '../utils'
 import './index.scss'
-
-function shuffle(items) {
-  const array = [...items]
-  for (let i = array.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[array[i], array[j]] = [array[j], array[i]]
-  }
-  return array
-}
 
 export default function RangeSliders({ question, sessionKey, onDraftChange, onReadyChange }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
@@ -25,7 +17,9 @@ export default function RangeSliders({ question, sessionKey, onDraftChange, onRe
   }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange])
 
   useEffect(() => {
+    const touchedCount = Object.keys(touched).length
     const allTouched = orderedOptions.length > 0 && orderedOptions.every(option => touched[option.id])
+
     onReadyChange(allTouched)
 
     if (!allTouched) {

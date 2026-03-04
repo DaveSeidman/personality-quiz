@@ -4,6 +4,7 @@
       "id": 1,
       "text": "All your afternoon meetings get cancelled. What's your first move?",
       "type": "multiple-choice-text",
+      "select": "single",
       "answers": [
         {
           "content": "Go for a walk in the park and enjoy the sunshine.",
@@ -26,6 +27,7 @@
       "id": 2,
       "text": "Your run into a bunch of your best friends hanging out without you",
       "type": "ranked-choice",
+      "select": "single",
       "answers": [
         {
           "content": "Be direct and ask if you can join them.",
@@ -49,6 +51,7 @@
       "id": 3,
       "text": "You're running late and need to get out the door, what do you grab first?",
       "type": "multiple-choice-image",
+      "select": "single",
       "answers": [
         {
           "content": "phone.png",
@@ -72,6 +75,7 @@
       "id": 4,
       "text": "You have a free weekend coming up, how do you spend it?",
       "type": "range-sliders",
+      "select": "single",
       "answers": [
         {
           "content": "Plan a fun outing with friends or family.",
@@ -87,6 +91,30 @@
         },
         {
           "content": "Go on an adventure and explore a new place.",
+          "id": "D"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "text": "Pick the snack that sounds best right now.",
+      "type": "slide-select",
+      "select": "single",
+      "answers": [
+        {
+          "content": "Salty chips",
+          "id": "A"
+        },
+        {
+          "content": "Fresh fruit",
+          "id": "B"
+        },
+        {
+          "content": "Chocolate",
+          "id": "C"
+        },
+        {
+          "content": "Popcorn",
           "id": "D"
         }
       ]

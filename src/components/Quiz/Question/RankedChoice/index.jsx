@@ -1,14 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
+import { shuffle } from '../utils'
 import './index.scss'
-
-function shuffle(items) {
-  const array = [...items]
-  for (let i = array.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[array[i], array[j]] = [array[j], array[i]]
-  }
-  return array
-}
 
 export default function RankedChoice({ question, sessionKey, onDraftChange, onReadyChange }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
@@ -31,8 +23,11 @@ export default function RankedChoice({ question, sessionKey, onDraftChange, onRe
   }, [orderedOptions, onDraftChange])
 
   useEffect(() => {
-    onReadyChange(Object.keys(touchedIds).length > 0)
-  }, [touchedIds, onReadyChange])
+    const touchedCount = Object.keys(touchedIds).length
+    const allTouched = orderedOptions.length > 0 && touchedCount === orderedOptions.length
+
+    onReadyChange(allTouched)
+  }, [orderedOptions, touchedIds, onReadyChange])
 
   const handlePointerDown = (event, optionId) => {
     event.preventDefault()
