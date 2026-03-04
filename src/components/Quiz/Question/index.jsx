@@ -4,23 +4,22 @@ import RankedChoice from './RankedChoice'
 import RangeSliders from './RangeSliders'
 import './index.scss'
 
-export default function Question({ index, question }) {
-  const [answer, setAnswer] = React.useState(null)
+export default function Question({ index, question, answers, setAnswers }) {
 
   return (
     <div className="question">
       <div className="question-content">{
         question.type === 'multiple-choice-text' || question.type === 'multiple-choice-image' ? (
-          <MultipleChoice question={question} answer={answer} setAnswer={setAnswer} />
+          <MultipleChoice question={question} setAnswers={setAnswers} />
         ) : question.type === 'ranked-choice' ? (
-          <RankedChoice question={question} answer={answer} setAnswer={setAnswer} />
+          <RankedChoice question={question} setAnswers={setAnswers} />
         ) : question.type === 'range-sliders' ? (
-          <RangeSliders question={question} answer={answer} setAnswer={setAnswer} />
+          <RangeSliders question={question} setAnswers={setAnswers} />
         ) : null
       } </div>
       <div className="question-navigation">
         <button className={`question-navigation-prev ${index === 0 ? 'hidden' : ''}`}>Previous</button>
-        <button className={`question-navigation-next ${answer ? '' : 'hidden'}`}>Next</button>
+        <button className={`question-navigation-next ${answers[question.id] ? '' : 'hidden'}`}>Next</button>
       </div>
     </div>
   )

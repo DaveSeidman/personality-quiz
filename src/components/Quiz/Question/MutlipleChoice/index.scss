@@ -3,5 +3,10 @@
   &-answers {
     display: flex;
     flex-direction: column;
+
+    &-answer {
+      margin: 1rem;
+      cursor: pointer
+    }
   }
 }

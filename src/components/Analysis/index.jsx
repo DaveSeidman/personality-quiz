@@ -1,12 +1,11 @@
 import React from "react"
 import './index.scss'
 
-export default function Analysis({ results }) {
+export default function Analysis({ answers }) {
 
   return (
     <div className="analysis">
-      <h2>Your Personality Type: {results.type}</h2>
-      <p>{results.description}</p>
+      {JSON.stringify(answers)}
     </div>
   )
 } 
