@@ -44,11 +44,6 @@
   }
 
   &-control {
-    display: grid;
-    grid-template-columns: auto 1fr auto auto;
-    align-items: center;
-    gap: 0.5rem;
-
     input {
       width: 100%;
     }

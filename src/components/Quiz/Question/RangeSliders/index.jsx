@@ -55,7 +55,7 @@ export default function RangeSliders({ question, sessionKey, onDraftChange, onRe
   return (
     <div className="range-sliders">
       <h2 className="range-sliders-title">{question.text}</h2>
-      <p className="range-sliders-instruction">Slide each item to score it from -1 to 1.</p>
+      <p className="range-sliders-instruction">Slide each item to score it.</p>
 
       <div className="range-sliders-list">
         {orderedOptions.map((option) => (
@@ -63,7 +63,6 @@ export default function RangeSliders({ question, sessionKey, onDraftChange, onRe
             <span className="range-sliders-label">{option.content}</span>
 
             <div className="range-sliders-control">
-              <span>-1</span>
               <input
                 type="range"
                 min="-1"
@@ -89,8 +88,6 @@ export default function RangeSliders({ question, sessionKey, onDraftChange, onRe
                   updateValue(option.id, event.target.value)
                 }}
               />
-              <span>0</span>
-              <span>1</span>
             </div>
           </div>
         ))}

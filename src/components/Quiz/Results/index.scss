@@ -15,16 +15,7 @@
     font-size: 0.875rem;
   }
 
-  &-payload {
-    margin: 0;
-    max-height: 260px;
-    overflow: auto;
-    padding: 0.75rem;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    background: rgba(0, 0, 0, 0.25);
-    color: #fff;
-  }
+  /* payload block removed */
 
   &-navigation {
     display: flex;
