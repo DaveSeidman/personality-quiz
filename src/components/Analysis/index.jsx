@@ -5,7 +5,7 @@ export default function Analysis({ answers }) {
 
   return (
     <div className="analysis">
-      {JSON.stringify(answers)}
+      {JSON.stringify(answers, null, 2)}
     </div>
   )
 } 

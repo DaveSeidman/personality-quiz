@@ -1,9 +1,15 @@
 .analysis {
   position: absolute;
-  bottom: 0;
+  top: 0;
   right: 0;
   width: 400px;
-  height: 100px;
-  background: white;
+  min-height: 100px;
+  padding: 0.5rem;
+  background: black;
   border: 1px solid black;
+  z-index: 20;
+  font-family: monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+  overflow: auto;
 }

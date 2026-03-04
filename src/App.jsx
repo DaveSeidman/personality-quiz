@@ -8,26 +8,26 @@ import './index.scss'
 export default function App() {
 
   const [attract, setAttract] = useState(true)
-  const [answers, setAnswers] = useState([])
+  const [answers, setAnswers] = useState({})
   const activityTimeoutRef = useRef(null)
   const INACTIVITY_TIMEOUT = 60000
 
   const activityTimeout = () => {
     setAttract(true)
-    setAnswers([])
+    setAnswers({})
   }
 
   const resetInactivityTimeout = () => {
     setAttract(false)
+    if (activityTimeoutRef.current) clearTimeout(activityTimeoutRef.current)
     activityTimeoutRef.current = setTimeout(activityTimeout, INACTIVITY_TIMEOUT)
   }
 
   useEffect(() => {
-
-    addEventListener('click', resetInactivityTimeout)
+    window.addEventListener('click', resetInactivityTimeout)
 
     return () => {
-      removeEventListener('click', resetInactivityTimeout)
+      window.removeEventListener('click', resetInactivityTimeout)
       if (activityTimeoutRef.current) clearTimeout(activityTimeoutRef.current)
     }
   }, [])
