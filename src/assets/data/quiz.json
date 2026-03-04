@@ -1,0 +1,95 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "text": "All your afternoon meetings get cancelled. What's your first move?",
+      "type": "multiple-choice-text",
+      "answers": [
+        {
+          "content": "Go for a walk in the park and enjoy the sunshine.",
+          "id": "A"
+        },
+        { 
+          "content": "Use the time to catch up on work or personal projects.",
+          "id": "B"
+        },
+        {
+          "content": "Call a friend and make plans to hang out.",
+          "id": "C"
+        },
+        {
+          "content": "Take a nap and recharge your energy.",
+          "id": "D"
+        }
+      ]
+    }, {
+      "id": 2,
+      "text": "Your run into a bunch of your best friends hanging out without you",
+      "type": "ranked-choice",
+      "answers": [
+        {
+          "content": "Be direct and ask if you can join them.",
+          "id": "A"
+        },
+        {
+          "content": "Try to leave before they notice you",
+          "id": "B"
+        },
+        {
+          "content": "Pretend like you were in on the plans and just join them",
+          "id": "C"
+        },
+        {
+          "content": "Tell them your feelings were hurt and leave",
+          "id": "D"
+        }
+      ]
+    }, 
+    {
+      "id": 3,
+      "text": "You're running late and need to get out the door, what do you grab first?",
+      "type": "multiple-choice-image",
+      "answers": [
+        {
+          "content": "phone.png",
+          "id": "A"
+        },
+        {
+          "content": "wallet.png",
+          "id": "B"
+        },
+        {
+          "content": "keys.png",
+          "id": "C"
+        },
+        {
+          "content": "sunglasses.png",
+          "id": "D"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "text": "You have a free weekend coming up, how do you spend it?",
+      "type": "range-sliders",
+      "answers": [
+        {
+          "content": "Plan a fun outing with friends or family.",
+          "id": "A"
+        },
+        {
+          "content": "Use the time to relax and unwind at home.",
+          "id": "B"
+        },
+        {
+          "content": "Take on a new hobby or project you've been interested in.",
+          "id": "C"
+        },
+        {
+          "content": "Go on an adventure and explore a new place.",
+          "id": "D"
+        }
+      ]
+    }
+  ]
+}

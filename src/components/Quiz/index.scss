@@ -1,0 +1,7 @@
+@use '../../index.scss' as src;
+
+.quiz {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}

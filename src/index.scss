@@ -1,0 +1,17 @@
+$darkgray: #222;
+
+html,
+body,
+#root,
+.app {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: $darkgray;
+
+  .hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
