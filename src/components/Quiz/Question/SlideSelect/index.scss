@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '../../../../index.scss' as src;
 
 .slide-select {
@@ -34,7 +35,7 @@
     }
 
     &.selected {
-      background: lighten(src.$green, 4%);
+      background: color.adjust(src.$green, $lightness: 4%);
       border-color: rgba(src.$orange, 0.85);
       box-shadow: 0 16px 28px rgba(0, 0, 0, 0.45);
       opacity: 1;

@@ -122,6 +122,7 @@
   font-size: 0.95rem;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.35;
+  min-height: 3rem;
 
   &.blank {
     min-height: 1.2rem;
@@ -145,6 +146,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
+  min-height: 60px;
 }
 
 .console-feed-row-metric-label {
@@ -160,8 +162,89 @@
   color: rgba(255, 255, 255, 0.92);
 }
 
-.console-feed-row-confidence {
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.55);
+.console-feed-row-graphs {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
 }
+
+.console-feed-row-graph {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.console-feed-row-graph.confidence {
+  align-items: flex-start;
+}
+
+.confidence-horizontal {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.confidence-horizontal-track {
+  position: relative;
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: visible;
+}
+
+.confidence-horizontal-baseline {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.confidence-horizontal-indicator {
+  position: absolute;
+  width: 0.5vh;
+  height: calc(100% + 6px);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: src.$orange;
+  border-radius: 999px;
+  opacity: 0.95;
+}
+
+.confidence-label {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+
+.console-feed-row-graph.interactions {
+  width: 100%;
+}
+
+.interaction-dot-grid {
+  display: grid;
+  grid-template-columns: repeat(30, minmax(0, 1fr));
+  grid-auto-rows: 10px;
+  gap: 0.2rem;
+}
+
+.interaction-dot {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: background-color 160ms ease;
+}
+
+.interaction-dot.active {
+  background: #fff;
+}
+

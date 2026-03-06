@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '../../../index.scss' as src;
 
 .question {
@@ -45,7 +46,7 @@
       transition: border-color 140ms ease, background-color 140ms ease, transform 140ms ease, opacity 140ms ease;
 
       &:hover:not(:disabled) {
-        background: lighten(src.$green, 6%);
+        background: color.adjust(src.$green, $lightness: 6%);
         border-color: rgba(255, 255, 255, 0.35);
       }
 
@@ -92,7 +93,7 @@
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
 
         &:hover:not(.disabled) {
-          background: lighten(src.$orange, 6%);
+          background: color.adjust(src.$orange, $lightness: 6%);
         }
 
         &.disabled {

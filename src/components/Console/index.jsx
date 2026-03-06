@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react'
+import { computeQuestionConfidence } from '../Quiz/analytics'
 import './index.scss'
 
 const formatSeconds = (ms) => {
@@ -101,12 +102,18 @@ export default function Console({ analytics, questions, answers, personalities, 
       const personality = answerMeta ? personalityMap[answerMeta.personalityId] : null
       const isActive = questionId === activeQuestionId
 
+      let liveConfidence = null
+      if (entry?.data) {
+        const score = computeQuestionConfidence(entry.data)
+        liveConfidence = score?.confidence ?? null
+      }
+
       return {
         id: questionId,
         label: question.label ?? `Question ${question.id}`,
         summary: buildSummary({ entry, personality }),
         metrics: buildMetrics(entry),
-        confidence: typeof entry?.confidence === 'number' ? entry.confidence : null,
+        confidence: liveConfidence,
         interactions: entry?.data?.events?.length ?? 0,
         isActive,
       }
@@ -161,17 +168,43 @@ export default function Console({ analytics, questions, answers, personalities, 
             ) : null}
 
             <div className="console-feed-row-graphs">
-              <div className="console-feed-row-graph">
+              <div className="console-feed-row-graph confidence">
                 <span>Confidence</span>
-                <div className="console-feed-row-graph-track">
-                  <div className="console-feed-row-graph-fill" style={{ width: `${Math.min(100, Math.max(0, (row.confidence || 0) * 100))}%` }} />
-                </div>
+                {(() => {
+                  const confidenceValue = typeof row.confidence === 'number' ? row.confidence : 0.5
+                  const delta = (confidenceValue - 0.5) * 100
+                  return (
+                    <div className="confidence-horizontal">
+                      <div className="confidence-horizontal-track">
+                        <div className="confidence-horizontal-baseline" />
+                        <div
+                          className="confidence-horizontal-indicator"
+                          style={{ left: `calc(50% + ${delta}%)` }}
+                        />
+                      </div>
+                      <div className="confidence-label">{typeof row.confidence === 'number' ? `${Math.round(row.confidence * 100)}%` : '—'}</div>
+                    </div>
+                  )
+                })()}
               </div>
-              <div className="console-feed-row-graph">
+
+              <div className="console-feed-row-graph interactions">
                 <span>Interactions</span>
-                <div className="console-feed-row-graph-track">
-                  <div className="console-feed-row-graph-fill interactions" style={{ width: `${Math.min(100, row.interactions * 6)}%` }} />
-                </div>
+                {(() => {
+                  const dotsPerRow = 30
+                  const rows = Math.max(3, Math.ceil(row.interactions / dotsPerRow))
+                  const totalDots = rows * dotsPerRow
+                  return (
+                    <div className="interaction-dot-grid" style={{ '--rows': rows }}>
+                      {Array.from({ length: totalDots }).map((_, idx) => (
+                        <span
+                          key={`${row.id}-dot-${idx}`}
+                          className={`interaction-dot ${idx < row.interactions ? 'active' : ''}`}
+                        />
+                      ))}
+                    </div>
+                  )
+                })()}
               </div>
             </div>
           </div>

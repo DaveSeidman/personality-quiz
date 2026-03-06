@@ -93,11 +93,6 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
     const pointer = pointerRef.current
     if (!pointer.pointerId || pointer.pointerId !== event.pointerId || pointer.optionId !== optionId) return
 
-    onAnalyticsEvent(String(question.id), 'pointer_move', {
-      optionId,
-      pressure: typeof event.pressure === 'number' ? event.pressure : 0,
-    })
-
     const nextProgress = getProgressFromPoint(optionId, event.clientX)
     setProgress(optionId, nextProgress)
   }

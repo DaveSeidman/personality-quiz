@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { triggerActivePress } from '../../utils'
+import loadingVideo from '../../../assets/videos/blobs.webm'
 import './index.scss'
 
 const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value))
@@ -607,6 +608,16 @@ export default function Results({ result, analytics, questions, answers, session
       </div>
 
       {status === 'error' && <p className="results-status error">Submit failed. Try again.</p>}
+
+      {status === 'submitting' && (
+        <div className="results-loading">
+          <video className="results-loading-video" src={loadingVideo} autoPlay muted loop playsInline />
+          <div className="results-loading-copy">
+            <p>Translating your signals…</p>
+            <span>We’re syncing with the cocktail oracle. This usually takes a beat.</span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

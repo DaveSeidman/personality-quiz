@@ -53,11 +53,6 @@ export default function RankedChoice({ question, sessionKey, onDraftChange, onRe
     const drag = dragRef.current
     if (!isDragging || drag.pointerId !== event.pointerId || !drag.optionId) return
 
-    onAnalyticsEvent(String(question.id), 'pointer_move', {
-      optionId: drag.optionId,
-      pressure: typeof event.pressure === 'number' ? event.pressure : 0,
-    })
-
     const element = document.elementFromPoint(event.clientX, event.clientY)
     const row = element?.closest('[data-option-id]')
     const hoverId = row?.getAttribute('data-option-id')
