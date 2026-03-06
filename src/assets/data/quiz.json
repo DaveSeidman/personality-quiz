@@ -1,121 +1,116 @@
 {
+  "quizId": "tr-event-intelligence-v1",
+  "useadvancedTelemetry": false,
+  "personalities": [
+    {
+      "id": "strategist",
+      "name": "The Strategist",
+      "description": "You lead with precision. Your events don't just inform — they position. You understand that the most powerful brand moments are the ones that make a room feel like the future is being written in real time. Thought leadership isn't a format; it's your signature.",
+      "drinkRecommendation": "an aged Manhattan"
+    },
+    {
+      "id": "architect",
+      "name": "The Architect",
+      "description": "You build worlds. Every sensory detail — the light, the color, the placement of a logo — is a deliberate signal. Your events don't just represent a brand; they become it. You understand that great design isn't decoration, it's persuasion.",
+      "drinkRecommendation": "a botanical gin spritz"
+    },
+    {
+      "id": "pioneer",
+      "name": "The Pioneer",
+      "description": "You don't launch products — you launch conversations. Your events are engineered around the moment of discovery, and you know that the most powerful marketing happens when an audience feels like they're witnessing something for the very first time.",
+      "drinkRecommendation": "a champagne cocktail"
+    },
+    {
+      "id": "catalyst",
+      "name": "The Catalyst",
+      "description": "You transform rooms into ecosystems. You know the best events don't just connect people — they unlock potential. Your energy is contagious, your environment is intentional, and your ROI is measured in relationships that last long after the venue closes.",
+      "drinkRecommendation": "a whiskey sour"
+    }
+  ],
   "questions": [
     {
       "id": 1,
-      "text": "All your afternoon meetings get cancelled. What's your first move?",
+      "label": "The Primary Objective",
+      "text": "What is the core mission of your upcoming activation or event?",
       "type": "multiple-choice-text",
       "select": "single",
       "answers": [
         {
-          "content": "Go for a walk in the park and enjoy the sunshine.",
-          "id": "A"
-        },
-        { 
-          "content": "Use the time to catch up on work or personal projects.",
-          "id": "B"
+          "id": "A",
+          "content": "Thought Leadership: Fostering high-level strategy and executive networking.",
+          "personalityId": "strategist"
         },
         {
-          "content": "Call a friend and make plans to hang out.",
-          "id": "C"
+          "id": "B",
+          "content": "Brand Awareness: Making a bold, memorable impression on new clients.",
+          "personalityId": "architect"
         },
         {
-          "content": "Take a nap and recharge your energy.",
-          "id": "D"
+          "id": "C",
+          "content": "Product Launch: Debuting a new innovation and driving immediate market excitement.",
+          "personalityId": "pioneer"
+        },
+        {
+          "id": "D",
+          "content": "Lead Generation: Creating an energetic environment for sales and growth.",
+          "personalityId": "catalyst"
         }
       ]
-    }, {
+    },
+    {
       "id": 2,
-      "text": "Your run into a bunch of your best friends hanging out without you",
-      "type": "ranked-choice",
+      "label": "The Sensory Environment",
+      "text": "Slide to confirm the immediate energy guests should feel the second they arrive.",
+      "type": "slide-select",
       "select": "single",
       "answers": [
         {
-          "content": "Be direct and ask if you can join them.",
-          "id": "A"
+          "id": "A",
+          "content": "Modern & Tech-Forward — Sleek, responsive surfaces and kinetic light.",
+          "personalityId": "pioneer"
         },
         {
-          "content": "Try to leave before they notice you",
-          "id": "B"
+          "id": "B",
+          "content": "Curated & Iconic — Designed vignettes, signature hues, intentional negative space.",
+          "personalityId": "architect"
         },
         {
-          "content": "Pretend like you were in on the plans and just join them",
-          "id": "C"
+          "id": "C",
+          "content": "Vibrant & Social — Pulse lighting, conversational clusters, high-color collisions.",
+          "personalityId": "catalyst"
         },
         {
-          "content": "Tell them your feelings were hurt and leave",
-          "id": "D"
+          "id": "D",
+          "content": "Polished & Exclusive — Low lighting, tactile finishes, concierge-level discretion.",
+          "personalityId": "strategist"
         }
       ]
-    }, 
+    },
     {
       "id": 3,
-      "text": "You're running late and need to get out the door, what do you grab first?",
-      "type": "multiple-choice-image",
-      "select": "single",
+      "label": "The Attendee Journey",
+      "text": "Rank the exit feelings — drag your #1 takeaway to the top, least important to the bottom.",
+      "type": "ranked-choice",
       "answers": [
         {
-          "content": "phone.png",
-          "id": "A"
+          "id": "A",
+          "content": "Immersive innovation — guests buzz about the tech choreography they just witnessed.",
+          "personalityId": "pioneer"
         },
         {
-          "content": "wallet.png",
-          "id": "B"
+          "id": "B",
+          "content": "Relationship momentum — they leave with new, high-spark contacts to follow up with.",
+          "personalityId": "catalyst"
         },
         {
-          "content": "keys.png",
-          "id": "C"
+          "id": "C",
+          "content": "Creative inspiration — notebooks full of ideas to reimagine their own experiences.",
+          "personalityId": "architect"
         },
         {
-          "content": "sunglasses.png",
-          "id": "D"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "text": "You have a free weekend coming up, how do you spend it?",
-      "type": "range-sliders",
-      "select": "single",
-      "answers": [
-        {
-          "content": "Plan a fun outing with friends or family.",
-          "id": "A"
-        },
-        {
-          "content": "Use the time to relax and unwind at home.",
-          "id": "B"
-        },
-        {
-          "content": "Take on a new hobby or project you've been interested in.",
-          "id": "C"
-        },
-        {
-          "content": "Go on an adventure and explore a new place.",
-          "id": "D"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "text": "Pick the snacks that sounds best right now.",
-      "type": "slide-select",
-      "select": "3",
-      "answers": [
-        {
-          "content": "Salty chips",
-          "id": "A"
-        },
-        {
-          "content": "Fresh fruit",
-          "id": "B"
-        },
-        {
-          "content": "Chocolate",
-          "id": "C"
-        },
-        {
-          "content": "Popcorn",
-          "id": "D"
+          "id": "D",
+          "content": "Brand obsession — they’re quoting your product and story in their next meeting.",
+          "personalityId": "strategist"
         }
       ]
     }

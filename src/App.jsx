@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
 import Quiz from './components/Quiz'
-import Analysis from './components/Analysis'
 import Attract from './components/Attract'
+import Console from './components/Console'
 import quizData from './assets/data/quiz.json'
+import backgroundVideo from './assets/videos/background2.mp4'
+import logoImg from './assets/images/logo.png'
 import './index.scss'
 
 export default function App() {
@@ -10,10 +12,9 @@ export default function App() {
   const [attract, setAttract] = useState(true)
   const [answers, setAnswers] = useState({})
   const [analytics, setAnalytics] = useState({})
-  const [showAnalysis, setShowAnalysis] = useState(false)
+  const [activeQuestionId, setActiveQuestionId] = useState(null)
   const activityTimeoutRef = useRef(null)
   const INACTIVITY_TIMEOUT = 120000
-  const isProduction = import.meta.env.PROD
 
   const activityTimeout = () => {
     setAttract(true)
@@ -38,25 +39,37 @@ export default function App() {
 
   return (
     <div className="app">
-      <Quiz
-        attract={attract}
-        questions={quizData.questions}
-        answers={answers}
-        setAnswers={setAnswers}
-        analytics={analytics}
-        setAnalytics={setAnalytics}
-      />
+      <video className="app-background" autoPlay loop muted>
+        <source src={backgroundVideo} type="video/mp4" />
+      </video>
 
-      {!isProduction ? (
-        <Analysis
+      <div className="app-layout">
+        <Quiz
+          attract={attract}
+          quizId={quizData.quizId}
+          questions={quizData.questions}
+          personalities={quizData.personalities}
           answers={answers}
+          setAnswers={setAnswers}
           analytics={analytics}
-          visible={showAnalysis}
-          onToggle={() => setShowAnalysis(prev => !prev)}
+          setAnalytics={setAnalytics}
+          onActiveQuestionChange={setActiveQuestionId}
         />
-      ) : null}
+
+        <Console
+          analytics={analytics}
+          questions={quizData.questions}
+          answers={answers}
+          personalities={quizData.personalities}
+          activeQuestionId={activeQuestionId}
+        />
+      </div>
 
       <Attract attract={attract} />
+
+      <div className='app-logo'>
+        <img src={logoImg} alt="Logo" />
+      </div>
     </div>
   )
 }

@@ -4,18 +4,25 @@ import Results from "./Results"
 import { CONFIDENCE_WEIGHTS, finalizeAnalytics } from "./analytics"
 import "./index.scss"
 
-function fakeSubmitAnswers(payload) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log("Fake API submit:", payload)
-      resolve({ ok: true })
-    }, 900)
+async function submitAnswersToBackend(payload) {
+  const baseUrl = import.meta.env.VITE_QUIZ_API_URL || 'http://localhost:8000'
+  const response = await fetch(`${baseUrl}/api/analyze`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
   })
+
+  if (!response.ok) {
+    throw new Error(`Backend submit failed (${response.status})`)
+  }
+
+  return response.json()
 }
 
-export default function Quiz({ attract, questions, answers, setAnswers, analytics, setAnalytics }) {
+export default function Quiz({ attract, quizId, questions, personalities, answers, setAnswers, analytics, setAnalytics, onActiveQuestionChange = () => {} }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [sessionKey, setSessionKey] = useState(0)
+  const [submissionResult, setSubmissionResult] = useState(null)
 
   const totalSteps = questions.length + 1
   const resultsStepIndex = questions.length
@@ -83,6 +90,7 @@ export default function Quiz({ attract, questions, answers, setAnswers, analytic
       setSessionKey(prev => prev + 1)
       seenQuestionIdsRef.current = new Set()
       setAnalytics({})
+      setSubmissionResult(null)
     }
   }, [attract, setAnalytics])
 
@@ -90,7 +98,7 @@ export default function Quiz({ attract, questions, answers, setAnswers, analytic
     const element = document.getElementById(`step-${currentStep}`)
     if (!element) return
 
-    element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" })
+    element.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" })
 
     if (currentStep < questions.length) {
       const question = questions[currentStep]
@@ -129,6 +137,19 @@ export default function Quiz({ attract, questions, answers, setAnswers, analytic
     }
   }, [currentStep, questions, setAnalytics])
 
+  useEffect(() => {
+    if (!questions || questions.length === 0) {
+      onActiveQuestionChange(null)
+      return
+    }
+
+    if (currentStep < questions.length) {
+      onActiveQuestionChange(String(questions[currentStep].id))
+    } else {
+      onActiveQuestionChange(null)
+    }
+  }, [currentStep, onActiveQuestionChange, questions])
+
   const goToPrevious = () => {
     setCurrentStep(prev => Math.max(prev - 1, 0))
   }
@@ -141,11 +162,28 @@ export default function Quiz({ attract, questions, answers, setAnswers, analytic
     const finalizedAnalytics = finalizeAnalytics(analytics, CONFIDENCE_WEIGHTS)
     setAnalytics(finalizedAnalytics)
 
-    await fakeSubmitAnswers({
+    const payload = {
+      quizId,
+      personalities,
+      questions,
       answers,
       analytics: finalizedAnalytics,
       confidenceWeights: CONFIDENCE_WEIGHTS,
-    })
+      submittedAt: Date.now(),
+    }
+
+    const result = await submitAnswersToBackend(payload)
+    setSubmissionResult(result)
+    console.log('Backend analysis result:', result)
+  }
+
+  const handleStartOver = () => {
+    setAnswers({})
+    setAnalytics({})
+    setSubmissionResult(null)
+    setSessionKey(prev => prev + 1)
+    seenQuestionIdsRef.current = new Set()
+    setCurrentStep(0)
   }
 
   return (
@@ -168,11 +206,14 @@ export default function Quiz({ attract, questions, answers, setAnswers, analytic
 
       <div className="quiz-step" id={`step-${resultsStepIndex}`}>
         <Results
-          answers={answers}
+          result={submissionResult}
           analytics={analytics}
-          confidenceWeights={CONFIDENCE_WEIGHTS}
+          questions={questions}
+          answers={answers}
+          sessionKey={sessionKey}
           onPrevious={goToPrevious}
           onSubmit={handleSubmit}
+          onStartOver={handleStartOver}
         />
       </div>
     </div>

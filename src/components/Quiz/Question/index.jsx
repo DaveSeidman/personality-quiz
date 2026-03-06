@@ -3,7 +3,7 @@ import MultipleChoice from './MutlipleChoice'
 import RankedChoice from './RankedChoice'
 import RangeSliders from './RangeSliders'
 import SlideSelect from './SlideSelect'
-import { getSelectionValidationMessage, getSlideSelectValidationMessage, isSelectionComplete } from './utils'
+import { getSelectionValidationMessage, getSlideSelectValidationMessage, isSelectionComplete, triggerActivePress } from '../../utils'
 import './index.scss'
 
 export default function Question({
@@ -122,11 +122,12 @@ export default function Question({
       <div className="question-navigation">
         <div className={`question-navigation-prev ${isFirst ? 'hidden' : ''}`}>
           <button
-            className="question-navigation-prev-button"
+            className="question-navigation-prev-button button-secondary"
             onClick={onPrevious}
+            onPointerDown={triggerActivePress}
             disabled={isFirst}
           >
-            Previous
+            Prev
           </button>
         </div>
 
@@ -140,6 +141,7 @@ export default function Question({
           <button
             className={`question-navigation-next-button ${canProceed ? '' : 'disabled'}`}
             onClick={handleNext}
+            onPointerDown={triggerActivePress}
           >
             Next
           </button>

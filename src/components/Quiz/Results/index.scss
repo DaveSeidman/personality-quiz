@@ -1,8 +1,21 @@
 .results {
-  width: min(900px, 100%);
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  box-sizing: border-box;
+  justify-content: center;
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.75rem;
+    border-radius: 1rem;
+    background: rgba(20, 20, 20, 0.5);
+    backdrop-filter: blur(10px);
+    overflow: auto;
+  }
 
   &-title {
     margin: 0;
@@ -10,24 +23,367 @@
   }
 
   &-instruction {
-    margin: 0;
+    margin: 0.25rem 0 0.75rem;
     color: rgba(255, 255, 255, 0.8);
     font-size: 0.875rem;
   }
 
-  /* payload block removed */
-
   &-navigation {
+    margin-top: 1rem;
     display: flex;
     justify-content: space-between;
   }
 
   &-status {
     margin: 0;
-    color: #9ef7b3;
+    color: #d7f7df;
+    padding: 0.9rem;
+    border-radius: 12px;
+    background: rgba(8, 12, 18, 0.55);
+    border: 1px solid rgba(120, 180, 255, 0.22);
+
+    &-summary {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: rgba(8, 12, 18, 0.92);
+      border-radius: 10px;
+      padding: 0.4rem;
+      margin-bottom: 0.6rem;
+    }
+
+    &-heading {
+      margin: 0 0 0.35rem;
+      font-weight: 700;
+      color: #baf7c8;
+      text-align: center;
+    }
+
+    &-match {
+      margin: 0 0 0.2rem;
+      color: #f0f6ff;
+      text-align: center;
+    }
+
+    &-statement {
+      margin: 0.2rem 0 0.5rem;
+      color: #f3f8ff;
+      line-height: 1.4;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    &-drink {
+      margin: 0 0 0.7rem;
+      text-align: center;
+      color: #ffe7b2;
+    }
+
+    &-radar {
+      margin: 0.4rem auto 0.9rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      &-title {
+        margin: 0 0 0.35rem;
+        font-size: 0.78rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #d3e4ff;
+      }
+
+      canvas {
+        width: 280px;
+        height: 245px;
+        max-width: 100%;
+      }
+    }
+
+    &-legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.55rem 0.75rem;
+      margin: 0 0 0.75rem;
+
+      &-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.74rem;
+        color: #e6edff;
+      }
+
+      &-swatch {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #9fb4dc;
+      }
+    }
+
+    &-analytics {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0.65rem;
+
+      &-title {
+        margin: 0 0 0.2rem;
+        width: 100%;
+        color: #c9e7ff;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        text-align: center;
+      }
+
+      &-subtitle {
+        margin: 0 0 0.2rem;
+        width: 100%;
+        font-size: 0.76rem;
+        color: #d7e6ff;
+        line-height: 1.35;
+        text-align: center;
+      }
+    }
+
+    &-question {
+      box-sizing: border-box;
+      width: calc(33.333% - 0.5rem);
+      flex: 0 0 calc(33.333% - 0.5rem);
+      padding: 0.65rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+
+      &-title {
+        margin: 0 0 0.5rem;
+        font-size: 0.78rem;
+        color: #f1f6ff;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      &-charts {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0;
+        background: #ffffff;
+        border: 1px solid rgba(30, 50, 90, 0.12);
+        border-radius: 10px;
+        overflow: hidden;
+
+        &::before,
+        &::after {
+          content: '';
+          position: absolute;
+          background: rgba(120, 130, 150, 0.18);
+          pointer-events: none;
+        }
+
+        &::before {
+          top: 0;
+          bottom: 0;
+          left: 50%;
+          width: 1px;
+          transform: translateX(-0.5px);
+        }
+
+        &::after {
+          left: 0;
+          right: 0;
+          top: 50%;
+          height: 1px;
+          transform: translateY(-0.5px);
+        }
+      }
+    }
+
+    &-chart {
+      --tone: #6d8eff;
+      --tone-soft: #dfe7fb;
+
+      min-height: 5.4rem;
+      color: #1b2440;
+      padding: 0.65rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      &-label {
+        margin: 0 0 0.25rem;
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #41537a;
+      }
+
+      &-value {
+        margin: 0.25rem 0 0;
+        font-size: 0.7rem;
+        color: #1f2b4b;
+      }
+
+      &-track {
+        height: 8px;
+        border-radius: 999px;
+        background: #e8eefb;
+        overflow: hidden;
+      }
+
+      &-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--tone), color-mix(in srgb, var(--tone), #ffffff 35%));
+      }
+
+      &.personality-strategist {
+        --tone: #4dbb89;
+        --tone-soft: #e7f6ee;
+      }
+
+      &.personality-pioneer {
+        --tone: #4c78ff;
+        --tone-soft: #e9efff;
+      }
+
+      &.personality-catalyst {
+        --tone: #d66bba;
+        --tone-soft: #fbe9f5;
+      }
+
+      &.personality-architect {
+        --tone: #ff6200;
+        --tone-soft: #fff0e6;
+      }
+    }
+
+    &-dot-row {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 0.22rem;
+    }
+
+    &-dot {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 999px;
+      background: #dde6f7;
+
+      &.active {
+        background: var(--tone);
+      }
+    }
+
+    &-needle-gauge {
+      position: relative;
+      width: 64px;
+      height: 36px;
+      margin: 0 auto;
+    }
+
+    &-needle-arc {
+      position: absolute;
+      inset: 0;
+      border: 6px solid var(--tone-soft);
+      border-bottom: 0;
+      border-radius: 72px 72px 0 0;
+      box-sizing: border-box;
+    }
+
+    &-needle {
+      position: absolute;
+      left: calc(50% - 1.5px);
+      bottom: 0;
+      width: 3px;
+      height: 28px;
+      transform-origin: bottom center;
+      background: var(--tone);
+      border-radius: 4px;
+    }
+
+    &-pill-row {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 0.2rem;
+    }
+
+    &-pill {
+      height: 10px;
+      border-radius: 999px;
+      background: #dde6f7;
+
+      &.active {
+        background: var(--tone);
+      }
+    }
+
+    &-ring {
+      width: 56px;
+      height: 56px;
+      margin: 0.2rem auto 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      position: relative;
+      background: conic-gradient(var(--tone) 0deg var(--degrees, 0deg), var(--tone-soft) var(--degrees, 0deg) 360deg);
+
+      &::before {
+        content: '';
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #fff;
+      }
+
+      span {
+        position: absolute;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #1f2b4b;
+      }
+    }
+
+    &.personality-strategist .results-status-heading {
+      color: #9af0be;
+    }
+
+    &.personality-pioneer .results-status-heading {
+      color: #a9c7ff;
+    }
+
+    &.personality-catalyst .results-status-heading {
+      color: #ffb8df;
+    }
+
+    &.personality-architect .results-status-heading {
+      color: #ffb380;
+    }
+
+    .results-status-legend-item.personality-strategist .results-status-legend-swatch {
+      background: #4dbb89;
+    }
+
+    .results-status-legend-item.personality-pioneer .results-status-legend-swatch {
+      background: #4c78ff;
+    }
+
+    .results-status-legend-item.personality-catalyst .results-status-legend-swatch {
+      background: #d66bba;
+    }
+
+    .results-status-legend-item.personality-architect .results-status-legend-swatch {
+      background: #ff6200;
+    }
 
     &.error {
       color: #ffc2c2;
+      border-color: rgba(255, 120, 120, 0.4);
     }
   }
 }

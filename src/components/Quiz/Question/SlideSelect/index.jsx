@@ -5,7 +5,7 @@ import {
   isSelectionComplete,
   normalizeSelections,
   shuffle,
-} from '../utils'
+} from '../../../utils'
 import './index.scss'
 
 const CONFIRM_THRESHOLD = 0.5

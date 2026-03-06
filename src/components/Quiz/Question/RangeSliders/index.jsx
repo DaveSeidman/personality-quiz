@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { shuffle } from '../utils'
+import { shuffle } from '../../../utils'
 import './index.scss'
 
 export default function RangeSliders({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent }) {
@@ -67,7 +67,7 @@ export default function RangeSliders({ question, sessionKey, onDraftChange, onRe
                 type="range"
                 min="-1"
                 max="1"
-                step="1"
+                step="0.01"
                 value={values[option.id] ?? 0}
                 onPointerDown={(event) => {
                   markTouched(option.id)

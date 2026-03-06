@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import { shuffle } from '../utils'
+import { shuffle } from '../../../utils'
 import './index.scss'
 
 export default function RankedChoice({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent }) {

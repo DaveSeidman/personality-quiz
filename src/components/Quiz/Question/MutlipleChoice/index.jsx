@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { getSelectRule, getSelectionInstruction, normalizeSelections, shuffle } from '../utils'
+import { getSelectRule, getSelectionInstruction, normalizeSelections, shuffle, triggerActivePress } from '../../../utils'
 import './index.scss'
 
 export default function MultipleChoice({ question, answer, setAnswers, sessionKey, onAnalyticsEvent }) {
@@ -17,6 +17,7 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
   }, [question.id, question.answers, sessionKey, onAnalyticsEvent])
 
   const isSelected = (optionId) => selections.includes(optionId)
+  const isVideoAsset = (content) => /\.(mp4|webm|ogg)$/i.test(content)
 
   const commitSelections = (nextSelections) => {
     if (selectRule.mode === 'exact' && selectRule.count === 1) {
@@ -28,6 +29,7 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
   }
 
   const handleSelect = (optionId, event) => {
+    triggerActivePress(event)
     const questionId = String(question.id)
     const currentlySelected = isSelected(optionId)
 
@@ -65,7 +67,7 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
   }
 
   return (
-    <div className={`question multiple-choice ${isPhotoQuestion ? 'photo' : ''}`}>
+    <div className={`multiple-choice ${isPhotoQuestion ? 'photo' : ''}`}>
       <h2>{question.text}</h2>
       <p className="multiple-choice-instruction">{getSelectionInstruction(question.select)}</p>
       <div className="multiple-choice-answers">
@@ -77,11 +79,22 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
             onPointerDown={(event) => handleSelect(option.id, event)}
           >
             {isPhotoQuestion ? (
-              <img
-                className="multiple-choice-answers-answer-image"
-                src={`${option.content}`}
-                alt={option.id}
-              />
+              isVideoAsset(option.content) ? (
+                <video
+                  className="multiple-choice-answers-answer-image"
+                  src={`${option.content}`}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              ) : (
+                <img
+                  className="multiple-choice-answers-answer-image"
+                  src={`${option.content}`}
+                  alt={option.id}
+                />
+              )
             ) : (
               option.content
             )}

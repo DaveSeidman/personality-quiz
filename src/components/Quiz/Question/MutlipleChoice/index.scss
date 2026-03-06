@@ -1,3 +1,5 @@
+@use '../../../../index.scss' as src;
+
 .multiple-choice {
   &-instruction {
     margin: 0;
@@ -14,23 +16,24 @@
     &-answer {
       margin: 0;
       padding: 1rem 1.25rem;
-      border-radius: 12px;
+      border-radius: 14px;
       border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(255, 255, 255, 0.06);
-      color: rgba(255, 255, 255, 0.65);
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.88);
       cursor: pointer;
       text-align: left;
       transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease, color 140ms ease;
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(src.$orange, 0.35);
+        color: #fff;
       }
 
       &.selected {
-        background: rgba(255, 255, 255, 0.14);
-        border-color: rgba(255, 255, 255, 0.35);
-        color: #fff;
-        transform: translateX(4px);
+        background: src.$orange;
+        border-color: lighten(src.$orange, 8%);
+        color: #130a04;
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.45);
       }
     }
   }
@@ -46,20 +49,20 @@
         padding: 0;
         aspect-ratio: 1;
         overflow: hidden;
-        border-radius: 12px;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.18);
         background: rgba(255, 255, 255, 0.08);
         transition: border-color 140ms ease, transform 140ms ease;
 
         &:hover {
           transform: translateY(-2px);
-          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(src.$orange, 0.35);
         }
 
         &.selected {
           transform: translateY(-2px);
-          border-color: rgba(80, 200, 120, 0.95);
-          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(src.$orange, 0.9);
+          box-shadow: 0 0 0 3px rgba(src.$orange, 0.35);
         }
 
         &-image {
