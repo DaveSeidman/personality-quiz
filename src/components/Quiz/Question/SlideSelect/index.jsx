@@ -194,7 +194,7 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
                 onPointerCancel={(event) => handlePointerUpOrCancel(event, option.id)}
               >
                 <div className="slide-select-row-fill" style={{ width: `${progress * 100}%` }} />
-                <div className="slide-select-row-thumb" style={{ left: `calc(${progress * 100}% - 14px)` }} />
+                <div className="slide-select-row-thumb" style={{ left: `${progress * 100}%` }} />
               </div>
             </div>
           )

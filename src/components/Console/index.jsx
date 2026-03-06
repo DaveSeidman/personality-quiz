@@ -12,9 +12,11 @@ const describeAnswer = (question, answerId) => {
   return question.answers.find((option) => option.id === answerId) ?? null
 }
 
-const buildSummary = ({ entry, answerMeta, personality, isActive }) => {
-  if (!answerMeta) {
-    return isActive ? '\u00A0' : 'Awaiting response…'
+const buildSummary = ({ entry, personality }) => {
+  const hasSignals = Array.isArray(entry?.data?.events) && entry.data.events.length > 0
+
+  if (!hasSignals) {
+    return 'Awaiting signals…'
   }
 
   const data = entry?.data ?? {}
@@ -30,14 +32,46 @@ const buildSummary = ({ entry, answerMeta, personality, isActive }) => {
     parts.push(`revisited ${revisitCount}× before locking it in`)
   }
 
-  const personaDescriptor = personality ? personality.name : (answerMeta.personalityId ?? 'their preferred')
+  const personaDescriptor = personality ? personality.name : 'their preferred signal'
   parts.push(`aligned with ${personaDescriptor}`)
 
-  if (answerMeta?.content) {
-    parts.push(`“${answerMeta.content.replace(/\s+/g, ' ').trim()}”`)
-  }
-
   return parts.join(' · ')
+}
+
+const buildMetrics = (entry) => {
+  if (!entry) return []
+
+  const data = entry.data || {}
+  const latencyMs = data.answerCommittedAt && data.firstInteractionAt
+    ? data.answerCommittedAt - data.firstInteractionAt
+    : null
+  const revisitCount = data.revisitCount ?? 0
+  const eventCount = Array.isArray(data.events) ? data.events.length : 0
+  const confidence = typeof entry.confidence === 'number' ? entry.confidence : null
+
+  const metrics = []
+
+  metrics.push({
+    label: 'Commit Time',
+    value: latencyMs ? formatSeconds(latencyMs) : '—'
+  })
+
+  metrics.push({
+    label: 'Confidence',
+    value: confidence !== null ? `${Math.round(confidence * 100)}%` : '—'
+  })
+
+  metrics.push({
+    label: 'Revisits',
+    value: revisitCount > 0 ? `${revisitCount}×` : 'None'
+  })
+
+  metrics.push({
+    label: 'Interactions',
+    value: eventCount
+  })
+
+  return metrics
 }
 
 export default function Console({ analytics, questions, answers, personalities, activeQuestionId }) {
@@ -70,8 +104,10 @@ export default function Console({ analytics, questions, answers, personalities, 
       return {
         id: questionId,
         label: question.label ?? `Question ${question.id}`,
-        summary: buildSummary({ entry, answerMeta, personality, isActive }),
-        confidence: answerMeta && typeof entry?.confidence === 'number' ? entry.confidence : null,
+        summary: buildSummary({ entry, personality }),
+        metrics: buildMetrics(entry),
+        confidence: typeof entry?.confidence === 'number' ? entry.confidence : null,
+        interactions: entry?.data?.events?.length ?? 0,
         isActive,
       }
     })
@@ -112,9 +148,32 @@ export default function Console({ analytics, questions, answers, personalities, 
             <div className={`console-feed-row-summary ${!row.summary.trim() ? 'blank' : ''}`}>
               {row.summary.trim() ? row.summary : '\u00A0'}
             </div>
-            {row.confidence !== null ? (
-              <div className="console-feed-row-confidence">{Math.round(row.confidence * 100)}% confidence</div>
+
+            {row.metrics && row.metrics.length ? (
+              <div className="console-feed-row-metrics">
+                {row.metrics.map((metric, idx) => (
+                  <div key={`${row.id}-metric-${idx}`} className="console-feed-row-metric">
+                    <span className="console-feed-row-metric-label">{metric.label}</span>
+                    <span className="console-feed-row-metric-value">{metric.value}</span>
+                  </div>
+                ))}
+              </div>
             ) : null}
+
+            <div className="console-feed-row-graphs">
+              <div className="console-feed-row-graph">
+                <span>Confidence</span>
+                <div className="console-feed-row-graph-track">
+                  <div className="console-feed-row-graph-fill" style={{ width: `${Math.min(100, Math.max(0, (row.confidence || 0) * 100))}%` }} />
+                </div>
+              </div>
+              <div className="console-feed-row-graph">
+                <span>Interactions</span>
+                <div className="console-feed-row-graph-track">
+                  <div className="console-feed-row-graph-fill interactions" style={{ width: `${Math.min(100, row.interactions * 6)}%` }} />
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>

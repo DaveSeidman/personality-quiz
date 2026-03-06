@@ -4,8 +4,14 @@ import Results from "./Results"
 import { CONFIDENCE_WEIGHTS, finalizeAnalytics } from "./analytics"
 import "./index.scss"
 
+const REMOTE_API = 'https://personality-quiz-backend-eogn.onrender.com'
+
 async function submitAnswersToBackend(payload) {
-  const baseUrl = import.meta.env.VITE_QUIZ_API_URL || 'http://localhost:8000'
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  const baseUrl = isLocalhost
+    ? (import.meta.env.VITE_QUIZ_API_URL || 'http://localhost:8000')
+    : REMOTE_API
+
   const response = await fetch(`${baseUrl}/api/analyze`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

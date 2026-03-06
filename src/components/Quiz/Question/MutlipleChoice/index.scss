@@ -22,11 +22,13 @@
       color: rgba(255, 255, 255, 0.88);
       cursor: pointer;
       text-align: left;
-      transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease, color 140ms ease;
+      opacity: 0.9;
+      transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease, color 140ms ease, opacity 140ms ease;
 
       &:hover {
         border-color: rgba(src.$orange, 0.35);
         color: #fff;
+        opacity: 1;
       }
 
       &.selected {
@@ -34,6 +36,7 @@
         border-color: lighten(src.$orange, 8%);
         color: #130a04;
         box-shadow: 0 16px 32px rgba(0, 0, 0, 0.45);
+        opacity: 1;
       }
     }
   }
@@ -52,17 +55,20 @@
         border-radius: 16px;
         border: 2px solid rgba(255, 255, 255, 0.18);
         background: rgba(255, 255, 255, 0.08);
-        transition: border-color 140ms ease, transform 140ms ease;
+        opacity: 0.9;
+        transition: border-color 140ms ease, transform 140ms ease, opacity 140ms ease;
 
         &:hover {
           transform: translateY(-2px);
           border-color: rgba(src.$orange, 0.35);
+          opacity: 1;
         }
 
         &.selected {
           transform: translateY(-2px);
           border-color: rgba(src.$orange, 0.9);
           box-shadow: 0 0 0 3px rgba(src.$orange, 0.35);
+          opacity: 1;
         }
 
         &-image {

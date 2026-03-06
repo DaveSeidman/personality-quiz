@@ -113,20 +113,26 @@ export default function RankedChoice({ question, sessionKey, onDraftChange, onRe
       <p className="ranked-choice-subtitle">rearrange the answers so that your favorite is on top and least favorite is on bottom</p>
 
       <div className="ranked-choice-list">
-        {orderedOptions.map((option, index) => (
-          <div
-            key={option.id}
-            data-option-id={option.id}
-            className={`ranked-choice-row ${draggingId === option.id ? 'dragging' : ''} ${touchedIds[option.id] ? 'touched' : ''}`}
-            onPointerDown={(event) => handlePointerDown(event, option.id)}
-            onPointerMove={handlePointerMove}
-            onPointerUp={clearPointerState}
-            onPointerCancel={clearPointerState}
-          >
-            <span className="ranked-choice-rank">{index + 1}</span>
-            <span className="ranked-choice-label">{option.content}</span>
-          </div>
-        ))}
+        {orderedOptions.map((option, index) => {
+          const isDraggingRow = draggingId === option.id
+          const hasBeenTouched = touchedIds[option.id]
+          const rowClass = `ranked-choice-row ${isDraggingRow ? 'dragging' : ''} ${hasBeenTouched ? 'touched' : ''} ${hasBeenTouched && !isDraggingRow ? 'locked' : ''}`
+
+          return (
+            <div
+              key={option.id}
+              data-option-id={option.id}
+              className={rowClass}
+              onPointerDown={(event) => handlePointerDown(event, option.id)}
+              onPointerMove={handlePointerMove}
+              onPointerUp={clearPointerState}
+              onPointerCancel={clearPointerState}
+            >
+              <span className="ranked-choice-rank">{index + 1}</span>
+              <span className="ranked-choice-label">{option.content}</span>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

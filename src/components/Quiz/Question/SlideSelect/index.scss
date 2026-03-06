@@ -26,12 +26,18 @@
     border-radius: 14px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     background: rgba(255, 255, 255, 0.08);
-    transition: background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+    opacity: 0.9;
+    transition: background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+
+    &:hover {
+      opacity: 1;
+    }
 
     &.selected {
       background: lighten(src.$green, 4%);
       border-color: rgba(src.$orange, 0.85);
       box-shadow: 0 16px 28px rgba(0, 0, 0, 0.45);
+      opacity: 1;
     }
 
     &-label {
@@ -64,12 +70,13 @@
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background: #130a04;
-      border: 2px solid lighten(src.$orange, 6%);
-      transform: translateY(-50%);
+      background: src.$orange;
+      border: none;
+      transform: translate(-50%, -50%);
       transition: left 180ms ease;
       pointer-events: none;
       box-sizing: border-box;
+      box-shadow: none;
     }
 
     &-track.dragging {
