@@ -24,8 +24,8 @@ $layout-padding: 1vh;
     border-radius: 1rem;
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(.5vh);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.35);
+    border: 0.052vh solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 1.3vh 2.34vh rgba(0, 0, 0, 0.35);
     margin: $layout-margin 0;
 
     h2 {
@@ -44,8 +44,8 @@ $layout-padding: 1vh;
 
     .button-secondary {
       padding: 0.5rem 0.9rem;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 0.52vh;
+      border: 0.052vh solid rgba(255, 255, 255, 0.16);
       background: rgba(255, 255, 255, 0.08);
       color: rgba(255, 255, 255, 0.92);
       cursor: pointer;
@@ -91,7 +91,7 @@ $layout-padding: 1vh;
 
       &-button {
         padding: 0.6rem 1rem;
-        border-radius: 999px;
+        border-radius: 999vh;
         border: none;
         background: src.$orange;
         color: #1a130d;
@@ -100,7 +100,7 @@ $layout-padding: 1vh;
         font-size: 0.78rem;
         font-weight: 800;
         letter-spacing: 0.08em;
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 0.63vh 1.25vh rgba(0, 0, 0, 0.35);
 
         // &:hover:not(.disabled) {
         //   background: color.adjust(src.$orange, $lightness: 6%);
@@ -117,9 +117,11 @@ $layout-padding: 1vh;
 }
 
 .question-content.build-on {
-  outline: 2px solid red;
+  // outline: 0.1vh solid red;
 }
 
 .question.before-visited {}
+
 .question.build-on {}
+
 .question-content.before-visited {}

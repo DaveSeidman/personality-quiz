@@ -205,7 +205,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
     <div className="quiz">
       {questions.map((question, index) => (
         <div
-          className={`quiz-step ${currentStep === index ? 'is-active' : 'is-hidden'}`}
+          className="quiz-step"
           id={`step-${index}`}
           key={question.id}
         >
@@ -226,7 +226,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
       ))}
 
       <div
-        className={`quiz-step ${currentStep === resultsStepIndex ? 'is-active' : 'is-hidden'}`}
+        className="quiz-step"
         id={`step-${resultsStepIndex}`}
       >
         <Results

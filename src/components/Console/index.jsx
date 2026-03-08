@@ -108,7 +108,7 @@ export default function Console({ analytics, questions, answers, personalities, 
       const entryEvents = Array.isArray(entry?.data?.events) ? entry.data.events : []
       const activityEvents = entryEvents.filter((event) => !PASSIVE_EVENTS.has(event.type))
       const eventCount = activityEvents.length
-      const hasMeaningfulSignals = eventCount > 0
+      const hasMeaningfulSignals = eventCount > 0 || (entry?.data?.revisitCount ?? 0) > 0 || Boolean(entry?.data?.answerCommittedAt)
 
       let liveConfidence = null
       if (hasMeaningfulSignals && entry?.data) {
