@@ -31,7 +31,7 @@ $layout-padding: 2vh;
 
     h2 {
       margin: 0 0 1.48vh;
-      font-size: clamp(2.37vh, 2vh, 3.56vh);
+      font-size: clamp(1.3vh, 1.6vh, 2.3vh);
       line-height: 1.25;
     }
   }
@@ -55,7 +55,7 @@ $layout-padding: 2vh;
       color: rgba(255, 255, 255, 0.92);
       cursor: pointer;
       text-transform: uppercase;
-      font-size: 1.07vh;
+      font-size: 0.86vh;
       font-weight: 700;
       letter-spacing: 0.12em;
       transition: border-color 0.14s ease, background-color 0.14s ease, transform 0.14s ease, opacity 0.14s ease;
@@ -82,7 +82,7 @@ $layout-padding: 2vh;
         right: 7.41vh;
         bottom: .7.41vh;
         margin: 0;
-        font-size: 1.3vh;
+        font-size: 1.04vh;
         color: src.$orange;
         text-align: right;
         width: auto;
@@ -97,7 +97,7 @@ $layout-padding: 2vh;
         color: #1a130d;
         cursor: pointer;
         text-transform: uppercase;
-        font-size: 1.16vh;
+        font-size: 0.93vh;
         font-weight: 800;
         letter-spacing: 0.14em;
         box-shadow: 0 0.63vh 1.25vh rgba(0, 0, 0, 0.35);

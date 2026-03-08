@@ -12,7 +12,7 @@
     margin: 0 0 1.48vh;
     min-height: 1.85vh;
     color: rgba(255, 255, 255, 0.7);
-    font-size: clamp(1.41vh, 1.6vh, 1.85vh);
+    font-size: clamp(1.13vh, 1.28vh, 1.48vh);
   }
 
   &-list {
@@ -44,7 +44,7 @@
     &-label {
       display: block;
       margin-bottom: 0.93vh;
-      font-size: clamp(1.56vh, 2vh, 2.37vh);
+      font-size: clamp(1.25vh, 1.6vh, 1.9vh);
       line-height: 1.4;
     }
 

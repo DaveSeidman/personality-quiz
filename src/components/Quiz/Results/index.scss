@@ -36,14 +36,14 @@ $layout-padding: 2vh;
   &-title {
     margin: 0;
     color: #fff;
-    font-size: 2.96vh;
+    font-size: 2.37vh;
     letter-spacing: 0.04em;
   }
 
   &-instruction {
     margin: 0.37vh 0 1.85vh;
     color: rgba(255, 255, 255, 0.78);
-    font-size: 1.48vh;
+    font-size: 1.18vh;
   }
 
   &-navigation {
@@ -67,7 +67,7 @@ $layout-padding: 2vh;
     border-radius: 999vh;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    font-size: 1.07vh;
+    font-size: 0.86vh;
     font-weight: 700;
     cursor: pointer;
     transition: opacity 0.16s ease;
@@ -128,7 +128,7 @@ $layout-padding: 2vh;
       color: rgba(255, 255, 255, 0.72);
       line-height: 1.6;
       text-align: center;
-      font-size: 1.48vh;
+      font-size: 1.18vh;
       font-weight: 500;
 
       &-highlight {
@@ -157,7 +157,7 @@ $layout-padding: 2vh;
 
       &-title {
         margin: 0 0 0.74vh;
-        font-size: 1.16vh;
+        font-size: 0.93vh;
         letter-spacing: 0.06em;
         text-transform: uppercase;
         color: #d3e4ff;
@@ -181,7 +181,7 @@ $layout-padding: 2vh;
         display: inline-flex;
         align-items: center;
         gap: 0.52vh;
-        font-size: 1.1vh;
+        font-size: 0.88vh;
         color: #e6edff;
       }
 
@@ -232,7 +232,7 @@ $layout-padding: 2vh;
         margin: 0 0 0.3vh;
         width: 100%;
         color: #c9e7ff;
-        font-size: 1.21vh;
+        font-size: 0.97vh;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         text-align: center;
@@ -241,7 +241,7 @@ $layout-padding: 2vh;
       &-subtitle {
         margin: 0 0 0.3vh;
         width: 100%;
-        font-size: 1.13vh;
+        font-size: 0.9vh;
         color: #d7e6ff;
         line-height: 1.35;
         text-align: center;
@@ -259,7 +259,7 @@ $layout-padding: 2vh;
 
       &-title {
         margin: 0 0 0.74vh;
-        font-size: 1.16vh;
+        font-size: 0.93vh;
         color: #f1f6ff;
         text-transform: uppercase;
         letter-spacing: 0.04em;
@@ -314,7 +314,7 @@ $layout-padding: 2vh;
 
       &-label {
         margin: 0 0 0.37vh;
-        font-size: 1.01vh;
+        font-size: 0.81vh;
         text-transform: uppercase;
         letter-spacing: 0.04em;
         color: #41537a;
@@ -322,7 +322,7 @@ $layout-padding: 2vh;
 
       &-value {
         margin: 0.37vh 0 0;
-        font-size: 1.04vh;
+        font-size: 0.83vh;
         color: #1f2b4b;
       }
 
@@ -440,7 +440,7 @@ $layout-padding: 2vh;
 
       span {
         position: absolute;
-        font-size: 1.04vh;
+        font-size: 0.83vh;
         font-weight: 700;
         color: #1f2b4b;
       }
@@ -520,7 +520,7 @@ $layout-padding: 2vh;
 
 .results-loading-copy p {
   margin: 0;
-  font-size: 2.67vh;
+  font-size: 2.14vh;
   letter-spacing: 0.08em;
 }
 
