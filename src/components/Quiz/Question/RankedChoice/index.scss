@@ -14,7 +14,7 @@
   &-subtitle {
     margin: 0 0 0.74vh;
     color: rgba(255, 255, 255, 0.78);
-    font-size: clamp(1.13vh, 1.28vh, 1.48vh);
+    font-size: clamp(0.9vh, 1.02vh, 1.18vh);
   }
 
   &-list {
@@ -36,7 +36,7 @@
     color: rgba(255, 255, 255, 0.9);
     cursor: grab;
     opacity: 0.9;
-    font-size: clamp(1.25vh, 1.68vh, 1.9vh);
+    font-size: clamp(1.0vh, 1.34vh, 1.52vh);
     line-height: 1.45;
     transition: transform 0.14s ease, background-color 0.14s ease, box-shadow 0.14s ease, color 0.14s ease, border-color 0.14s ease, opacity 0.14s ease;
 

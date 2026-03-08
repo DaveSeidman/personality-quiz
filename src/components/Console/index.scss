@@ -24,7 +24,7 @@
 
   &-label {
     margin: 0;
-    font-size: 1.01vh;
+    font-size: 0.91vh;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.7);
@@ -32,7 +32,7 @@
 
   &-sub {
     margin: 0.37vh 0 0;
-    font-size: 1.13vh;
+    font-size: 1.02vh;
     color: rgba(255, 255, 255, 0.58);
   }
 
@@ -40,7 +40,7 @@
     display: flex;
     align-items: center;
     gap: 0.52vh;
-    font-size: 1.01vh;
+    font-size: 0.91vh;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.8);
@@ -118,7 +118,7 @@
 }
 
 .console-feed-row-label {
-  font-size: 0.93vh;
+  font-size: 0.84vh;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.58);
@@ -128,7 +128,7 @@
   align-items: center;
 
   .console-feed-row-live {
-    font-size: 0.83vh;
+    font-size: 0.75vh;
     letter-spacing: 0.12em;
     padding: 0.15vh 0.74vh;
     border-radius: 92.5vh;
@@ -138,7 +138,7 @@
 }
 
 .console-feed-row-summary {
-  font-size: 1.13vh;
+  font-size: 1.02vh;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.35;
   min-height: 4.44vh;
@@ -169,14 +169,14 @@
 }
 
 .console-feed-row-metric-label {
-  font-size: 0.83vh;
+  font-size: 0.75vh;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.55);
 }
 
 .console-feed-row-metric-value {
-  font-size: 1.13vh;
+  font-size: 1.02vh;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.92);
 }
@@ -192,7 +192,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.74vh;
-  font-size: 0.83vh;
+  font-size: 0.75vh;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.6);
@@ -240,7 +240,7 @@
 
 .confidence-label {
   margin-top: 0.52vh;
-  font-size: 1.01vh;
+  font-size: 0.91vh;
   letter-spacing: 0.08em;
 }
 
@@ -257,7 +257,7 @@
   text-align: center;
   padding: 2.96vh;
   color: rgba(255, 255, 255, 0.85);
-  font-size: 1.18vh;
+  font-size: 1.06vh;
   line-height: 1.6;
   letter-spacing: 0.01em;
   background: rgba(8, 12, 9, 0.78);
@@ -313,7 +313,7 @@
   color: rgba(255, 255, 255, 0.86);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.83vh;
+  font-size: 0.75vh;
   cursor: pointer;
   transition: opacity 160ms ease;
 }
@@ -352,14 +352,14 @@
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.93vh;
+  font-size: 0.84vh;
   color: rgba(255, 255, 255, 0.8);
 }
 
 .console-breakdown-subtitle {
   margin: 0 0 1.48vh;
   text-align: center;
-  font-size: 0.97vh;
+  font-size: 0.87vh;
   color: rgba(255, 255, 255, 0.65);
 }
 
@@ -387,7 +387,7 @@
 
 .console-breakdown-card-title {
   margin: 0 0 0.74vh;
-  font-size: 0.93vh;
+  font-size: 0.84vh;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.85);
   text-transform: uppercase;
@@ -396,7 +396,7 @@
   span {
     display: block;
     margin-top: 0.22vh;
-    font-size: 0.81vh;
+    font-size: 0.73vh;
     color: rgba(255, 255, 255, 0.55);
     letter-spacing: 0.04em;
   }
@@ -449,7 +449,7 @@
 
 .console-breakdown-chart-label {
   margin: 0 0 0.37vh;
-  font-size: 0.81vh;
+  font-size: 0.73vh;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: #41537a;
@@ -457,7 +457,7 @@
 
 .console-breakdown-chart-value {
   margin: 0.37vh 0 0;
-  font-size: 0.86vh;
+  font-size: 0.77vh;
   color: #1f2b4b;
 }
 
@@ -527,7 +527,7 @@
 
 .console-breakdown-ring span {
   position: absolute;
-  font-size: 0.83vh;
+  font-size: 0.75vh;
   font-weight: 700;
   color: #1f2b4b;
 }
@@ -618,7 +618,7 @@
 .console-aggregate-title {
   margin: 0;
   text-align: center;
-  font-size: 1.01vh;
+  font-size: 0.91vh;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.82);
@@ -627,7 +627,7 @@
 .console-aggregate-subtitle {
   margin: 0;
   text-align: center;
-  font-size: 0.95vh;
+  font-size: 0.85vh;
   color: rgba(255, 255, 255, 0.6);
 }
 
@@ -651,7 +651,7 @@
   display: flex;
   align-items: center;
   gap: 0.89vh;
-  font-size: 0.95vh;
+  font-size: 0.85vh;
   color: rgba(255, 255, 255, 0.85);
 }
 
@@ -659,7 +659,7 @@
   flex: 0 0 12.96vh;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.81vh;
+  font-size: 0.73vh;
   color: rgba(255, 255, 255, 0.65);
 }
 
@@ -680,7 +680,7 @@
 .console-aggregate-distribution-value {
   width: 4.44vh;
   text-align: right;
-  font-size: 0.89vh;
+  font-size: 0.8vh;
   color: rgba(255, 255, 255, 0.8);
 }
 
@@ -705,7 +705,7 @@
 
 .console-aggregate-chart-label {
   margin: 0 0 0.37vh;
-  font-size: 0.81vh;
+  font-size: 0.73vh;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #41537a;
@@ -713,7 +713,7 @@
 
 .console-aggregate-chart-value {
   margin: 0.52vh 0 0;
-  font-size: 0.89vh;
+  font-size: 0.8vh;
   font-weight: 600;
   color: #1f2b4b;
 }
@@ -752,7 +752,7 @@
 
 .console-aggregate-ring span {
   position: absolute;
-  font-size: 0.88vh;
+  font-size: 0.79vh;
   font-weight: 700;
   color: #1f2b4b;
 }
