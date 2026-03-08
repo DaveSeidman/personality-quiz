@@ -50,7 +50,7 @@
 
     &-track {
       position: relative;
-      height: 2.96vh;
+      height: 1.48vh;
       border-radius: 92.5vh;
       border: 0.09vh solid rgba(255, 255, 255, 0.2);
       background: rgba(10, 18, 9, 0.65);
@@ -71,8 +71,8 @@
     &-thumb {
       position: absolute;
       top: 50%;
-      width: 3.15vh;
-      height: 3.15vh;
+      width: 1.58vh;
+      height: 1.58vh;
       border-radius: 50%;
       background: src.$orange;
       border: none;
@@ -90,9 +90,9 @@
         transform: translate(-50%, -50%);
         width: 0;
         height: 0;
-        border-top: 0.56vh solid transparent;
-        border-bottom: 0.56vh solid transparent;
-        border-left: 0.74vh solid #1a130d;
+        border-top: 0.28vh solid transparent;
+        border-bottom: 0.28vh solid transparent;
+        border-left: 0.37vh solid #1a130d;
       }
     }
 
