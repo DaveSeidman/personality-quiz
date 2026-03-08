@@ -28,7 +28,7 @@ textarea,
 .console,
 .attract,
 .attract-blob {
-  transition: background-color var(--ui-transition), color var(--ui-transition), border-color var(--ui-transition), opacity var(--ui-transition), transform var(--ui-transition);
+  // transition: background-color var(--ui-transition), color var(--ui-transition), border-color var(--ui-transition), opacity var(--ui-transition), transform var(--ui-transition);
 }
 
 @font-face {
@@ -107,5 +107,5 @@ button.is-active,
 button:active,
 .multiple-choice-answers-answer.is-active,
 .question-navigation button.is-active {
-  transform: scale(1.02);
+  // transform: scale(1.02);
 }

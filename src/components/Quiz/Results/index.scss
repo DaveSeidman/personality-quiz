@@ -27,7 +27,9 @@ $layout-padding: 2vh;
     border: 0.052vh solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 1.56vh 3.13vh rgba(0, 0, 0, 0.55);
     overflow: auto;
-    margin: $layout-margin auto;
+    // margin: $layout-margin auto;
+    margin: 7vh 0 0;
+
   }
 
   &-title {

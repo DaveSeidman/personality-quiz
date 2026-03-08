@@ -26,7 +26,8 @@ $layout-padding: 1vh;
     backdrop-filter: blur(.5vh);
     border: 0.052vh solid rgba(255, 255, 255, 0.22);
     box-shadow: 0 1.3vh 2.34vh rgba(0, 0, 0, 0.35);
-    margin: $layout-margin 0;
+    // margin: $layout-margin 0;
+    margin: 7vh 0 0;
 
     h2 {
       margin: 0 0 1rem;
