@@ -11,8 +11,8 @@
 
   &-instruction {
     margin: 0;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: clamp(0.95rem, 1.6vh, 1.25rem);
   }
 
   &-list {
@@ -41,6 +41,7 @@
 
   &-label {
     line-height: 1.35;
+    font-size: clamp(1.05rem, 2vh, 1.6rem);
   }
 
   &-control {

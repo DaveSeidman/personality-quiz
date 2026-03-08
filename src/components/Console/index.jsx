@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useRef } from 'react'
 import { computeQuestionConfidence } from '../Quiz/analytics'
 import './index.scss'
 
+const PASSIVE_EVENTS = new Set(['question_presented', 'question_revisited'])
+
 const formatSeconds = (ms) => {
   if (typeof ms !== 'number' || Number.isNaN(ms) || ms <= 0) return 'a beat'
   if (ms < 600) return 'almost instantly'
@@ -14,7 +16,7 @@ const describeAnswer = (question, answerId) => {
 }
 
 const buildSummary = ({ entry, personality }) => {
-  const hasSignals = Array.isArray(entry?.data?.events) && entry.data.events.length > 0
+  const hasSignals = Array.isArray(entry?.data?.events) && entry.data.events.some((event) => !PASSIVE_EVENTS.has(event.type))
 
   if (!hasSignals) {
     return 'Awaiting signals…'
@@ -39,7 +41,7 @@ const buildSummary = ({ entry, personality }) => {
   return parts.join(' · ')
 }
 
-const buildMetrics = (entry) => {
+const buildMetrics = (entry, confidenceOverride = null, eventCount = 0) => {
   if (!entry) return []
 
   const data = entry.data || {}
@@ -47,8 +49,9 @@ const buildMetrics = (entry) => {
     ? data.answerCommittedAt - data.firstInteractionAt
     : null
   const revisitCount = data.revisitCount ?? 0
-  const eventCount = Array.isArray(data.events) ? data.events.length : 0
-  const confidence = typeof entry.confidence === 'number' ? entry.confidence : null
+  const confidence = typeof confidenceOverride === 'number'
+    ? confidenceOverride
+    : (typeof entry.confidence === 'number' ? entry.confidence : null)
 
   const metrics = []
 
@@ -102,19 +105,29 @@ export default function Console({ analytics, questions, answers, personalities, 
       const personality = answerMeta ? personalityMap[answerMeta.personalityId] : null
       const isActive = questionId === activeQuestionId
 
+      const entryEvents = Array.isArray(entry?.data?.events) ? entry.data.events : []
+      const activityEvents = entryEvents.filter((event) => !PASSIVE_EVENTS.has(event.type))
+      const eventCount = activityEvents.length
+      const hasMeaningfulSignals = eventCount > 0
+
       let liveConfidence = null
-      if (entry?.data) {
+      if (hasMeaningfulSignals && entry?.data) {
         const score = computeQuestionConfidence(entry.data)
         liveConfidence = score?.confidence ?? null
       }
+
+      const baseConfidence = hasMeaningfulSignals && typeof entry?.confidence === 'number' ? entry.confidence : null
+      const confidenceValue = typeof liveConfidence === 'number'
+        ? liveConfidence
+        : (typeof baseConfidence === 'number' ? baseConfidence : 0.5)
 
       return {
         id: questionId,
         label: question.label ?? `Question ${question.id}`,
         summary: buildSummary({ entry, personality }),
-        metrics: buildMetrics(entry),
-        confidence: liveConfidence,
-        interactions: entry?.data?.events?.length ?? 0,
+        metrics: buildMetrics(entry, confidenceValue, eventCount),
+        confidence: confidenceValue,
+        interactions: eventCount,
         isActive,
       }
     })
@@ -129,15 +142,14 @@ export default function Console({ analytics, questions, answers, personalities, 
   }
 
   return (
-    <aside className="console">
+    <div className="console">
       <div className="console-header">
         <div>
           <p className="console-header-label">Signal Console</p>
-          <p className="console-header-sub">Facts-for-nerds stream of how the quiz brain is reading the room.</p>
         </div>
         <div className="console-header-indicator">
           <span className="pulse" />
-          <span>Live</span>
+          <span>Analyzing</span>
         </div>
       </div>
 
@@ -210,6 +222,6 @@ export default function Console({ analytics, questions, answers, personalities, 
           </div>
         ))}
       </div>
-    </aside>
+    </div>
   )
 }

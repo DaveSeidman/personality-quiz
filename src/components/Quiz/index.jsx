@@ -195,7 +195,12 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
   return (
     <div className="quiz">
       {questions.map((question, index) => (
-        <div className="quiz-step" id={`step-${index}`} key={question.id}>
+        <div
+          className={`quiz-step ${currentStep === index ? 'is-active' : 'is-hidden'}`}
+          id={`step-${index}`}
+          key={question.id}
+          aria-hidden={currentStep !== index}
+        >
           <Question
             question={question}
             answers={answers}
@@ -210,7 +215,11 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
         </div>
       ))}
 
-      <div className="quiz-step" id={`step-${resultsStepIndex}`}>
+      <div
+        className={`quiz-step ${currentStep === resultsStepIndex ? 'is-active' : 'is-hidden'}`}
+        id={`step-${resultsStepIndex}`}
+        aria-hidden={currentStep !== resultsStepIndex}
+      >
         <Results
           result={submissionResult}
           analytics={analytics}

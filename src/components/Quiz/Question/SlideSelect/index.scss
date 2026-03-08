@@ -12,7 +12,7 @@
     margin: 0 0 1rem;
     min-height: 1.25rem;
     color: rgba(255, 255, 255, 0.7);
-    font-size: 0.875rem;
+    font-size: clamp(0.95rem, 1.6vh, 1.25rem);
   }
 
   &-list {
@@ -30,9 +30,9 @@
     opacity: 0.9;
     transition: background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
 
-    &:hover {
-      opacity: 1;
-    }
+    // &:hover {
+    //   opacity: 1;
+    // }
 
     &.selected {
       background: color.adjust(src.$green, $lightness: 4%);
@@ -44,6 +44,8 @@
     &-label {
       display: block;
       margin-bottom: 0.625rem;
+      font-size: clamp(1.05rem, 2vh, 1.6rem);
+      line-height: 1.4;
     }
 
     &-track {
@@ -81,6 +83,7 @@
     }
 
     &-track.dragging {
+
       .slide-select-row-fill,
       .slide-select-row-thumb {
         transition: none;

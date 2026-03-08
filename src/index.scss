@@ -3,19 +3,32 @@ $orange: #c64c21;
 $green: #1a2f18;
 
 :root {
-  /* viewport-scaled sizing system */
-  --ui-unit: 1vh;
   font-size: clamp(12px, 1.6vh, 20px);
+  --ui-transition: 0.16s ease;
 }
 
 * {
   -webkit-tap-highlight-color: transparent;
 }
 
-*,
-*::before,
-*::after {
-  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, opacity 160ms ease, transform 160ms ease;
+button,
+input,
+select,
+textarea,
+.multiple-choice-answers-answer,
+.ranked-choice-row,
+.range-sliders-row,
+.slide-select-row-track,
+.console-feed-row,
+.results-status-question,
+.results-status-chart,
+.results-status-legend-item,
+.question-content,
+.results-content,
+.console,
+.attract,
+.attract-blob {
+  transition: background-color var(--ui-transition), color var(--ui-transition), border-color var(--ui-transition), opacity var(--ui-transition), transform var(--ui-transition);
 }
 
 @font-face {
@@ -73,6 +86,7 @@ body,
   width: 12vh;
   height: 5vh;
   z-index: 2;
+  pointer-events: none;
 
   img {
     width: 100%;

@@ -3,7 +3,7 @@ import Quiz from './components/Quiz'
 import Attract from './components/Attract'
 import Console from './components/Console'
 import quizData from './assets/data/quiz.json'
-import backgroundVideo from './assets/videos/background2.mp4'
+import backgroundVideo from './assets/videos/pulses1-loop.mp4'
 import logoImg from './assets/images/logo.png'
 import './index.scss'
 

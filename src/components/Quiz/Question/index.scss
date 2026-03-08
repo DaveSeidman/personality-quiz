@@ -1,36 +1,46 @@
 @use 'sass:color';
 @use '../../../index.scss' as src;
 
+$layout-margin: 2vh;
+$layout-padding: 1vh;
+
 .question {
-  width: 100%;
+  width: calc(100% - 4vh);
   height: 100%;
   box-sizing: border-box;
-  margin: 0;
-  padding: 1rem 1rem 1rem;
+  margin: $layout-margin auto;
+  padding: $layout-padding;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   justify-content: center;
 
   &-content {
-    width: calc(100% - 4rem);
+    width: calc(100% - 4vh);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 1.75rem;
+    padding: $layout-padding;
     border-radius: 1rem;
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(.5vh);
     border: 1px solid rgba(255, 255, 255, 0.22);
     box-shadow: 0 25px 45px rgba(0, 0, 0, 0.35);
-    margin: 1rem 0;
+    margin: $layout-margin 0;
+
+    h2 {
+      margin: 0 0 1rem;
+      font-size: clamp(1.6rem, 2vh, 2.4rem);
+      line-height: 1.25;
+    }
   }
 
   &-navigation {
-    width: calc(100% - 1rem);
-    // margin: 1rem ;
+    width: calc(100% - 4vh);
     display: flex;
     justify-content: space-between;
+    margin: $layout-margin auto 0;
+    padding: $layout-padding 0 0;
 
     .button-secondary {
       padding: 0.5rem 0.9rem;
@@ -45,10 +55,10 @@
       letter-spacing: 0.06em;
       transition: border-color 140ms ease, background-color 140ms ease, transform 140ms ease, opacity 140ms ease;
 
-      &:hover:not(:disabled) {
-        background: color.adjust(src.$green, $lightness: 6%);
-        border-color: rgba(255, 255, 255, 0.35);
-      }
+      // &:hover:not(:disabled) {
+      //   background: color.adjust(src.$green, $lightness: 6%);
+      //   border-color: rgba(255, 255, 255, 0.35);
+      // }
 
       &:disabled {
         opacity: 0.35;
@@ -92,9 +102,9 @@
         letter-spacing: 0.08em;
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
 
-        &:hover:not(.disabled) {
-          background: color.adjust(src.$orange, $lightness: 6%);
-        }
+        // &:hover:not(.disabled) {
+        //   background: color.adjust(src.$orange, $lightness: 6%);
+        // }
 
         &.disabled {
           opacity: 0.45;

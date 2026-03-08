@@ -480,6 +480,7 @@ function RadarCanvas({ composite, byQuestion }) {
 
 export default function Results({ result, analytics, questions, answers, sessionKey, onPrevious, onSubmit, onStartOver }) {
   const [status, setStatus] = useState('idle')
+  const [analyticsExpanded, setAnalyticsExpanded] = useState(false)
   const cards = useMemo(() => buildQuestionCards(analytics, questions, answers), [analytics, questions, answers])
   const radarData = useMemo(() => buildRadarData(cards), [cards])
 
@@ -490,6 +491,7 @@ export default function Results({ result, analytics, questions, answers, session
   useEffect(() => {
     if (!result) {
       setStatus('idle')
+      setAnalyticsExpanded(false)
     }
   }, [result])
 
@@ -528,58 +530,69 @@ export default function Results({ result, analytics, questions, answers, session
             </div>
 
             <div className="results-status-analytics">
-              <p className="results-status-analytics-title">Behavioral Indicators by Question Type</p>
-              <p className="results-status-analytics-subtitle">
-                Each metric can map toward different personality signals. Mixed colors in one question indicate blended tendencies.
-              </p>
-              {cards.map((card) => (
-                <div
-                  key={card.questionId}
-                  className={`results-status-question ${card.type} ${card.personalityId ? `personality-${card.personalityId}` : ''}`}
-                >
-                  <p className="results-status-question-title">
-                    Question {card.questionId} · {card.type} · <strong>Personality Result: {titleCase(humanizePersonality(card.personalityId))}</strong>
-                  </p>
+              <button
+                type="button"
+                className="results-status-analytics-toggle"
+                onClick={() => setAnalyticsExpanded(prev => !prev)}
+              >
+                {analyticsExpanded ? 'Hide behavioral breakdown' : 'Show behavioral breakdown'}
+              </button>
 
-                  <div className="results-status-question-charts">
-                    {(card.type === 'multiple-choice') && (
-                      <>
-                        <NeedleChart label="Decision Speed" value={card.metrics.speed} tone="pioneer" />
-                        <DotChart label="Selection Churn" count={card.metrics.changeCount} tone="architect" />
-                        <RingChart label="Next Decisiveness" value={card.metrics.nextDecisiveness} tone="strategist" />
-                        <BarChart label="Confidence Signal" value={card.confidence} tone="catalyst" />
-                      </>
-                    )}
+              <div className={`results-status-analytics-panel ${analyticsExpanded ? 'expanded' : 'collapsed'}`}>
+                <p className="results-status-analytics-title">Behavioral Indicators by Question Type</p>
+                <p className="results-status-analytics-subtitle">
+                  Each metric can map toward different personality signals. Mixed colors in one question indicate blended tendencies.
+                </p>
 
-                    {(card.type === 'ranked-choice') && (
-                      <>
-                        <PillChart label="Reorder Activity" value={card.metrics.reorderDensity} tone="architect" />
-                        <RingChart label="Touch Coverage" value={card.metrics.coverage} tone="catalyst" />
-                        <NeedleChart label="Pressure Index" value={card.metrics.avgPressure} tone="strategist" />
-                        <BarChart label="Confidence Signal" value={card.confidence} tone="pioneer" />
-                      </>
-                    )}
+                {cards.map((card) => (
+                  <div
+                    key={card.questionId}
+                    className={`results-status-question ${card.type} ${card.personalityId ? `personality-${card.personalityId}` : ''}`}
+                  >
+                    <p className="results-status-question-title">
+                      Question {card.questionId} · {card.type} · <strong>Personality Result: {titleCase(humanizePersonality(card.personalityId))}</strong>
+                    </p>
 
-                    {(card.type === 'range-sliders') && (
-                      <>
-                        <BarChart label="Slider Adjustment Density" value={card.metrics.sliderDensity} tone="architect" />
-                        <PillChart label="Question Coverage" value={card.metrics.coverage} tone="catalyst" />
-                        <NeedleChart label="Hesitation Coefficient" value={card.metrics.hesitation} tone="strategist" />
-                        <RingChart label="Confidence Signal" value={card.confidence} tone="pioneer" />
-                      </>
-                    )}
+                    <div className="results-status-question-charts">
+                      {(card.type === 'multiple-choice') && (
+                        <>
+                          <NeedleChart label="Decision Speed" value={card.metrics.speed} tone="pioneer" />
+                          <DotChart label="Selection Churn" count={card.metrics.changeCount} tone="architect" />
+                          <RingChart label="Next Decisiveness" value={card.metrics.nextDecisiveness} tone="strategist" />
+                          <BarChart label="Confidence Signal" value={card.confidence} tone="catalyst" />
+                        </>
+                      )}
 
-                    {(card.type === 'slide-select') && (
-                      <>
-                        <RingChart label="Slide Precision" value={card.metrics.slidePrecision} tone="pioneer" />
-                        <NeedleChart label="Touch Pressure" value={card.metrics.avgPressure} tone="strategist" />
-                        <PillChart label="Decision Speed" value={card.metrics.speed} tone="architect" />
-                        <BarChart label="Confidence Signal" value={card.confidence} tone="catalyst" />
-                      </>
-                    )}
+                      {(card.type === 'ranked-choice') && (
+                        <>
+                          <PillChart label="Reorder Activity" value={card.metrics.reorderDensity} tone="architect" />
+                          <RingChart label="Touch Coverage" value={card.metrics.coverage} tone="catalyst" />
+                          <NeedleChart label="Pressure Index" value={card.metrics.avgPressure} tone="strategist" />
+                          <BarChart label="Confidence Signal" value={card.confidence} tone="pioneer" />
+                        </>
+                      )}
+
+                      {(card.type === 'range-sliders') && (
+                        <>
+                          <BarChart label="Slider Adjustment Density" value={card.metrics.sliderDensity} tone="architect" />
+                          <PillChart label="Question Coverage" value={card.metrics.coverage} tone="catalyst" />
+                          <NeedleChart label="Hesitation Coefficient" value={card.metrics.hesitation} tone="strategist" />
+                          <RingChart label="Confidence Signal" value={card.confidence} tone="pioneer" />
+                        </>
+                      )}
+
+                      {(card.type === 'slide-select') && (
+                        <>
+                          <RingChart label="Slide Precision" value={card.metrics.slidePrecision} tone="pioneer" />
+                          <NeedleChart label="Touch Pressure" value={card.metrics.avgPressure} tone="strategist" />
+                          <PillChart label="Decision Speed" value={card.metrics.speed} tone="architect" />
+                          <BarChart label="Confidence Signal" value={card.confidence} tone="catalyst" />
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             <div className="results-status-legend">

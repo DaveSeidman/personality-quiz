@@ -13,4 +13,9 @@
 .quiz-step {
   width: 100%;
   height: 100%;
+  display: none;
+}
+
+.quiz-step.is-active {
+  display: block;
 }

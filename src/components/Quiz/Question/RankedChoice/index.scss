@@ -13,7 +13,8 @@
 
   &-subtitle {
     margin: 0 0 0.5rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.78);
+    font-size: clamp(0.95rem, 1.6vh, 1.25rem);
   }
 
   &-list {
@@ -31,16 +32,18 @@
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 16px;
-    padding: 1rem 1.25rem;
-    color: rgba(255, 255, 255, 0.85);
+    padding: 1.1rem 1.35rem;
+    color: rgba(255, 255, 255, 0.9);
     cursor: grab;
     opacity: 0.9;
+    font-size: clamp(1.05rem, 2.1vh, 1.6rem);
+    line-height: 1.45;
     transition: transform 140ms ease, background-color 140ms ease, box-shadow 140ms ease, color 140ms ease, border-color 140ms ease, opacity 140ms ease;
 
-    &:hover {
-      border-color: rgba(src.$orange, 0.4);
-      opacity: 1;
-    }
+    // &:hover {
+    //   border-color: rgba(src.$orange, 0.4);
+    //   opacity: 1;
+    // }
 
     &.touched {
       border-color: rgba(src.$orange, 0.7);
@@ -71,6 +74,7 @@
     display: grid;
     place-items: center;
     background: rgba(255, 255, 255, 0.18);
+    color: #fff;
     font-weight: 700;
   }
 
