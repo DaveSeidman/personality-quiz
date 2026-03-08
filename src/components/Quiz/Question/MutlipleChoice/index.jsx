@@ -2,28 +2,18 @@ import React, { useEffect, useMemo, useState } from "react"
 import { getSelectRule, getSelectionInstruction, normalizeSelections, shuffle, triggerActivePress } from '../../../utils'
 import './index.scss'
 
-const ANSWER_STAGGER = 0.08
-const ANSWER_BASE_DELAY = 0.18
-
 export default function MultipleChoice({ question, answer, setAnswers, sessionKey, onAnalyticsEvent }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
   const selectRule = useMemo(() => getSelectRule(question.select), [question.select])
   const selections = normalizeSelections(answer)
   const isPhotoQuestion = question.type === 'multiple-choice-image'
-  const [buildActive, setBuildActive] = useState(false)
 
   useEffect(() => {
     const nextOrder = shuffle(question.answers)
     setOrderedOptions(nextOrder)
-    setBuildActive(false)
-    const frame = requestAnimationFrame(() => {
-      setBuildActive(true)
-    })
     onAnalyticsEvent(String(question.id), 'answers_presented_order', {
       order: nextOrder.map(option => option.id),
     })
-
-    return () => cancelAnimationFrame(frame)
   }, [question.id, question.answers, sessionKey, onAnalyticsEvent])
 
   const isSelected = (optionId) => selections.includes(optionId)
@@ -77,7 +67,7 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
   }
 
   return (
-    <div className={`multiple-choice ${isPhotoQuestion ? 'photo' : ''} ${buildActive ? 'build-active' : ''}`}>
+    <div className={`multiple-choice ${isPhotoQuestion ? 'photo' : ''}`}>
       <h2>{question.text}</h2>
       <p className="multiple-choice-instruction">{getSelectionInstruction(question.select)}</p>
       <div className="multiple-choice-answers">
@@ -85,10 +75,9 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
           <button
             key={option.id}
             type="button"
-            className={`multiple-choice-answers-answer ${isSelected(option.id) ? 'selected' : ''} ${buildActive ? 'build-visible' : ''}`}
+            className={`multiple-choice-answers-answer ${isSelected(option.id) ? 'selected' : ''}`}
             onPointerDown={(event) => handleSelect(option.id, event)}
-            style={{ '--answer-delay': buildActive ? `${ANSWER_BASE_DELAY + index * ANSWER_STAGGER}s` : '0s' }}
-          >
+            >
             {isPhotoQuestion ? (
               isVideoAsset(option.content) ? (
                 <video

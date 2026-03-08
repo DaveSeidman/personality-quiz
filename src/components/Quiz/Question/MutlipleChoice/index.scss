@@ -2,27 +2,11 @@
 @use '../../../../index.scss' as src;
 
 .multiple-choice {
-  h2,
-  &-instruction {
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.45s ease, transform 0.45s ease;
-  }
-
   &-instruction {
     margin: 0 0 1.5rem;
     min-height: 1.25rem;
     color: rgba(255, 255, 255, 0.7);
     font-size: clamp(0.95rem, 1.6vh, 1.2rem);
-    transition-delay: 0.08s;
-  }
-
-  &.build-active {
-    h2,
-    .multiple-choice-instruction {
-      opacity: 1;
-      transform: none;
-    }
   }
 
   &-answers {
@@ -43,13 +27,12 @@
       font-size: clamp(1.05rem, 2.1vh, 1.6rem);
       line-height: 1.5;
       transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease, color 140ms ease, opacity 140ms ease;
-      transition-delay: var(--answer-delay, 0s);
 
-      // &:hover {
-      //   border-color: rgba(src.$orange, 0.35);
-      //   color: #fff;
-      //   opacity: 1;
-      // }
+      &:hover {
+        border-color: rgba(src.$orange, 0.35);
+        color: #fff;
+        opacity: 1;
+      }
 
       &.selected {
         background: src.$orange;
@@ -77,13 +60,12 @@
         background: rgba(255, 255, 255, 0.08);
         opacity: 0.9;
         transition: border-color 140ms ease, transform 140ms ease, opacity 140ms ease;
-        transition-delay: var(--answer-delay, 0s);
 
-        // &:hover {
-        //   transform: translateY(-2px);
-        //   border-color: rgba(src.$orange, 0.35);
-        //   opacity: 1;
-        // }
+        &:hover {
+          transform: translateY(-2px);
+          border-color: rgba(src.$orange, 0.35);
+          opacity: 1;
+        }
 
         &.selected {
           transform: translateY(-2px);
@@ -101,21 +83,4 @@
       }
     }
   }
-
-  .multiple-choice-answers-answer {
-    opacity: 0;
-    transform: translateY(14px);
-    pointer-events: none;
-  }
-
-  .multiple-choice-answers-answer.build-visible {
-    opacity: 0.9;
-    transform: none;
-    pointer-events: auto;
-  }
-
-  .multiple-choice-answers-answer.build-visible.selected {
-    opacity: 1;
-  }
-
 }

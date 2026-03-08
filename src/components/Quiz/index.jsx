@@ -29,6 +29,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
   const [currentStep, setCurrentStep] = useState(0)
   const [sessionKey, setSessionKey] = useState(0)
   const [submissionResult, setSubmissionResult] = useState(null)
+  const [visitedQuestions, setVisitedQuestions] = useState({})
 
   const totalSteps = questions.length + 1
   const resultsStepIndex = questions.length
@@ -97,6 +98,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
       seenQuestionIdsRef.current = new Set()
       setAnalytics({})
       setSubmissionResult(null)
+      setVisitedQuestions({})
     }
   }, [attract, setAnalytics])
 
@@ -111,12 +113,14 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
       const questionId = String(question.id)
       const now = Date.now()
 
+      const hasSeen = seenQuestionIdsRef.current.has(questionId)
+      if (!hasSeen) {
+        seenQuestionIdsRef.current.add(questionId)
+      }
+
       setAnalytics((prev) => {
         const prevEntry = prev[questionId] ?? { confidence: 0, data: { events: [], revisitCount: 0 } }
         const prevData = prevEntry.data ?? { events: [], revisitCount: 0 }
-
-        const hasSeen = seenQuestionIdsRef.current.has(questionId)
-        if (!hasSeen) seenQuestionIdsRef.current.add(questionId)
 
         return {
           ...prev,
@@ -140,6 +144,10 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
           },
         }
       })
+
+      if (!hasSeen) {
+        setVisitedQuestions(prev => (prev[questionId] ? prev : { ...prev, [questionId]: true }))
+      }
     }
   }, [currentStep, questions, setAnalytics])
 
@@ -189,6 +197,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
     setSubmissionResult(null)
     setSessionKey(prev => prev + 1)
     seenQuestionIdsRef.current = new Set()
+    setVisitedQuestions({})
     setCurrentStep(0)
   }
 
@@ -199,7 +208,6 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
           className={`quiz-step ${currentStep === index ? 'is-active' : 'is-hidden'}`}
           id={`step-${index}`}
           key={question.id}
-          aria-hidden={currentStep !== index}
         >
           <Question
             question={question}
@@ -211,6 +219,8 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
             onAnalyticsPatch={ensureQuestionAnalytics}
             isFirst={index === 0}
             sessionKey={sessionKey}
+            isActive={currentStep === index}
+            hasVisited={Boolean(visitedQuestions[question.id])}
           />
         </div>
       ))}
@@ -218,7 +228,6 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
       <div
         className={`quiz-step ${currentStep === resultsStepIndex ? 'is-active' : 'is-hidden'}`}
         id={`step-${resultsStepIndex}`}
-        aria-hidden={currentStep !== resultsStepIndex}
       >
         <Results
           result={submissionResult}

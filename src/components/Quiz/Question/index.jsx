@@ -15,11 +15,15 @@ export default function Question({
   onAnalyticsEvent,
   onAnalyticsPatch,
   isFirst,
-  sessionKey
+  sessionKey,
+  isActive = false,
+  hasVisited = false
 }) {
   const [draftAnswer, setDraftAnswer] = useState(null)
   const [canProceedLocal, setCanProceedLocal] = useState(false)
   const [validationMessage, setValidationMessage] = useState('')
+  const [hasTriggeredBuild, setHasTriggeredBuild] = useState(false)
+  const [isBuilding, setIsBuilding] = useState(false)
 
   useEffect(() => {
     setDraftAnswer(null)
@@ -42,7 +46,21 @@ export default function Question({
     }
   }, [canProceed, validationMessage])
 
-  const handleNext = () => {
+  useEffect(() => {
+    setHasTriggeredBuild(false)
+    setIsBuilding(false)
+  }, [question.id, sessionKey])
+
+  useEffect(() => {
+    if (isActive && !hasVisited && !hasTriggeredBuild) {
+      setHasTriggeredBuild(true)
+      setIsBuilding(true)
+      const timer = setTimeout(() => setIsBuilding(false), 800)
+      return () => clearTimeout(timer)
+    }
+  }, [isActive, hasVisited, hasTriggeredBuild])
+
+    const handleNext = () => {
     const questionId = String(question.id)
 
     if (!canProceed) {
@@ -82,9 +100,9 @@ export default function Question({
   }
 
   return (
-    <div className="question" id={`question-${question.id}`}>
-      <div className="question-content">{
-        isImmediateQuestion ? (
+    <div className={`question ${!hasVisited ? 'before-visited' : ''} ${isBuilding ? 'build-on' : ''}`} id={`question-${question.id}`}>
+      <div className={`question-content ${!hasVisited ? 'before-visited' : ''} ${isBuilding ? 'build-on' : ''}`}>
+        {isImmediateQuestion ? (
           <MultipleChoice
             question={question}
             answer={committedAnswer}
@@ -117,7 +135,8 @@ export default function Question({
             onAnalyticsEvent={onAnalyticsEvent}
           />
         ) : null
-      }</div>
+        }
+      </div>
 
       <div className="question-navigation">
         <div className={`question-navigation-prev ${isFirst ? 'hidden' : ''}`}>

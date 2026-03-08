@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef } from 'react'
 import { computeQuestionConfidence } from '../Quiz/analytics'
 import './index.scss'
 
-const PASSIVE_EVENTS = new Set(['question_presented', 'question_revisited'])
+const PASSIVE_EVENTS = new Set(['question_presented', 'question_revisited', 'answers_presented_order'])
 
 const formatSeconds = (ms) => {
   if (typeof ms !== 'number' || Number.isNaN(ms) || ms <= 0) return 'a beat'

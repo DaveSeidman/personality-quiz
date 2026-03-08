@@ -4,7 +4,7 @@ import Attract from './components/Attract'
 import Console from './components/Console'
 import quizData from './assets/data/quiz.json'
 import backgroundVideo from './assets/videos/pulses1-loop.mp4'
-import logoImg from './assets/images/logo.png'
+import logoImg from './assets/images/logo-white.png'
 import './index.scss'
 
 export default function App() {

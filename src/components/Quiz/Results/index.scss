@@ -1,3 +1,4 @@
+@use '../../../index.scss' as src;
 $layout-margin: 2vh;
 $layout-padding: 2vh;
 
@@ -60,7 +61,7 @@ $layout-padding: 2vh;
       letter-spacing: 0.08em;
       font-weight: 700;
       cursor: pointer;
-      background: linear-gradient(135deg, rgba(198, 76, 33, 0.95), rgba(255, 150, 100, 0.95));
+      background: src.$orange;
       color: #1a130d;
       box-shadow: 0 18px 28px rgba(0, 0, 0, 0.45);
 
@@ -77,7 +78,7 @@ $layout-padding: 2vh;
     color: #d7f7df;
     padding: 1.25rem;
     border-radius: 20px;
-    background: linear-gradient(135deg, rgba(27, 41, 36, 0.95), rgba(11, 16, 24, 0.92));
+    background: rgba(27, 41, 36, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.12);
 
     &-summary {
