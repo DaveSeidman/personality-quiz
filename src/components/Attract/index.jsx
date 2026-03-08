@@ -2,7 +2,7 @@ import React from "react"
 import blobVideo from '../../assets/videos/blobs.webm'
 import './index.scss'
 
-export default function Attract({ attract }) {
+export default function Attract({ attract, quizData }) {
   return (
     <div className={`attract ${attract ? '' : 'hidden'}`}>
       <video
@@ -15,7 +15,7 @@ export default function Attract({ attract }) {
       />
       <div className="attract-copy">
         <h1>Ai PERSONALITY QUIZ</h1>
-        <p>Discover your personality type with our fun and insightful quiz!</p>
+        <p>Discover your personality type by answering {quizData.questions.length} questions.</p>
       </div>
     </div>
   )

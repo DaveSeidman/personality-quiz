@@ -169,7 +169,7 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
   return (
     <div className="slide-select">
       <h2 className="slide-select-title">{question.text}</h2>
-      <p className="slide-select-subtitle">{getSelectionInstruction(question.select)} Slide any answer to confirm.</p>
+      <p className="slide-select-subtitle">select {question.select} answer{question.select > 1 ? 's' : ''} by sliding</p>
 
       <div className="slide-select-list">
         {orderedOptions.map((option) => {

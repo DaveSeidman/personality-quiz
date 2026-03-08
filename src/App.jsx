@@ -13,6 +13,7 @@ export default function App() {
   const [answers, setAnswers] = useState({})
   const [analytics, setAnalytics] = useState({})
   const [activeQuestionId, setActiveQuestionId] = useState(null)
+  const [analysisComplete, setAnalysisComplete] = useState(false)
   const activityTimeoutRef = useRef(null)
   const INACTIVITY_TIMEOUT = 120000
 
@@ -20,6 +21,7 @@ export default function App() {
     setAttract(true)
     setAnswers({})
     setAnalytics({})
+    setAnalysisComplete(false)
   }
 
   const resetInactivityTimeout = () => {
@@ -28,11 +30,28 @@ export default function App() {
     activityTimeoutRef.current = setTimeout(activityTimeout, INACTIVITY_TIMEOUT)
   }
 
+  const handleExitToAttract = () => {
+    if (activityTimeoutRef.current) {
+      clearTimeout(activityTimeoutRef.current)
+      activityTimeoutRef.current = null
+    }
+    activityTimeout()
+    setActiveQuestionId(null)
+    setAnalysisComplete(false)
+  }
+
   useEffect(() => {
-    window.addEventListener('click', resetInactivityTimeout)
+    const handleGlobalClick = (event) => {
+      if (event.target.closest('[data-exit-button="true"]')) {
+        return
+      }
+      resetInactivityTimeout()
+    }
+
+    window.addEventListener('click', handleGlobalClick)
 
     return () => {
-      window.removeEventListener('click', resetInactivityTimeout)
+      window.removeEventListener('click', handleGlobalClick)
       if (activityTimeoutRef.current) clearTimeout(activityTimeoutRef.current)
     }
   }, [])
@@ -54,18 +73,25 @@ export default function App() {
           analytics={analytics}
           setAnalytics={setAnalytics}
           onActiveQuestionChange={setActiveQuestionId}
+          onExit={handleExitToAttract}
+          onAnalysisCompleteChange={setAnalysisComplete}
         />
 
         <Console
+          attract={attract}
           analytics={analytics}
           questions={quizData.questions}
           answers={answers}
           personalities={quizData.personalities}
           activeQuestionId={activeQuestionId}
+          analysisComplete={analysisComplete}
         />
       </div>
 
-      <Attract attract={attract} />
+      <Attract
+        attract={attract}
+        quizData={quizData}
+      />
 
       <div className='app-logo'>
         <img src={logoImg} alt="Logo" />

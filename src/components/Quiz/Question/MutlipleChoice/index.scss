@@ -26,7 +26,7 @@
       opacity: 0.9;
       font-size: clamp(1.05rem, 2.1vh, 1.6rem);
       line-height: 1.5;
-      transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease, color 140ms ease, opacity 140ms ease;
+      transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.14s ease, color 0.14s ease, opacity 0.14s ease;
 
       &:hover {
         border-color: rgba(src.$orange, 0.35);
@@ -59,7 +59,7 @@
         border: 2px solid rgba(255, 255, 255, 0.18);
         background: rgba(255, 255, 255, 0.08);
         opacity: 0.9;
-        transition: border-color 140ms ease, transform 140ms ease, opacity 140ms ease;
+        transition: border-color 0.14s ease, transform 0.14s ease, opacity 0.14s ease;
 
         &:hover {
           transform: translateY(-2px);

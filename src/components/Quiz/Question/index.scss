@@ -2,10 +2,10 @@
 @use '../../../index.scss' as src;
 
 $layout-margin: 2vh;
-$layout-padding: 1vh;
+$layout-padding: 2vh;
 
 .question {
-  width: calc(100% - 4vh);
+  width: calc(100% - $layout-padding);
   height: 100%;
   box-sizing: border-box;
   margin: $layout-margin auto;
@@ -16,7 +16,7 @@ $layout-padding: 1vh;
   justify-content: center;
 
   &-content {
-    width: calc(100% - 2vh);
+    width: calc(100% - 4vh);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -37,15 +37,15 @@ $layout-padding: 1vh;
   }
 
   &-navigation {
-    width: calc(100% - 4vh);
+    width: 100%;
     display: flex;
     justify-content: space-between;
     margin: $layout-margin auto 0;
     padding: $layout-padding 0 0;
 
     .button-secondary {
-      padding: 0.5rem 0.9rem;
-      border-radius: 0.52vh;
+      padding: 0.6rem 1rem;
+      border-radius: 999vh;
       border: 0.052vh solid rgba(255, 255, 255, 0.16);
       background: rgba(255, 255, 255, 0.08);
       color: rgba(255, 255, 255, 0.92);
@@ -54,7 +54,7 @@ $layout-padding: 1vh;
       font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 0.06em;
-      transition: border-color 140ms ease, background-color 140ms ease, transform 140ms ease, opacity 140ms ease;
+      transition: border-color 0.14s ease, background-color 0.14s ease, transform 0.14s ease, opacity 0.14s ease;
 
       // &:hover:not(:disabled) {
       //   background: color.adjust(src.$green, $lightness: 6%);

@@ -33,7 +33,7 @@
       "label": "The Primary Objective",
       "text": "What is the core mission of your upcoming activation or event?",
       "type": "multiple-choice-text",
-      "select": "single",
+      "select": 1,
       "answers": [
         {
           "id": "A",
@@ -60,9 +60,9 @@
     {
       "id": 2,
       "label": "The Sensory Environment",
-      "text": "Slide to confirm the immediate energy guests should feel the second they arrive.",
+      "text": "When guests enter the space, what immediate 'energy' should they feel?",
       "type": "slide-select",
-      "select": "single",
+      "select": 1,
       "answers": [
         {
           "id": "A",
@@ -89,7 +89,7 @@
     {
       "id": 3,
       "label": "The Attendee Journey",
-      "text": "Rank the exit feelings — drag your #1 takeaway to the top, least important to the bottom.",
+      "text": "What is the desired 'takeaway' for your guests as they depart the venue?",
       "type": "ranked-choice",
       "answers": [
         {

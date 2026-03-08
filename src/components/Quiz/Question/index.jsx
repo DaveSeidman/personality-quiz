@@ -17,7 +17,8 @@ export default function Question({
   isFirst,
   sessionKey,
   isActive = false,
-  hasVisited = false
+  hasVisited = false,
+  onExit = () => {}
 }) {
   const [draftAnswer, setDraftAnswer] = useState(null)
   const [canProceedLocal, setCanProceedLocal] = useState(false)
@@ -60,7 +61,7 @@ export default function Question({
     }
   }, [isActive, hasVisited, hasTriggeredBuild])
 
-    const handleNext = () => {
+  const handleNext = () => {
     const questionId = String(question.id)
 
     if (!canProceed) {
@@ -109,6 +110,8 @@ export default function Question({
             setAnswers={setAnswers}
             sessionKey={sessionKey}
             onAnalyticsEvent={onAnalyticsEvent}
+            onAnalyticsPatch={onAnalyticsPatch}
+            animateAnswers={!hasVisited}
           />
         ) : question.type === 'ranked-choice' ? (
           <RankedChoice
@@ -117,6 +120,8 @@ export default function Question({
             onDraftChange={setDraftAnswer}
             onReadyChange={setCanProceedLocal}
             onAnalyticsEvent={onAnalyticsEvent}
+            onAnalyticsPatch={onAnalyticsPatch}
+            animateAnswers={!hasVisited}
           />
         ) : question.type === 'range-sliders' ? (
           <RangeSliders
@@ -125,6 +130,8 @@ export default function Question({
             onDraftChange={setDraftAnswer}
             onReadyChange={setCanProceedLocal}
             onAnalyticsEvent={onAnalyticsEvent}
+            onAnalyticsPatch={onAnalyticsPatch}
+            animateAnswers={!hasVisited}
           />
         ) : question.type === 'slide-select' || question.type === 'SlideSelect' ? (
           <SlideSelect
@@ -133,21 +140,33 @@ export default function Question({
             onDraftChange={setDraftAnswer}
             onReadyChange={setCanProceedLocal}
             onAnalyticsEvent={onAnalyticsEvent}
+            onAnalyticsPatch={onAnalyticsPatch}
+            animateAnswers={!hasVisited}
           />
         ) : null
         }
       </div>
 
-      <div className="question-navigation">
-        <div className={`question-navigation-prev ${isFirst ? 'hidden' : ''}`}>
-          <button
-            className="question-navigation-prev-button button-secondary"
-            onClick={onPrevious}
-            onPointerDown={triggerActivePress}
-            disabled={isFirst}
-          >
-            Prev
-          </button>
+      {isActive && <div className="question-navigation">
+        <div className="question-navigation-prev">
+          {isFirst ? (
+            <button
+              className="question-navigation-prev-button button-secondary question-navigation-exit-button"
+              onClick={(event) => { event.stopPropagation(); onExit(); }}
+              onPointerDown={triggerActivePress}
+              data-exit-button="true"
+            >
+              Exit
+            </button>
+          ) : (
+            <button
+              className="question-navigation-prev-button button-secondary"
+              onClick={onPrevious}
+              onPointerDown={triggerActivePress}
+            >
+              Prev
+            </button>
+          )}
         </div>
 
         <div className="question-navigation-next">
@@ -165,7 +184,7 @@ export default function Question({
             Next
           </button>
         </div>
-      </div>
+      </div>}
     </div>
   )
 }

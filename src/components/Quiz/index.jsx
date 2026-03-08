@@ -25,15 +25,20 @@ async function submitAnswersToBackend(payload) {
   return response.json()
 }
 
-export default function Quiz({ attract, quizId, questions, personalities, answers, setAnswers, analytics, setAnalytics, onActiveQuestionChange = () => {} }) {
+export default function Quiz({ attract, quizId, questions, personalities, answers, setAnswers, analytics, setAnalytics, onActiveQuestionChange = () => {}, onExit = () => {}, onAnalysisCompleteChange = () => {} }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [sessionKey, setSessionKey] = useState(0)
   const [submissionResult, setSubmissionResult] = useState(null)
   const [visitedQuestions, setVisitedQuestions] = useState({})
+  const [quizTransition, setQuizTransition] = useState('')
+  const [useSmoothScroll, setUseSmoothScroll] = useState(true)
+  const [isResetting, setIsResetting] = useState(false)
+  const quizRef = useRef(null)
 
   const totalSteps = questions.length + 1
   const resultsStepIndex = questions.length
   const seenQuestionIdsRef = useRef(new Set())
+  const visitCountsRef = useRef(new Map())
   const questionTypeById = useRef(Object.fromEntries(questions.map(question => [String(question.id), question.type])))
 
   const ensureQuestionAnalytics = useCallback((questionId, patch = {}) => {
@@ -93,28 +98,38 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
 
   useEffect(() => {
     if (attract) {
-      setCurrentStep(0)
-      setSessionKey(prev => prev + 1)
-      seenQuestionIdsRef.current = new Set()
-      setAnalytics({})
-      setSubmissionResult(null)
-      setVisitedQuestions({})
+      setQuizTransition('fade-out')
+      setTimeout(() => {
+        setCurrentStep(0)
+        setSessionKey(prev => prev + 1)
+        seenQuestionIdsRef.current = new Set()
+        visitCountsRef.current = new Map()
+        setAnalytics({})
+        setSubmissionResult(null)
+        setVisitedQuestions({})
+        onAnalysisCompleteChange(false)
+        setQuizTransition('fade-in')
+        setTimeout(() => setQuizTransition(''), 1500)
+      }, 500)
     }
-  }, [attract, setAnalytics])
+  }, [attract, setAnalytics, onAnalysisCompleteChange])
 
   useEffect(() => {
     const element = document.getElementById(`step-${currentStep}`)
     if (!element) return
 
-    element.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" })
+    element.scrollIntoView({ behavior: useSmoothScroll ? 'smooth' : 'auto', block: 'center', inline: 'center' })
 
     if (currentStep < questions.length) {
       const question = questions[currentStep]
       const questionId = String(question.id)
       const now = Date.now()
 
-      const hasSeen = seenQuestionIdsRef.current.has(questionId)
-      if (!hasSeen) {
+      const visitCount = (visitCountsRef.current.get(questionId) ?? 0) + 1
+      visitCountsRef.current.set(questionId, visitCount)
+      const hasSeen = visitCount > 1
+      const revisitCount = Math.max(0, visitCount - 1)
+      if (!seenQuestionIdsRef.current.has(questionId)) {
         seenQuestionIdsRef.current.add(questionId)
       }
 
@@ -131,7 +146,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
               questionId,
               questionType: question.type,
               presentedAt: now,
-              revisitCount: hasSeen ? (prevData.revisitCount ?? 0) + 1 : (prevData.revisitCount ?? 0),
+              revisitCount,
               events: [
                 ...(prevData.events ?? []),
                 {
@@ -145,11 +160,11 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
         }
       })
 
-      if (!hasSeen) {
+      if (visitCount === 1) {
         setVisitedQuestions(prev => (prev[questionId] ? prev : { ...prev, [questionId]: true }))
       }
     }
-  }, [currentStep, questions, setAnalytics])
+  }, [currentStep, questions, setAnalytics, useSmoothScroll])
 
   useEffect(() => {
     if (!questions || questions.length === 0) {
@@ -163,6 +178,11 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
       onActiveQuestionChange(null)
     }
   }, [currentStep, onActiveQuestionChange, questions])
+
+
+  useEffect(() => {
+    onAnalysisCompleteChange(Boolean(submissionResult))
+  }, [submissionResult, onAnalysisCompleteChange])
 
   const goToPrevious = () => {
     setCurrentStep(prev => Math.max(prev - 1, 0))
@@ -192,17 +212,37 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
   }
 
   const handleStartOver = () => {
-    setAnswers({})
-    setAnalytics({})
-    setSubmissionResult(null)
-    setSessionKey(prev => prev + 1)
-    seenQuestionIdsRef.current = new Set()
-    setVisitedQuestions({})
-    setCurrentStep(0)
+    setQuizTransition('fade-out')
+    setIsResetting(true)
+    setUseSmoothScroll(false)
+    setTimeout(() => {
+      setAnswers({})
+      setAnalytics({})
+      setSubmissionResult(null)
+      onAnalysisCompleteChange(false)
+      setSessionKey(prev => prev + 1)
+      seenQuestionIdsRef.current = new Set()
+      visitCountsRef.current = new Map()
+      setVisitedQuestions({})
+      setCurrentStep(0)
+
+      requestAnimationFrame(() => {
+        const firstStep = document.getElementById('step-0')
+        if (firstStep) {
+          firstStep.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'center' })
+        }
+        setQuizTransition('fade-in')
+        setTimeout(() => {
+          setQuizTransition('')
+          setIsResetting(false)
+          setUseSmoothScroll(true)
+        }, 500)
+      })
+    }, 200)
   }
 
   return (
-    <div className="quiz">
+    <div ref={quizRef} className={`quiz ${quizTransition} ${isResetting ? 'quiz--hidden' : ''}`}>
       {questions.map((question, index) => (
         <div
           className="quiz-step"
@@ -221,6 +261,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
             sessionKey={sessionKey}
             isActive={currentStep === index}
             hasVisited={Boolean(visitedQuestions[question.id])}
+            onExit={onExit}
           />
         </div>
       ))}
