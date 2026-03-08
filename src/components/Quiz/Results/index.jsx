@@ -238,6 +238,13 @@ export default function Results({ result, analytics, questions, answers, session
           <>
             <h2 className="results-title">Start AI analysis of your answers and behavioral signals?</h2>
             <p className="results-instruction">You can go back before submitting.</p>
+            <div className="results-blob-placeholder">
+              <video
+                className={`results-blob-video ${status === 'submitting' ? 'blob-active' : 'blob-idle'}`}
+                src={loadingVideo}
+                autoPlay muted loop playsInline
+              />
+            </div>
           </>
         )}
 
@@ -305,18 +312,12 @@ export default function Results({ result, analytics, questions, answers, session
 
       {status === 'error' && <p className="results-status error">Submit failed. Try again.</p>}
 
-      {status !== 'submitted' && (
-        <div className="results-loading-placeholder">
-          <video className="results-loading-video blob-idle" src={loadingVideo} autoPlay muted loop playsInline />
-        </div>
-      )}
-
       {status === 'submitting' && (
         <div className="results-loading">
           <video className="results-loading-video blob-active" src={loadingVideo} autoPlay muted loop playsInline />
           <div className="results-loading-copy">
             <p>Translating your signals…</p>
-            <span>We’re syncing with the cocktail oracle. This usually takes a beat.</span>
+            <span>We're syncing with the cocktail oracle. This usually takes a beat.</span>
           </div>
         </div>
       )}
