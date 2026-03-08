@@ -4,7 +4,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1.11vh;
 
   &-title {
     margin: 0;
@@ -12,15 +12,15 @@
   }
 
   &-subtitle {
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.74vh;
     color: rgba(255, 255, 255, 0.78);
-    font-size: clamp(0.95rem, 1.6vh, 1.25rem);
+    font-size: clamp(1.41vh, 1.6vh, 1.85vh);
   }
 
   &-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1.11vh;
     touch-action: none;
     user-select: none;
   }
@@ -28,15 +28,15 @@
   &-row {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.48vh;
     background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 16px;
-    padding: 1.1rem 1.35rem;
+    border: 0.09vh solid rgba(255, 255, 255, 0.18);
+    border-radius: 1.48vh;
+    padding: 1.63vh 2.0vh;
     color: rgba(255, 255, 255, 0.9);
     cursor: grab;
     opacity: 0.9;
-    font-size: clamp(1.05rem, 2.1vh, 1.6rem);
+    font-size: clamp(1.56vh, 2.1vh, 2.37vh);
     line-height: 1.45;
     transition: transform 0.14s ease, background-color 0.14s ease, box-shadow 0.14s ease, color 0.14s ease, border-color 0.14s ease, opacity 0.14s ease;
 
@@ -51,7 +51,7 @@
       cursor: grabbing;
       transform: scale(1.02);
       background: src.$orange;
-      box-shadow: 0 18px 32px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 1.67vh 2.96vh rgba(0, 0, 0, 0.35);
       color: #1a130d;
       opacity: 1;
     }
@@ -63,8 +63,8 @@
   }
 
   &-rank {
-    min-width: 2rem;
-    height: 2rem;
+    min-width: 2.96vh;
+    height: 2.96vh;
     border-radius: 50%;
     display: grid;
     place-items: center;

@@ -2,7 +2,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1.11vh;
 
   &-title {
     margin: 0;
@@ -12,22 +12,22 @@
   &-instruction {
     margin: 0;
     color: rgba(255, 255, 255, 0.78);
-    font-size: clamp(0.95rem, 1.6vh, 1.25rem);
+    font-size: clamp(1.41vh, 1.6vh, 1.85vh);
   }
 
   &-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1.11vh;
   }
 
   &-row {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.875rem 1rem;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    gap: 0.74vh;
+    padding: 1.3vh 1.48vh;
+    border-radius: 0.93vh;
+    border: 0.09vh solid rgba(255, 255, 255, 0.18);
     background: rgba(255, 255, 255, 0.06);
     color: rgba(255, 255, 255, 0.65);
     transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease;
@@ -41,7 +41,7 @@
 
   &-label {
     line-height: 1.35;
-    font-size: clamp(1.05rem, 2vh, 1.6rem);
+    font-size: clamp(1.56vh, 2vh, 2.37vh);
   }
 
   &-control {
@@ -53,7 +53,7 @@
 
 .range-sliders-row.answer-animate {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(1.67vh);
   animation: rangeSliderRowEnter 420ms ease forwards;
 }
 

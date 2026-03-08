@@ -8,49 +8,49 @@
   padding: 2vh;
   margin: 0;
   background: rgba(3, 6, 4, 0.8);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 0.09vh solid rgba(255, 255, 255, 0.12);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.48vh;
   color: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 -18px 32px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 -1.67vh 2.96vh rgba(0, 0, 0, 0.45);
 }
 
 .console-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 1.48vh;
 
   &-label {
     margin: 0;
-    font-size: 0.85rem;
+    font-size: 1.26vh;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.7);
   }
 
   &-sub {
-    margin: 0.25rem 0 0;
-    font-size: 0.95rem;
+    margin: 0.37vh 0 0;
+    font-size: 1.41vh;
     color: rgba(255, 255, 255, 0.58);
   }
 
   &-indicator {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
-    font-size: 0.85rem;
+    gap: 0.52vh;
+    font-size: 1.26vh;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.8);
 
     .pulse {
-      width: 10px;
-      height: 10px;
+      width: 0.93vh;
+      height: 0.93vh;
       border-radius: 50%;
       background: src.$orange;
-      box-shadow: 0 0 12px rgba(src.$orange, 0.8);
+      box-shadow: 0 0 1.11vh rgba(src.$orange, 0.8);
       animation: console-pulse 2s infinite ease-in-out;
     }
   }
@@ -86,9 +86,9 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1.11vh;
   overflow-y: auto;
-  padding-right: 0.5rem;
+  padding-right: 0.74vh;
   transition: opacity 240ms ease, visibility 240ms ease;
   opacity: 1;
   visibility: visible;
@@ -101,11 +101,11 @@
 }
 
 .console-feed-row {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  padding: 0.9rem 1.1rem;
+  border: 0.09vh solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.48vh;
+  padding: 1.33vh 1.63vh;
   background: rgba(8, 12, 9, 0.8);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 0 0 0.09vh rgba(255, 255, 255, 0.04);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -113,70 +113,70 @@
 
   &.active {
     border-color: rgba(src.$orange, 0.85);
-    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1.11vh 2.04vh rgba(0, 0, 0, 0.4);
   }
 }
 
 .console-feed-row-label {
-  font-size: 0.78rem;
+  font-size: 1.16vh;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.58);
-  margin: 0 0 0.35rem 0;
+  margin: 0 0 0.52vh 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   .console-feed-row-live {
-    font-size: 0.7rem;
+    font-size: 1.04vh;
     letter-spacing: 0.12em;
-    padding: 0.1rem 0.5rem;
-    border-radius: 999px;
+    padding: 0.15vh 0.74vh;
+    border-radius: 92.5vh;
     background: rgba(src.$orange, 0.85);
     color: #1a130d;
   }
 }
 
 .console-feed-row-summary {
-  font-size: 0.95rem;
+  font-size: 1.41vh;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.35;
-  min-height: 3rem;
+  min-height: 4.44vh;
 
   &.blank {
-    min-height: 1.2rem;
+    min-height: 1.78vh;
     background: rgba(255, 255, 255, 0.04);
-    border-radius: 4px;
+    border-radius: 0.37vh;
   }
 }
 
 .console-feed-row-metrics {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 0.55rem;
-  margin-top: 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(11.11vh, 1fr));
+  gap: 0.81vh;
+  margin-top: 0.96vh;
 }
 
 .console-feed-row-metric {
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  padding: 0.45rem 0.6rem;
+  border: 0.09vh solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.93vh;
+  padding: 0.67vh 0.89vh;
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  min-height: 60px;
+  gap: 0.22vh;
+  min-height: 5.56vh;
 }
 
 .console-feed-row-metric-label {
-  font-size: 0.7rem;
+  font-size: 1.04vh;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.55);
 }
 
 .console-feed-row-metric-value {
-  font-size: 0.95rem;
+  font-size: 1.41vh;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.92);
 }
@@ -184,15 +184,15 @@
 .console-feed-row-graphs {
   margin-top: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(16.67vh, 1fr));
+  gap: 1.48vh;
 }
 
 .console-feed-row-graph {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  font-size: 0.7rem;
+  gap: 0.74vh;
+  font-size: 1.04vh;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.6);
@@ -206,14 +206,14 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.52vh;
 }
 
 .confidence-horizontal-track {
   position: relative;
   width: 100%;
-  height: 12px;
-  border-radius: 999px;
+  height: 1.11vh;
+  border-radius: 92.5vh;
   background: rgba(255, 255, 255, 0.12);
   overflow: visible;
 }
@@ -223,24 +223,24 @@
   left: 50%;
   top: 0;
   bottom: 0;
-  width: 1px;
+  width: 0.09vh;
   background: rgba(255, 255, 255, 0.45);
 }
 
 .confidence-horizontal-indicator {
   position: absolute;
   width: 0.5vh;
-  height: calc(100% + 6px);
+  height: calc(100% + 0.56vh);
   top: 50%;
   transform: translate(-50%, -50%);
   background: src.$orange;
-  border-radius: 999px;
+  border-radius: 92.5vh;
   opacity: 0.95;
 }
 
 .confidence-label {
-  margin-top: 0.35rem;
-  font-size: 0.85rem;
+  margin-top: 0.52vh;
+  font-size: 1.26vh;
   letter-spacing: 0.08em;
 }
 
@@ -255,15 +255,15 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 2rem;
+  padding: 2.96vh;
   color: rgba(255, 255, 255, 0.85);
-  font-size: 1rem;
+  font-size: 1.48vh;
   line-height: 1.6;
   letter-spacing: 0.01em;
   background: rgba(8, 12, 9, 0.78);
-  border: 1px dashed rgba(255, 255, 255, 0.18);
-  border-radius: 18px;
-  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.25);
+  border: 0.09vh dashed rgba(255, 255, 255, 0.18);
+  border-radius: 1.67vh;
+  box-shadow: inset 0 0 3.24vh rgba(0, 0, 0, 0.25);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -277,15 +277,15 @@
 
   p {
     margin: 0;
-    max-width: 32rem;
+    max-width: 47.41vh;
   }
 }
 
 .interaction-dot-grid {
   display: grid;
   grid-template-columns: repeat(30, minmax(0, 1fr));
-  grid-auto-rows: 10px;
-  gap: 0.2rem;
+  grid-auto-rows: 0.93vh;
+  gap: 0.3vh;
 }
 
 .interaction-dot {
@@ -302,18 +302,18 @@
 .console-header-actions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1.11vh;
 }
 
 .console-header-breakdown {
-  padding: 0.4rem 0.9rem;
+  padding: 0.59vh 1.33vh;
   border-radius: 999vh;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 0.09vh solid rgba(255, 255, 255, 0.25);
   background: rgba(10, 15, 12, 0.6);
   color: rgba(255, 255, 255, 0.86);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.7rem;
+  font-size: 1.04vh;
   cursor: pointer;
   transition: opacity 160ms ease;
 }
@@ -325,12 +325,12 @@
 
 .console-breakdown {
   width: 100%;
-  margin-top: 1.25rem;
-  padding: 1.5rem;
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 1.85vh;
+  padding: 2.22vh;
+  border-radius: 1.67vh;
+  border: 0.09vh solid rgba(255, 255, 255, 0.12);
   background: rgba(6, 10, 8, 0.9);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 0 0 0.09vh rgba(255, 255, 255, 0.03);
   overflow: hidden;
   max-height: 0;
   opacity: 0;
@@ -338,7 +338,7 @@
 }
 
 .console-breakdown.expanded {
-  max-height: 2000px;
+  max-height: 185.19vh;
   opacity: 1;
 }
 
@@ -348,18 +348,18 @@
 }
 
 .console-breakdown-title {
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.52vh;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.78rem;
+  font-size: 1.16vh;
   color: rgba(255, 255, 255, 0.8);
 }
 
 .console-breakdown-subtitle {
-  margin: 0 0 1rem;
+  margin: 0 0 1.48vh;
   text-align: center;
-  font-size: 0.82rem;
+  font-size: 1.21vh;
   color: rgba(255, 255, 255, 0.65);
 }
 
@@ -372,22 +372,22 @@
 .console-breakdown-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.8rem;
+  gap: 1.19vh;
 }
 
 .console-breakdown-card {
-  flex: 0 0 calc(33.333% - 0.6rem);
-  min-width: 240px;
-  padding: 0.7rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex: 0 0 calc(33.333% - 0.89vh);
+  min-width: 22.22vh;
+  padding: 1.04vh;
+  border-radius: 1.11vh;
+  border: 0.09vh solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.03);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  box-shadow: inset 0 0 0 0.09vh rgba(255, 255, 255, 0.02);
 }
 
 .console-breakdown-card-title {
-  margin: 0 0 0.5rem;
-  font-size: 0.78rem;
+  margin: 0 0 0.74vh;
+  font-size: 1.16vh;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.85);
   text-transform: uppercase;
@@ -395,8 +395,8 @@
 
   span {
     display: block;
-    margin-top: 0.15rem;
-    font-size: 0.68rem;
+    margin-top: 0.22vh;
+    font-size: 1.01vh;
     color: rgba(255, 255, 255, 0.55);
     letter-spacing: 0.04em;
   }
@@ -408,7 +408,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 0.93vh;
   overflow: hidden;
 }
 
@@ -424,23 +424,23 @@
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 1px;
-  transform: translateX(-0.5px);
+  width: 0.09vh;
+  transform: translateX(-0.05vh);
 }
 
 .console-breakdown-card-charts::after {
   left: 0;
   right: 0;
   top: 50%;
-  height: 1px;
-  transform: translateY(-0.5px);
+  height: 0.09vh;
+  transform: translateY(-0.05vh);
 }
 
 .console-breakdown-chart {
   --tone: #6d8eff;
   --tone-soft: #dfe7fb;
-  min-height: 5rem;
-  padding: 0.7rem;
+  min-height: 7.41vh;
+  padding: 1.04vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -448,16 +448,16 @@
 }
 
 .console-breakdown-chart-label {
-  margin: 0 0 0.25rem;
-  font-size: 0.68rem;
+  margin: 0 0 0.37vh;
+  font-size: 1.01vh;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: #41537a;
 }
 
 .console-breakdown-chart-value {
-  margin: 0.25rem 0 0;
-  font-size: 0.72rem;
+  margin: 0.37vh 0 0;
+  font-size: 1.07vh;
   color: #1f2b4b;
 }
 
@@ -477,7 +477,7 @@
 .console-breakdown-dot-row {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  gap: 0.2rem;
+  gap: 0.3vh;
 }
 
 .console-breakdown-dot,
@@ -494,7 +494,7 @@
 .console-breakdown-pill-row {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  gap: 0.18rem;
+  gap: 0.27vh;
 }
 
 .console-breakdown-pill {
@@ -527,7 +527,7 @@
 
 .console-breakdown-ring span {
   position: absolute;
-  font-size: 0.7rem;
+  font-size: 1.04vh;
   font-weight: 700;
   color: #1f2b4b;
 }
@@ -582,13 +582,13 @@
 
 .console-header-indicator.waiting .pulse {
   background: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 1.11vh rgba(255, 255, 255, 0.35);
   animation-duration: 2.6s;
 }
 
 .console-header-indicator.complete .pulse {
   background: #ffffff;
-  box-shadow: 0 0 14px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 1.3vh rgba(255, 255, 255, 0.6);
   animation: none;
 }
 
@@ -601,8 +601,8 @@
   inset: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding-right: 0.5rem;
+  gap: 1.48vh;
+  padding-right: 0.74vh;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -618,7 +618,7 @@
 .console-aggregate-title {
   margin: 0;
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 1.26vh;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.82);
@@ -627,7 +627,7 @@
 .console-aggregate-subtitle {
   margin: 0;
   text-align: center;
-  font-size: 0.8rem;
+  font-size: 1.19vh;
   color: rgba(255, 255, 255, 0.6);
 }
 
@@ -640,62 +640,62 @@
 .console-aggregate-distribution {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 0.74vh;
+  padding: 1.48vh;
+  border-radius: 1.48vh;
+  border: 0.09vh solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.03);
 }
 
 .console-aggregate-distribution-row {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 0.8rem;
+  gap: 0.89vh;
+  font-size: 1.19vh;
   color: rgba(255, 255, 255, 0.85);
 }
 
 .console-aggregate-distribution-label {
-  flex: 0 0 140px;
+  flex: 0 0 12.96vh;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.68rem;
+  font-size: 1.01vh;
   color: rgba(255, 255, 255, 0.65);
 }
 
 .console-aggregate-distribution-track {
   flex: 1;
-  height: 0.45rem;
-  border-radius: 999px;
+  height: 0.67vh;
+  border-radius: 92.5vh;
   background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
 }
 
 .console-aggregate-distribution-fill {
   height: 100%;
-  border-radius: 999px;
+  border-radius: 92.5vh;
   background: rgba(255, 255, 255, 0.7);
 }
 
 .console-aggregate-distribution-value {
-  width: 3rem;
+  width: 4.44vh;
   text-align: right;
-  font-size: 0.75rem;
+  font-size: 1.11vh;
   color: rgba(255, 255, 255, 0.8);
 }
 
 .console-aggregate-metrics {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(14.81vh, 1fr));
+  gap: 1.11vh;
 }
 
 .console-aggregate-chart {
   --tone: #6d8eff;
   --tone-soft: #dfe7fb;
-  padding: 0.7rem;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.04vh;
+  border-radius: 1.3vh;
+  border: 0.09vh solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.04);
   display: flex;
   flex-direction: column;
@@ -704,37 +704,37 @@
 }
 
 .console-aggregate-chart-label {
-  margin: 0 0 0.25rem;
-  font-size: 0.68rem;
+  margin: 0 0 0.37vh;
+  font-size: 1.01vh;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #41537a;
 }
 
 .console-aggregate-chart-value {
-  margin: 0.35rem 0 0;
-  font-size: 0.75rem;
+  margin: 0.52vh 0 0;
+  font-size: 1.11vh;
   font-weight: 600;
   color: #1f2b4b;
 }
 
 .console-aggregate-chart-track {
-  height: 0.45rem;
-  border-radius: 999px;
+  height: 0.67vh;
+  border-radius: 92.5vh;
   background: var(--tone-soft);
   overflow: hidden;
 }
 
 .console-aggregate-chart-fill {
   height: 100%;
-  border-radius: 999px;
+  border-radius: 92.5vh;
   background: linear-gradient(90deg, var(--tone), color-mix(in srgb, var(--tone), #ffffff 35%));
 }
 
 .console-aggregate-ring {
   width: 3.1vh;
   height: 3.1vh;
-  margin: 0.3rem auto 0;
+  margin: 0.44vh auto 0;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -752,7 +752,7 @@
 
 .console-aggregate-ring span {
   position: absolute;
-  font-size: 0.74rem;
+  font-size: 1.1vh;
   font-weight: 700;
   color: #1f2b4b;
 }

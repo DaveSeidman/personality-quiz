@@ -3,28 +3,28 @@
 
 .multiple-choice {
   &-instruction {
-    margin: 0 0 1.5rem;
-    min-height: 1.25rem;
+    margin: 0 0 2.22vh;
+    min-height: 1.85vh;
     color: rgba(255, 255, 255, 0.7);
-    font-size: clamp(0.95rem, 1.6vh, 1.2rem);
+    font-size: clamp(1.41vh, 1.6vh, 1.78vh);
   }
 
   &-answers {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1.11vh;
 
     &-answer {
       margin: 0;
-      padding: 1.1rem 1.5rem;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 1.63vh 2.22vh;
+      border-radius: 1.3vh;
+      border: 0.09vh solid rgba(255, 255, 255, 0.18);
       background: rgba(255, 255, 255, 0.08);
       color: rgba(255, 255, 255, 0.88);
       cursor: pointer;
       text-align: left;
       opacity: 0.9;
-      font-size: clamp(1.05rem, 2.1vh, 1.6rem);
+      font-size: clamp(1.56vh, 2.1vh, 2.37vh);
       line-height: 1.5;
       transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.14s ease, color 0.14s ease, opacity 0.14s ease;
 
@@ -38,7 +38,7 @@
         background: src.$orange;
         border-color: color.adjust(src.$orange, $lightness: 8%);
         color: #130a04;
-        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.45);
+        box-shadow: 0 1.48vh 2.96vh rgba(0, 0, 0, 0.45);
         opacity: 1;
       }
     }
@@ -47,30 +47,30 @@
   &.photo {
     .multiple-choice-answers {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 0.75rem;
+      grid-template-columns: repeat(auto-fit, minmax(14.81vh, 1fr));
+      gap: 1.11vh;
 
       &-answer {
         margin: 0;
         padding: 0;
         aspect-ratio: 1;
         overflow: hidden;
-        border-radius: 16px;
-        border: 2px solid rgba(255, 255, 255, 0.18);
+        border-radius: 1.48vh;
+        border: 0.19vh solid rgba(255, 255, 255, 0.18);
         background: rgba(255, 255, 255, 0.08);
         opacity: 0.9;
         transition: border-color 0.14s ease, transform 0.14s ease, opacity 0.14s ease;
 
         &:hover {
-          transform: translateY(-2px);
+          transform: translateY(-0.19vh);
           border-color: rgba(src.$orange, 0.35);
           opacity: 1;
         }
 
         &.selected {
-          transform: translateY(-2px);
+          transform: translateY(-0.19vh);
           border-color: rgba(src.$orange, 0.9);
-          box-shadow: 0 0 0 3px rgba(src.$orange, 0.35);
+          box-shadow: 0 0 0 0.28vh rgba(src.$orange, 0.35);
           opacity: 1;
         }
 
@@ -87,7 +87,7 @@
 
 .multiple-choice-answers-answer.answer-animate {
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(1.48vh);
   animation: multipleChoiceAnswerEnter 420ms ease forwards;
 }
 

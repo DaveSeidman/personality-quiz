@@ -21,7 +21,7 @@ $layout-padding: 2vh;
     flex-direction: column;
     justify-content: center;
     padding: $layout-padding;
-    border-radius: 1rem;
+    border-radius: 1.48vh;
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(.5vh);
     border: 0.052vh solid rgba(255, 255, 255, 0.22);
@@ -30,8 +30,8 @@ $layout-padding: 2vh;
     margin: 7vh 0 0;
 
     h2 {
-      margin: 0 0 1rem;
-      font-size: clamp(1.6rem, 2vh, 2.4rem);
+      margin: 0 0 1.48vh;
+      font-size: clamp(2.37vh, 2vh, 3.56vh);
       line-height: 1.25;
     }
   }
@@ -48,14 +48,14 @@ $layout-padding: 2vh;
     box-shadow: 0 0 1vh 1vh src.$green;
 
     .button-secondary {
-      padding: 0.6rem 1rem;
+      padding: 0.89vh 1.48vh;
       border-radius: 999vh;
       border: 0.052vh solid rgba(255, 255, 255, 0.16);
       background: rgba(255, 255, 255, 0.08);
       color: rgba(255, 255, 255, 0.92);
       cursor: pointer;
       text-transform: uppercase;
-      font-size: 0.72rem;
+      font-size: 1.07vh;
       font-weight: 700;
       letter-spacing: 0.12em;
       transition: border-color 0.14s ease, background-color 0.14s ease, transform 0.14s ease, opacity 0.14s ease;
@@ -79,10 +79,10 @@ $layout-padding: 2vh;
 
       &-message {
         position: absolute;
-        right: 5rem;
-        bottom: .5rem;
+        right: 7.41vh;
+        bottom: .7.41vh;
         margin: 0;
-        font-size: 0.875rem;
+        font-size: 1.3vh;
         color: src.$orange;
         text-align: right;
         width: auto;
@@ -90,14 +90,14 @@ $layout-padding: 2vh;
       }
 
       &-button {
-        padding: 0.6rem 1rem;
+        padding: 0.89vh 1.48vh;
         border-radius: 999vh;
         border: none;
         background: src.$orange;
         color: #1a130d;
         cursor: pointer;
         text-transform: uppercase;
-        font-size: 0.78rem;
+        font-size: 1.16vh;
         font-weight: 800;
         letter-spacing: 0.14em;
         box-shadow: 0 0.63vh 1.25vh rgba(0, 0, 0, 0.35);
