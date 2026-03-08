@@ -31,14 +31,11 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
   const [submissionResult, setSubmissionResult] = useState(null)
   const [visitedQuestions, setVisitedQuestions] = useState({})
   const [quizTransition, setQuizTransition] = useState('')
-  const [useSmoothScroll, setUseSmoothScroll] = useState(true)
   const [isResetting, setIsResetting] = useState(false)
-  const quizRef = useRef(null)
 
   const totalSteps = questions.length + 1
   const resultsStepIndex = questions.length
   const seenQuestionIdsRef = useRef(new Set())
-  const visitCountsRef = useRef(new Map())
   const questionTypeById = useRef(Object.fromEntries(questions.map(question => [String(question.id), question.type])))
 
   const ensureQuestionAnalytics = useCallback((questionId, patch = {}) => {
@@ -103,7 +100,6 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
         setCurrentStep(0)
         setSessionKey(prev => prev + 1)
         seenQuestionIdsRef.current = new Set()
-        visitCountsRef.current = new Map()
         setAnalytics({})
         setSubmissionResult(null)
         setVisitedQuestions({})
@@ -118,53 +114,59 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
     const element = document.getElementById(`step-${currentStep}`)
     if (!element) return
 
-    element.scrollIntoView({ behavior: useSmoothScroll ? 'smooth' : 'auto', block: 'center', inline: 'center' })
+    element.scrollIntoView({ behavior: isResetting ? 'auto' : 'smooth', block: 'center', inline: 'center' })
 
     if (currentStep < questions.length) {
       const question = questions[currentStep]
       const questionId = String(question.id)
       const now = Date.now()
 
-      const visitCount = (visitCountsRef.current.get(questionId) ?? 0) + 1
-      visitCountsRef.current.set(questionId, visitCount)
-      const hasSeen = visitCount > 1
-      const revisitCount = Math.max(0, visitCount - 1)
-      if (!seenQuestionIdsRef.current.has(questionId)) {
-        seenQuestionIdsRef.current.add(questionId)
-      }
-
+      let shouldMarkVisited = false
+      let nextRevisitCount = 0
       setAnalytics((prev) => {
-        const prevEntry = prev[questionId] ?? { confidence: 0, data: { events: [], revisitCount: 0 } }
-        const prevData = prevEntry.data ?? { events: [], revisitCount: 0 }
+        const prevEntry = prev[questionId] ?? { confidence: 0, data: { events: [], revisitCount: 0, visitCount: 0 } }
+        const prevData = prevEntry.data ?? { events: [], revisitCount: 0, visitCount: 0 }
+        const nextVisitCount = (prevData.visitCount ?? 0) + 1
+        nextRevisitCount = Math.max(0, nextVisitCount - 1)
+        const hasSeen = nextVisitCount > 1
+        if (!seenQuestionIdsRef.current.has(questionId)) {
+          seenQuestionIdsRef.current.add(questionId)
+        }
+        if (nextVisitCount === 1) {
+          shouldMarkVisited = true
+        }
+
+        const nextData = {
+          ...prevData,
+          questionId,
+          questionType: question.type,
+          presentedAt: now,
+          visitCount: nextVisitCount,
+          revisitCount: nextRevisitCount,
+          events: [
+            ...(prevData.events ?? []),
+            {
+              timestamp: now,
+              type: hasSeen ? 'question_revisited' : 'question_presented',
+              payload: { stepIndex: currentStep },
+            },
+          ],
+        }
 
         return {
           ...prev,
           [questionId]: {
             confidence: prevEntry.confidence ?? 0,
-            data: {
-              ...prevData,
-              questionId,
-              questionType: question.type,
-              presentedAt: now,
-              revisitCount,
-              events: [
-                ...(prevData.events ?? []),
-                {
-                  timestamp: now,
-                  type: hasSeen ? 'question_revisited' : 'question_presented',
-                  payload: { stepIndex: currentStep },
-                },
-              ],
-            },
+            data: nextData,
           },
         }
       })
 
-      if (visitCount === 1) {
+      if (shouldMarkVisited) {
         setVisitedQuestions(prev => (prev[questionId] ? prev : { ...prev, [questionId]: true }))
       }
     }
-  }, [currentStep, questions, setAnalytics, useSmoothScroll])
+  }, [currentStep, questions, setAnalytics, isResetting])
 
   useEffect(() => {
     if (!questions || questions.length === 0) {
@@ -214,7 +216,6 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
   const handleStartOver = () => {
     setQuizTransition('fade-out')
     setIsResetting(true)
-    setUseSmoothScroll(false)
     setTimeout(() => {
       setAnswers({})
       setAnalytics({})
@@ -222,27 +223,18 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
       onAnalysisCompleteChange(false)
       setSessionKey(prev => prev + 1)
       seenQuestionIdsRef.current = new Set()
-      visitCountsRef.current = new Map()
       setVisitedQuestions({})
       setCurrentStep(0)
-
-      requestAnimationFrame(() => {
-        const firstStep = document.getElementById('step-0')
-        if (firstStep) {
-          firstStep.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'center' })
-        }
-        setQuizTransition('fade-in')
-        setTimeout(() => {
-          setQuizTransition('')
-          setIsResetting(false)
-          setUseSmoothScroll(true)
-        }, 500)
-      })
+      setQuizTransition('fade-in')
+      setTimeout(() => {
+        setQuizTransition('')
+        setIsResetting(false)
+      }, 500)
     }, 200)
   }
 
   return (
-    <div ref={quizRef} className={`quiz ${quizTransition} ${isResetting ? 'quiz--hidden' : ''}`}>
+    <div className={`quiz ${quizTransition} ${isResetting ? 'quiz--hidden' : ''}`}>
       {questions.map((question, index) => (
         <div
           className="quiz-step"

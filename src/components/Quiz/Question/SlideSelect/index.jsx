@@ -10,7 +10,7 @@ import './index.scss'
 
 const CONFIRM_THRESHOLD = 0.5
 
-export default function SlideSelect({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent }) {
+export default function SlideSelect({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent, onAnalyticsPatch, animateAnswers = false }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
   const [progressById, setProgressById] = useState({})
   const [confirmedIds, setConfirmedIds] = useState([])
@@ -31,10 +31,14 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
     onDraftChange(null)
     onReadyChange(false)
 
+    const order = nextOrder.map(option => option.id)
     onAnalyticsEvent(String(question.id), 'answers_presented_order', {
-      order: nextOrder.map(option => option.id),
+      order,
     })
-  }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent])
+    onAnalyticsPatch && onAnalyticsPatch(String(question.id), {
+      presentation: { answerOrder: order, firstAnswerId: order[0] ?? null },
+    })
+  }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent, onAnalyticsPatch])
 
   useEffect(() => {
     onReadyChange(isSelectionComplete(confirmedIds, question.select))
@@ -172,12 +176,16 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
       <p className="slide-select-subtitle">select {question.select} answer{question.select > 1 ? 's' : ''} by sliding</p>
 
       <div className="slide-select-list">
-        {orderedOptions.map((option) => {
+        {orderedOptions.map((option, index) => {
           const progress = progressById[option.id] ?? 0
           const isSelected = confirmedIds.includes(option.id)
 
           return (
-            <div key={option.id} className={`slide-select-row ${isSelected ? 'selected' : ''}`}>
+            <div
+              key={option.id}
+              className={`slide-select-row ${isSelected ? 'selected' : ''} ${animateAnswers ? 'answer-animate' : ''}`}
+              style={animateAnswers ? { animationDelay: `${index * 140}ms` } : undefined}
+            >
               <span className="slide-select-row-label">{option.content}</span>
 
               <div

@@ -139,7 +139,7 @@ export default function Console({ attract = false, analytics, questions, answers
 
       const entryEvents = Array.isArray(entry?.data?.events) ? entry.data.events : []
       const activityEvents = entryEvents.filter((event) => !PASSIVE_EVENTS.has(event.type))
-      const eventCount = activityEvents.length
+      const eventCount = activityEvents.filter((event) => event.type !== 'pointer_up').length
       const hasMeaningfulSignals = eventCount > 0 || (entry?.data?.revisitCount ?? 0) > 0 || Boolean(entry?.data?.answerCommittedAt)
 
       let liveConfidence = null
@@ -182,6 +182,7 @@ export default function Console({ attract = false, analytics, questions, answers
     }
 
     const distribution = { ...baseDistribution }
+    let weightSum = 0
     let confidenceSum = 0
     let confidenceCount = 0
     let speedSum = 0
@@ -190,8 +191,10 @@ export default function Console({ attract = false, analytics, questions, answers
     let hesitationCount = 0
 
     questionCards.forEach((card) => {
+      const confidenceWeight = typeof card.confidence === 'number' ? card.confidence : 0.5
       if (card.personalityId && distribution[card.personalityId] !== undefined) {
-        distribution[card.personalityId] += 1
+        distribution[card.personalityId] += confidenceWeight
+        weightSum += confidenceWeight
       }
 
       if (typeof card.confidence === 'number') {
@@ -212,7 +215,7 @@ export default function Console({ attract = false, analytics, questions, answers
 
     const total = questionCards.length
     Object.keys(distribution).forEach((key) => {
-      distribution[key] = distribution[key] / total
+      distribution[key] = weightSum ? distribution[key] / weightSum : 0
     })
 
     return {

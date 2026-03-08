@@ -84,3 +84,16 @@
     }
   }
 }
+
+.multiple-choice-answers-answer.answer-animate {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: multipleChoiceAnswerEnter 420ms ease forwards;
+}
+
+@keyframes multipleChoiceAnswerEnter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { shuffle } from '../../../utils'
 import './index.scss'
 
-export default function RankedChoice({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent }) {
+export default function RankedChoice({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent, onAnalyticsPatch }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
   const [draggingId, setDraggingId] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -17,10 +17,14 @@ export default function RankedChoice({ question, sessionKey, onDraftChange, onRe
     onDraftChange(nextOrder.map(option => option.id))
     onReadyChange(false)
 
+    const order = nextOrder.map(option => option.id)
     onAnalyticsEvent(String(question.id), 'answers_presented_order', {
-      order: nextOrder.map(option => option.id),
+      order,
     })
-  }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent])
+    onAnalyticsPatch && onAnalyticsPatch(String(question.id), {
+      presentation: { answerOrder: order, firstAnswerId: order[0] ?? null },
+    })
+  }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent, onAnalyticsPatch])
 
   useEffect(() => {
     onDraftChange(orderedOptions.map(option => option.id))

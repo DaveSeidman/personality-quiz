@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react"
 import { getSelectRule, getSelectionInstruction, normalizeSelections, shuffle, triggerActivePress } from '../../../utils'
 import './index.scss'
 
-export default function MultipleChoice({ question, answer, setAnswers, sessionKey, onAnalyticsEvent }) {
+export default function MultipleChoice({ question, answer, setAnswers, sessionKey, onAnalyticsEvent, onAnalyticsPatch, animateAnswers = false }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
   const selectRule = useMemo(() => getSelectRule(question.select), [question.select])
   const selections = normalizeSelections(answer)
@@ -11,10 +11,14 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
   useEffect(() => {
     const nextOrder = shuffle(question.answers)
     setOrderedOptions(nextOrder)
+    const order = nextOrder.map(option => option.id)
     onAnalyticsEvent(String(question.id), 'answers_presented_order', {
-      order: nextOrder.map(option => option.id),
+      order,
     })
-  }, [question.id, question.answers, sessionKey, onAnalyticsEvent])
+    onAnalyticsPatch && onAnalyticsPatch(String(question.id), {
+      presentation: { answerOrder: order, firstAnswerId: order[0] ?? null },
+    })
+  }, [question.id, question.answers, sessionKey, onAnalyticsEvent, onAnalyticsPatch])
 
   const isSelected = (optionId) => selections.includes(optionId)
   const isVideoAsset = (content) => /\.(mp4|webm|ogg)$/i.test(content)
@@ -71,35 +75,40 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
       <h2>{question.text}</h2>
       <p className="multiple-choice-instruction">{getSelectionInstruction(question.select)}</p>
       <div className="multiple-choice-answers">
-        {orderedOptions.map((option, index) => (
-          <button
-            key={option.id}
-            type="button"
-            className={`multiple-choice-answers-answer ${isSelected(option.id) ? 'selected' : ''}`}
-            onPointerDown={(event) => handleSelect(option.id, event)}
+        {orderedOptions.map((option, index) => {
+          const animateClass = animateAnswers ? 'answer-animate' : ''
+          const delayStyle = animateAnswers ? { animationDelay: `${index * 120}ms` } : undefined
+          return (
+            <button
+              key={option.id}
+              type="button"
+              className={`multiple-choice-answers-answer ${isSelected(option.id) ? 'selected' : ''} ${animateClass}`}
+              style={delayStyle}
+              onPointerDown={(event) => handleSelect(option.id, event)}
             >
-            {isPhotoQuestion ? (
-              isVideoAsset(option.content) ? (
-                <video
-                  className="multiple-choice-answers-answer-image"
-                  src={`${option.content}`}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                />
+              {isPhotoQuestion ? (
+                isVideoAsset(option.content) ? (
+                  <video
+                    className="multiple-choice-answers-answer-image"
+                    src={`${option.content}`}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    className="multiple-choice-answers-answer-image"
+                    src={`${option.content}`}
+                    alt={option.id}
+                  />
+                )
               ) : (
-                <img
-                  className="multiple-choice-answers-answer-image"
-                  src={`${option.content}`}
-                  alt={option.id}
-                />
-              )
-            ) : (
-              option.content
-            )}
-          </button>
-        ))}
+                option.content
+              )}
+            </button>
+          )
+        })}
       </div>
     </div>
   )

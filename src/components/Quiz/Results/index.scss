@@ -30,7 +30,7 @@ $layout-padding: 2vh;
     border: 0.052vh solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 1.56vh 3.13vh rgba(0, 0, 0, 0.55);
     overflow-y: auto;
-    margin: 2vh 0 0;
+    margin: 2vh;
   }
 
   &-title {
@@ -524,9 +524,79 @@ $layout-padding: 2vh;
   letter-spacing: 0.08em;
 }
 
-.results-loading-copy span {
-  display: block;
-  margin-top: 0.6rem;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 1rem;
+
+.results-loading-placeholder {
+  position: relative;
+  width: 100%;
+  height: 24vh;
+  margin-top: 2vh;
+  border-radius: 1.67vh;
+  overflow: hidden;
+}
+
+.results-loading {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.67vh;
+  overflow: hidden;
+}
+
+.results-loading-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+}
+
+.results-loading-copy {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #fff;
+  padding: 2rem 3rem;
+  border-radius: 1.25vh;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(0.31vh);
+}
+
+.results-loading-placeholder {
+  position: relative;
+  width: 100%;
+  height: 24vh;
+  margin: 2vh 0 0;
+  border-radius: 1.67vh;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.results-loading-video.blob-idle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+  animation: blobIdlePulse 6s ease-in-out infinite alternate;
+}
+
+.results-loading-video.blob-active {
+  animation: blobActivePulse 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes blobIdlePulse {
+  from { opacity: 0.35; }
+  to { opacity: 0.65; }
+}
+
+@keyframes blobActivePulse {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
 }

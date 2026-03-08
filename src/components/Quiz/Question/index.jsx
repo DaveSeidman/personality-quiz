@@ -18,7 +18,7 @@ export default function Question({
   sessionKey,
   isActive = false,
   hasVisited = false,
-  onExit = () => {}
+  onExit = () => { }
 }) {
   const [draftAnswer, setDraftAnswer] = useState(null)
   const [canProceedLocal, setCanProceedLocal] = useState(false)
@@ -121,7 +121,6 @@ export default function Question({
             onReadyChange={setCanProceedLocal}
             onAnalyticsEvent={onAnalyticsEvent}
             onAnalyticsPatch={onAnalyticsPatch}
-            animateAnswers={!hasVisited}
           />
         ) : question.type === 'range-sliders' ? (
           <RangeSliders

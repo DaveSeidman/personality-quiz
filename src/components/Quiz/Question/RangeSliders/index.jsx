@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { shuffle } from '../../../utils'
 import './index.scss'
 
-export default function RangeSliders({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent }) {
+export default function RangeSliders({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent, onAnalyticsPatch, animateAnswers = false }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
   const [values, setValues] = useState({})
   const [touched, setTouched] = useState({})
@@ -15,10 +15,14 @@ export default function RangeSliders({ question, sessionKey, onDraftChange, onRe
     onDraftChange(null)
     onReadyChange(false)
 
+    const order = nextOrder.map(option => option.id)
     onAnalyticsEvent(String(question.id), 'answers_presented_order', {
-      order: nextOrder.map(option => option.id),
+      order,
     })
-  }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent])
+    onAnalyticsPatch && onAnalyticsPatch(String(question.id), {
+      presentation: { answerOrder: order, firstAnswerId: order[0] ?? null },
+    })
+  }, [question.id, question.answers, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent, onAnalyticsPatch])
 
   useEffect(() => {
     const touchedCount = Object.keys(touched).length
@@ -58,8 +62,12 @@ export default function RangeSliders({ question, sessionKey, onDraftChange, onRe
       <p className="range-sliders-instruction">Slide each item to score it.</p>
 
       <div className="range-sliders-list">
-        {orderedOptions.map((option) => (
-          <div key={option.id} className={`range-sliders-row ${touched[option.id] ? 'touched' : ''}`}>
+        {orderedOptions.map((option, index) => (
+          <div
+            key={option.id}
+            className={`range-sliders-row ${touched[option.id] ? 'touched' : ''} ${animateAnswers ? 'answer-animate' : ''}`}
+            style={animateAnswers ? { animationDelay: `${index * 130}ms` } : undefined}
+          >
             <span className="range-sliders-label">{option.content}</span>
 
             <div className="range-sliders-control">

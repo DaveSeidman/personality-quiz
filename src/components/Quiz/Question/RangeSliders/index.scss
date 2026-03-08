@@ -50,3 +50,16 @@
     }
   }
 }
+
+.range-sliders-row.answer-animate {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: rangeSliderRowEnter 420ms ease forwards;
+}
+
+@keyframes rangeSliderRowEnter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

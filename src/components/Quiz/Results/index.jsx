@@ -305,9 +305,15 @@ export default function Results({ result, analytics, questions, answers, session
 
       {status === 'error' && <p className="results-status error">Submit failed. Try again.</p>}
 
+      {status !== 'submitted' && (
+        <div className="results-loading-placeholder">
+          <video className="results-loading-video blob-idle" src={loadingVideo} autoPlay muted loop playsInline />
+        </div>
+      )}
+
       {status === 'submitting' && (
         <div className="results-loading">
-          <video className="results-loading-video" src={loadingVideo} autoPlay muted loop playsInline />
+          <video className="results-loading-video blob-active" src={loadingVideo} autoPlay muted loop playsInline />
           <div className="results-loading-copy">
             <p>Translating your signals…</p>
             <span>We’re syncing with the cocktail oracle. This usually takes a beat.</span>

@@ -11,26 +11,6 @@ $green: #1a2f18;
   -webkit-tap-highlight-color: transparent;
 }
 
-button,
-input,
-select,
-textarea,
-.multiple-choice-answers-answer,
-.ranked-choice-row,
-.range-sliders-row,
-.slide-select-row-track,
-.console-feed-row,
-.results-status-question,
-.results-status-chart,
-.results-status-legend-item,
-.question-content,
-.results-content,
-.console,
-.attract,
-.attract-blob {
-  // transition: background-color var(--ui-transition), color var(--ui-transition), border-color var(--ui-transition), opacity var(--ui-transition), transform var(--ui-transition);
-}
-
 @font-face {
   font-family: 'Montserrat';
   src: url('./assets/fonts/Montserrat.ttf') format('truetype');
@@ -100,12 +80,4 @@ body,
 .hidden {
   visibility: hidden;
   opacity: 0;
-}
-
-.is-active,
-button.is-active,
-button:active,
-.multiple-choice-answers-answer.is-active,
-.question-navigation button.is-active {
-  // transform: scale(1.02);
 }
