@@ -1,6 +1,6 @@
 $darkgray: #222;
 $orange: #ff6a1a;
-$green: #1a2f18;
+$green: #072a01;
 
 :root {
   font-size: clamp(0.89vh, 1.28vh, 1.48vh);
@@ -80,6 +80,7 @@ body,
 .hidden {
   visibility: hidden;
   opacity: 0;
+  pointer-events: none;
 }
 
 .app-fullscreen-btn {
