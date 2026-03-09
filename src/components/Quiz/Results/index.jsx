@@ -231,95 +231,85 @@ export default function Results({ result, analytics, questions, answers, session
     }
   }
 
+  const isSubmitted = status === 'submitted'
+  const isSubmitting = status === 'submitting'
+
   return (
     <div className="results">
       <div className="results-content">
-        {status !== 'submitted' && (
-          <>
+
+        {/* ── Cross-fading screens ── */}
+        <div className="results-screens">
+
+          {/* Screen A: idle + submitting */}
+          <div className={`results-screen ${!isSubmitted ? 'in' : 'out'}`}>
             <h2 className="results-title">Start AI analysis of your answers and behavioral signals?</h2>
             <p className="results-instruction">You can go back before submitting.</p>
             <div className="results-blob-placeholder">
               <video
-                className={`results-blob-video ${status === 'submitting' ? 'blob-active' : 'blob-idle'}`}
+                className={`results-blob-video ${isSubmitting ? 'blob-active' : 'blob-idle'}`}
                 src={loadingVideo}
                 autoPlay muted loop playsInline
               />
-            </div>
-          </>
-        )}
-
-        {status === 'submitted' && (
-          <div className={`results-status ${result?.result?.personalityId ? `personality-${result.result.personalityId}` : ''}`}>
-            <div className="results-status-summary">
-              {result?.result ? (
-                <>
-                  <p className="results-status-match">
-                    Top match: <strong>{result.result.personalityName}</strong> ({Math.round((result.result.confidence || 0) * 100)}%)
-                  </p>
-                  <p className="results-status-statement">
-                    {renderStatement(
-                      result.result.statement || result.result.reasoning || 'No AI statement returned yet.',
-                      [result.result.personalityName, result.result.drinkRecommendation]
-                    )}
-                  </p>
-                  <RadarCanvas composite={radarData.composite} byQuestion={radarData.byQuestion} />
-                </>
-              ) : null}
-            </div>
-
-            <div className="results-status-legend">
-              {PERSONALITY_LEGEND.map((entry) => (
-                <div key={entry.id} className={`results-status-legend-item personality-${entry.id}`}>
-                  <span className="results-status-legend-swatch" />
-                  <span>{entry.label}</span>
-                </div>
-              ))}
+              <div className={`results-blob-overlay ${isSubmitting ? 'visible' : ''}`}>
+                <p>Translating your signals…</p>
+                <span>Syncing with the cocktail oracle. This usually takes a beat.</span>
+              </div>
             </div>
           </div>
-        )}
 
+          {/* Screen B: submitted */}
+          <div className={`results-screen ${isSubmitted ? 'in' : 'out'}`}>
+            <div className={`results-status ${result?.result?.personalityId ? `personality-${result.result.personalityId}` : ''}`}>
+              <div className="results-status-summary">
+                {result?.result ? (
+                  <>
+                    <p className="results-status-match">
+                      Top match: <strong>{result.result.personalityName}</strong> ({Math.round((result.result.confidence || 0) * 100)}%)
+                    </p>
+                    <p className="results-status-statement">
+                      {renderStatement(
+                        result.result.statement || result.result.reasoning || 'No AI statement returned yet.',
+                        [result.result.personalityName, result.result.drinkRecommendation]
+                      )}
+                    </p>
+                    <RadarCanvas composite={radarData.composite} byQuestion={radarData.byQuestion} />
+                  </>
+                ) : null}
+              </div>
+              <div className="results-status-legend">
+                {PERSONALITY_LEGEND.map((entry) => (
+                  <div key={entry.id} className={`results-status-legend-item personality-${entry.id}`}>
+                    <span className="results-status-legend-swatch" />
+                    <span>{entry.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* ── Nav (always visible) ── */}
         {status === 'error' && <p className="results-error">Submit failed. Try again.</p>}
-
         <div className="results-content-nav">
-          {status !== 'submitted' ? (
+          {!isSubmitted ? (
             <>
-              <button
-                className="question-navigation-prev-button"
-                onClick={onPrevious}
-                onPointerDown={triggerActivePress}
-              >
+              <button className="question-navigation-prev-button" onClick={onPrevious} onPointerDown={triggerActivePress}>
                 Review
               </button>
-              <button
-                className="question-navigation-next-button"
-                onClick={handleSubmit}
-                onPointerDown={triggerActivePress}
-                disabled={status === 'submitting'}
-              >
-                {status === 'submitting' ? 'Submitting…' : 'Submit'}
+              <button className="question-navigation-next-button" onClick={handleSubmit} onPointerDown={triggerActivePress} disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting…' : 'Submit'}
               </button>
             </>
           ) : (
-            <button
-              className="question-navigation-prev-button"
-              onClick={onStartOver}
-              onPointerDown={triggerActivePress}
-            >
+            <button className="question-navigation-prev-button" onClick={onStartOver} onPointerDown={triggerActivePress}>
               Start Over
             </button>
           )}
         </div>
-      </div>
 
-      {status === 'submitting' && (
-        <div className="results-loading">
-          <video className="results-loading-video blob-active" src={loadingVideo} autoPlay muted loop playsInline />
-          <div className="results-loading-copy">
-            <p>Translating your signals…</p>
-            <span>We're syncing with the cocktail oracle. This usually takes a beat.</span>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   )
 }

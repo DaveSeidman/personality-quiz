@@ -31,6 +31,31 @@ $layout-padding: 2vh;
     box-shadow: 0 1.56vh 3.13vh rgba(0, 0, 0, 0.55);
     box-sizing: border-box;
     gap: 1.5vh;
+    overflow: hidden;
+  }
+
+  &-screens {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+  }
+
+  &-screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vh;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 400ms linear;
+
+    &.in {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 
   &-title {
@@ -75,6 +100,40 @@ $layout-padding: 2vh;
     &.blob-active { opacity: 1; }
   }
 
+  &-blob-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75vh;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(0.5vh);
+    opacity: 0;
+    transition: opacity 400ms linear;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1.8vh;
+      letter-spacing: 0.08em;
+      color: #fff;
+    }
+
+    span {
+      font-size: 0.9vh;
+      color: rgba(255, 255, 255, 0.65);
+      max-width: 36vh;
+      text-align: center;
+      line-height: 1.5;
+    }
+  }
+
   &-content-nav {
     display: flex;
     justify-content: center;
@@ -88,7 +147,7 @@ $layout-padding: 2vh;
       padding: 0.89vh 1.48vh;
       border-radius: 999vh;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       font-size: 0.86vh;
       font-weight: 700;
       cursor: pointer;
@@ -120,11 +179,8 @@ $layout-padding: 2vh;
 
   &-status {
     width: 100%;
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
+    height: 100%;
     color: #d7f7df;
-    padding: 0.5vh;
     border-radius: 1.04vh;
     display: flex;
     flex-direction: column;
@@ -464,63 +520,7 @@ $layout-padding: 2vh;
     }
   }
 
-  // ── Loading overlay (full-bleed, above content) ───────────────────────────
 
-  &-loading {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(0.83vh);
-    background: rgba(4, 6, 5, 0.82);
-    z-index: 5;
-
-    &-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.4;
-    }
-
-    &-copy {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      color: #fff;
-      padding: 2.96vh 4.44vh;
-      border-radius: 1.25vh;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(0.31vh);
-
-      p {
-        margin: 0;
-        font-size: 2.14vh;
-        letter-spacing: 0.08em;
-      }
-
-      span {
-        display: block;
-        margin-top: 0.56vh;
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 0.93vh;
-      }
-    }
-  }
 }
 
-// ── Keyframes ─────────────────────────────────────────────────────────────────
 
-@keyframes blobIdlePulse {
-  from { opacity: 0.35; }
-  to   { opacity: 0.65; }
-}
-
-@keyframes blobActivePulse {
-  from { opacity: 0.4; }
-  to   { opacity: 1;   }
-}
