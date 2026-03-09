@@ -48,10 +48,10 @@ function RadarCanvas({ composite, byQuestion }) {
     const radius = Math.min(width, height) * 0.36
 
     const axes = [
-      { id: 'pioneer',    angle: -Math.PI / 2, label: 'Pioneer' },
-      { id: 'architect',  angle: 0,             label: 'Architect' },
-      { id: 'catalyst',   angle: Math.PI / 2,   label: 'Catalyst' },
-      { id: 'strategist', angle: Math.PI,        label: 'Strategist' },
+      { id: 'pioneer', angle: -Math.PI / 2, label: 'Pioneer' },
+      { id: 'architect', angle: 0, label: 'Architect' },
+      { id: 'catalyst', angle: Math.PI / 2, label: 'Catalyst' },
+      { id: 'strategist', angle: Math.PI, label: 'Strategist' },
     ]
 
     let raf = null
@@ -112,29 +112,29 @@ function RadarCanvas({ composite, byQuestion }) {
         ctx.fill()
       })
 
-      // per-question polygons (staggered animation)
-      ;(byQuestion || []).forEach((entry, qi) => {
-        const progress = clamp(elapsed - qi * 0.18)
-        const pts = polygonPoints(entry.vector, progress)
-        const fill = POLY_COLORS[qi % POLY_COLORS.length]
-        const stroke = POLY_STROKE_COLORS[qi % POLY_STROKE_COLORS.length]
+        // per-question polygons (staggered animation)
+        ; (byQuestion || []).forEach((entry, qi) => {
+          const progress = clamp(elapsed - qi * 0.18)
+          const pts = polygonPoints(entry.vector, progress)
+          const fill = POLY_COLORS[qi % POLY_COLORS.length]
+          const stroke = POLY_STROKE_COLORS[qi % POLY_STROKE_COLORS.length]
 
-        ctx.beginPath()
-        pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
-        ctx.closePath()
-        ctx.fillStyle = fill
-        ctx.fill()
-        ctx.strokeStyle = stroke
-        ctx.lineWidth = 1.2
-        ctx.stroke()
-
-        pts.forEach((p) => {
           ctx.beginPath()
-          ctx.arc(p.x, p.y, 3, 0, Math.PI * 2)
-          ctx.fillStyle = PERSONALITY_COLORS[p.axis.id]
+          pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
+          ctx.closePath()
+          ctx.fillStyle = fill
           ctx.fill()
+          ctx.strokeStyle = stroke
+          ctx.lineWidth = 1.2
+          ctx.stroke()
+
+          pts.forEach((p) => {
+            ctx.beginPath()
+            ctx.arc(p.x, p.y, 3, 0, Math.PI * 2)
+            ctx.fillStyle = PERSONALITY_COLORS[p.axis.id]
+            ctx.fill()
+          })
         })
-      })
 
       // composite polygon (delayed until after per-question)
       const compDelay = (byQuestion?.length || 0) * 0.18 + 0.2
@@ -235,8 +235,8 @@ export default function Results({ result, analytics, questions, answers, session
 
           {/* Screen A: idle + submitting */}
           <div className={`results-screen ${!isSubmitted ? 'in' : 'out'}`}>
-            <h2 className="results-title">Start AI analysis of your answers and behavioral signals?</h2>
-            <p className="results-instruction">You can go back before submitting.</p>
+            <h2 className="results-title">Start AI analysis of your answers and behavioral signals...</h2>
+            <p className="results-instruction">You can review before submitting.</p>
             <div className="results-blob-placeholder">
               <video
                 className={`results-blob-video ${isSubmitting ? 'blob-active' : 'blob-idle'}`}

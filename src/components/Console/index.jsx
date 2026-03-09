@@ -139,7 +139,7 @@ export default function Console({ attract = false, analytics, questions, answers
 
       const entryEvents = Array.isArray(entry?.data?.events) ? entry.data.events : []
       const activityEvents = entryEvents.filter((event) => !PASSIVE_EVENTS.has(event.type))
-      const eventCount = activityEvents.filter((event) => event.type !== 'pointer_up').length
+      const eventCount = entryEvents.filter((event) => event.type === 'pointer_down').length
       const hasMeaningfulSignals = eventCount > 0 || (entry?.data?.revisitCount ?? 0) > 0 || Boolean(entry?.data?.answerCommittedAt)
 
       let liveConfidence = null

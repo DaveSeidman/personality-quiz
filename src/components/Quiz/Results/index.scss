@@ -235,7 +235,6 @@ $layout-padding: 2vh;
     }
 
     &-statement {
-      margin: 0;
       color: rgba(255, 255, 255, 0.72);
       line-height: 1.5;
       text-align: center;
@@ -251,6 +250,8 @@ $layout-padding: 2vh;
         letter-spacing: 0.01em;
         line-height: 1.2;
         white-space: nowrap;
+        text-transform: uppercase;
+        font-family: serif;
       }
     }
 
@@ -278,7 +279,7 @@ $layout-padding: 2vh;
 
       canvas {
         max-width: 52vh;
-        height: 25vh;
+        height: 23vh;
       }
     }
 
