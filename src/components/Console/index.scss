@@ -154,7 +154,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(11.11vh, 1fr));
   gap: 0.81vh;
-  margin-top: 0.96vh;
+  margin: 0.96vh 0;
 }
 
 .console-feed-row-metric {
@@ -299,6 +299,7 @@
 .interaction-dot.active {
   background: #fff;
 }
+
 .console-header-actions {
   display: flex;
   align-items: center;
@@ -777,7 +778,18 @@
   --tone-soft: #fff0e6;
 }
 
-.console-aggregate-distribution-row.personality-strategist .console-aggregate-distribution-fill { background: #4dbb89; }
-.console-aggregate-distribution-row.personality-pioneer .console-aggregate-distribution-fill { background: #4c78ff; }
-.console-aggregate-distribution-row.personality-catalyst .console-aggregate-distribution-fill { background: #d66bba; }
-.console-aggregate-distribution-row.personality-architect .console-aggregate-distribution-fill { background: #ff6200; }
+.console-aggregate-distribution-row.personality-strategist .console-aggregate-distribution-fill {
+  background: #4dbb89;
+}
+
+.console-aggregate-distribution-row.personality-pioneer .console-aggregate-distribution-fill {
+  background: #4c78ff;
+}
+
+.console-aggregate-distribution-row.personality-catalyst .console-aggregate-distribution-fill {
+  background: #d66bba;
+}
+
+.console-aggregate-distribution-row.personality-architect .console-aggregate-distribution-fill {
+  background: #ff6200;
+}
