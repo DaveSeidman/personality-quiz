@@ -71,10 +71,15 @@ export default function App() {
       resetInactivityTimeout()
     }
 
+    // Kiosk: suppress context menu on long-press
+    const handleContextMenu = (event) => event.preventDefault()
+
     window.addEventListener('click', handleGlobalClick)
+    window.addEventListener('contextmenu', handleContextMenu)
 
     return () => {
       window.removeEventListener('click', handleGlobalClick)
+      window.removeEventListener('contextmenu', handleContextMenu)
       if (activityTimeoutRef.current) clearTimeout(activityTimeoutRef.current)
     }
   }, [])

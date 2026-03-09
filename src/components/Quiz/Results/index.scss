@@ -251,6 +251,7 @@ $layout-padding: 2vh;
         color: #fff;
         letter-spacing: 0.01em;
         line-height: 1.2;
+        white-space: nowrap;
       }
     }
 
@@ -286,8 +287,8 @@ $layout-padding: 2vh;
       flex-shrink: 0;
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 1.2vh 0;
+      justify-content: center;
+      gap: 1.2vh 2.4vh;
       margin: 1vh 0;
 
       &-item {

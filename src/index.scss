@@ -9,6 +9,14 @@ $green: #072a01;
 
 * {
   -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+canvas,
+img {
+  touch-action: none;
+  -webkit-touch-callout: none;
 }
 
 @font-face {
