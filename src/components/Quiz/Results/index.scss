@@ -77,60 +77,60 @@ $layout-padding: 2vh;
     font-size: 1vh;
   }
 
-  &-blob-placeholder {
-    position: relative;
-    width: 100%;
-    flex: 1;
-    min-height: 0;
-    border-radius: 1.25vh;
-    overflow: hidden;
-    border: 0.052vh solid rgba(255, 255, 255, 0.08);
-    background: rgba(0, 0, 0, 0.3);
-  }
-
-  &-blob-video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: opacity 600ms linear;
-
-    &.blob-idle { opacity: 0.5; }
-    &.blob-active { opacity: 1; }
-  }
-
-  &-blob-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75vh;
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(0.5vh);
-    opacity: 0;
-    transition: opacity 400ms linear;
-    pointer-events: none;
-
-    &.visible {
-      opacity: 1;
+  &-blob {
+    &-placeholder {
+      position: relative;
+      width: 100%;
+      height: 25vh;
+      min-height: 0;
+      border-radius: 1.25vh;
+      overflow: hidden;
+      border: 0.052vh solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.3);
     }
 
-    p {
-      margin: 0;
-      font-size: 1.8vh;
-      letter-spacing: 0.08em;
-      color: #fff;
+    &-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 600ms linear;
+
+      &.blob-idle  { opacity: 0.5; }
+      &.blob-active { opacity: 1; }
     }
 
-    span {
-      font-size: 0.9vh;
-      color: rgba(255, 255, 255, 0.65);
-      max-width: 36vh;
-      text-align: center;
-      line-height: 1.5;
+    &-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75vh;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(0.5vh);
+      opacity: 0;
+      transition: opacity 400ms linear;
+      pointer-events: none;
+
+      &.visible { opacity: 1; }
+
+      p {
+        margin: 0;
+        font-size: 1.8vh;
+        letter-spacing: 0.08em;
+        color: #fff;
+      }
+
+      span {
+        font-size: 0.9vh;
+        color: rgba(255, 255, 255, 0.65);
+        max-width: 36vh;
+        text-align: center;
+        line-height: 1.5;
+      }
     }
   }
 
@@ -420,10 +420,25 @@ $layout-padding: 2vh;
         background: linear-gradient(90deg, var(--tone), color-mix(in srgb, var(--tone), #ffffff 35%));
       }
 
-      &.personality-strategist { --tone: #4dbb89; --tone-soft: #e7f6ee; }
-      &.personality-pioneer    { --tone: #4c78ff; --tone-soft: #e9efff; }
-      &.personality-catalyst   { --tone: #d66bba; --tone-soft: #fbe9f5; }
-      &.personality-architect  { --tone: #ff6200; --tone-soft: #fff0e6; }
+      &.personality-strategist {
+        --tone: #4dbb89;
+        --tone-soft: #e7f6ee;
+      }
+
+      &.personality-pioneer {
+        --tone: #4c78ff;
+        --tone-soft: #e9efff;
+      }
+
+      &.personality-catalyst {
+        --tone: #d66bba;
+        --tone-soft: #fbe9f5;
+      }
+
+      &.personality-architect {
+        --tone: #ff6200;
+        --tone-soft: #fff0e6;
+      }
     }
 
     &-dot-row {
@@ -437,7 +452,10 @@ $layout-padding: 2vh;
       aspect-ratio: 1 / 1;
       border-radius: 999vh;
       background: #dde6f7;
-      &.active { background: var(--tone); }
+
+      &.active {
+        background: var(--tone);
+      }
     }
 
     &-needle-gauge {
@@ -477,7 +495,10 @@ $layout-padding: 2vh;
       height: 0.52vh;
       border-radius: 999vh;
       background: #dde6f7;
-      &.active { background: var(--tone); }
+
+      &.active {
+        background: var(--tone);
+      }
     }
 
     &-ring {
@@ -507,20 +528,40 @@ $layout-padding: 2vh;
     }
 
     // Personality colour overrides
-    &.personality-strategist .results-status-heading { color: #9af0be; }
-    &.personality-pioneer    .results-status-heading { color: #a9c7ff; }
-    &.personality-catalyst   .results-status-heading { color: #ffb8df; }
-    &.personality-architect  .results-status-heading { color: #ffb380; }
+    &.personality-strategist .results-status-heading {
+      color: #9af0be;
+    }
+
+    &.personality-pioneer .results-status-heading {
+      color: #a9c7ff;
+    }
+
+    &.personality-catalyst .results-status-heading {
+      color: #ffb8df;
+    }
+
+    &.personality-architect .results-status-heading {
+      color: #ffb380;
+    }
 
     .results-status-legend-item {
-      &.personality-strategist .results-status-legend-swatch { background: #4dbb89; }
-      &.personality-pioneer    .results-status-legend-swatch { background: #4c78ff; }
-      &.personality-catalyst   .results-status-legend-swatch { background: #d66bba; }
-      &.personality-architect  .results-status-legend-swatch { background: #ff6200; }
+      &.personality-strategist .results-status-legend-swatch {
+        background: #4dbb89;
+      }
+
+      &.personality-pioneer .results-status-legend-swatch {
+        background: #4c78ff;
+      }
+
+      &.personality-catalyst .results-status-legend-swatch {
+        background: #d66bba;
+      }
+
+      &.personality-architect .results-status-legend-swatch {
+        background: #ff6200;
+      }
     }
   }
 
 
 }
-
-
