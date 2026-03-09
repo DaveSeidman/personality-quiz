@@ -36,6 +36,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
   const totalSteps = questions.length + 1
   const resultsStepIndex = questions.length
   const seenQuestionIdsRef = useRef(new Set())
+  const isResettingRef = useRef(false)
   const questionTypeById = useRef(Object.fromEntries(questions.map(question => [String(question.id), question.type])))
 
   const ensureQuestionAnalytics = useCallback((questionId, patch = {}) => {
@@ -114,7 +115,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
     const element = document.getElementById(`step-${currentStep}`)
     if (!element) return
 
-    element.scrollIntoView({ behavior: isResetting ? 'auto' : 'smooth', block: 'center', inline: 'center' })
+    element.scrollIntoView({ behavior: isResettingRef.current ? 'auto' : 'smooth', block: 'center', inline: 'center' })
 
     if (currentStep < questions.length) {
       const question = questions[currentStep]
@@ -166,7 +167,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
         setVisitedQuestions(prev => (prev[questionId] ? prev : { ...prev, [questionId]: true }))
       }
     }
-  }, [currentStep, questions, setAnalytics, isResetting])
+  }, [currentStep, questions, setAnalytics])
 
   useEffect(() => {
     if (!questions || questions.length === 0) {
@@ -215,6 +216,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
 
   const handleStartOver = () => {
     setQuizTransition('fade-out')
+    isResettingRef.current = true
     setIsResetting(true)
     setTimeout(() => {
       setAnswers({})
@@ -228,6 +230,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
       setQuizTransition('fade-in')
       setTimeout(() => {
         setQuizTransition('')
+        isResettingRef.current = false
         setIsResetting(false)
       }, 500)
     }, 200)
