@@ -43,10 +43,10 @@ $layout-padding: 2vh;
     // margin: $layout-margin auto 0;
     margin: 1vh 0;
     padding: $layout-padding 0 0;
-    background: src.$green;
+    background: rgba(26, 47, 24, 0.9);
     border-radius: 1vh;
     // border: 1px solid rgba(64, 255, 162, 0.35);
-    box-shadow: 0 0 1vh 1vh src.$green;
+    box-shadow: 0 0 1vh 1vh rgba(26, 47, 24, 0.9);
 
     .button-secondary {
       padding: 0.89vh 1.48vh;
