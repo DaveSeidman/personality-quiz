@@ -106,14 +106,6 @@ function RadarCanvas({ composite, byQuestion }) {
         ctx.lineWidth = 1
         ctx.stroke()
 
-        ctx.fillStyle = 'rgba(230,240,255,0.95)'
-        ctx.font = '13px Montserrat, sans-serif'
-        ctx.textAlign = axis.id === 'strategist' ? 'right' : axis.id === 'architect' ? 'left' : 'center'
-        ctx.textBaseline = axis.id === 'pioneer' ? 'bottom' : axis.id === 'catalyst' ? 'top' : 'middle'
-        const lx = cx + Math.cos(axis.angle) * (radius + 28)
-        const ly = cy + Math.sin(axis.angle) * (radius + 28)
-        ctx.fillText(axis.label, lx, ly)
-
         ctx.beginPath()
         ctx.arc(cx + Math.cos(axis.angle) * (radius + 8), cy + Math.sin(axis.angle) * (radius + 8), 4, 0, Math.PI * 2)
         ctx.fillStyle = PERSONALITY_COLORS[axis.id]
@@ -265,7 +257,8 @@ export default function Results({ result, analytics, questions, answers, session
                 {result?.result ? (
                   <>
                     <p className="results-status-match">
-                      Top match: <strong>{result.result.personalityName}</strong> ({Math.round((result.result.confidence || 0) * 100)}%)
+                      Top match: <strong>{result.result.personalityName}</strong>
+                      <span className="results-status-confidence">{Math.round((result.result.confidence || 0) * 100)}% Confidence</span>
                     </p>
                     <p className="results-status-statement">
                       {renderStatement(

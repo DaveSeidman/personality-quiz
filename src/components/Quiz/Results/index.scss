@@ -214,6 +214,18 @@ $layout-padding: 2vh;
       margin: 0;
       color: #f0f6ff;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4vh;
+    }
+
+    &-confidence {
+      font-size: 0.8vh;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
     }
 
     &-statement {
@@ -259,7 +271,7 @@ $layout-padding: 2vh;
 
       canvas {
         max-width: 52vh;
-        height: 20vh;
+        height: 26vh;
       }
     }
 

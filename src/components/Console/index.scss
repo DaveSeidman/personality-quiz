@@ -8,6 +8,7 @@
   padding: 2vh;
   background: rgba(3, 6, 4, 0.8);
   border-top: 0.09vh solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(.25vh);
   display: flex;
   flex-direction: column;
   gap: 1.48vh;
@@ -218,8 +219,13 @@
         text-transform: uppercase;
         color: rgba(255, 255, 255, 0.6);
 
-        &.confidence { align-items: flex-start; }
-        &.interactions { width: 100%; }
+        &.confidence {
+          align-items: flex-start;
+        }
+
+        &.interactions {
+          width: 100%;
+        }
       }
     }
   }
@@ -354,13 +360,17 @@
         }
 
         &::before {
-          top: 0; bottom: 0; left: 50%;
+          top: 0;
+          bottom: 0;
+          left: 50%;
           width: 0.09vh;
           transform: translateX(-0.05vh);
         }
 
         &::after {
-          left: 0; right: 0; top: 50%;
+          left: 0;
+          right: 0;
+          top: 50%;
           height: 0.09vh;
           transform: translateY(-0.05vh);
         }
@@ -404,10 +414,25 @@
         background: linear-gradient(90deg, var(--tone), color-mix(in srgb, var(--tone), #ffffff 35%));
       }
 
-      &.personality-strategist { --tone: #4dbb89; --tone-soft: #e7f6ee; }
-      &.personality-pioneer    { --tone: #4c78ff; --tone-soft: #e9efff; }
-      &.personality-catalyst   { --tone: #d66bba; --tone-soft: #fbe9f5; }
-      &.personality-architect  { --tone: #ff6200; --tone-soft: #fff0e6; }
+      &.personality-strategist {
+        --tone: #4dbb89;
+        --tone-soft: #e7f6ee;
+      }
+
+      &.personality-pioneer {
+        --tone: #4c78ff;
+        --tone-soft: #e9efff;
+      }
+
+      &.personality-catalyst {
+        --tone: #d66bba;
+        --tone-soft: #fbe9f5;
+      }
+
+      &.personality-architect {
+        --tone: #ff6200;
+        --tone-soft: #fff0e6;
+      }
     }
 
     &-dot-row {
@@ -420,10 +445,16 @@
     &-pill {
       background: #dde6f7;
       border-radius: 999vh;
-      &.active { background: var(--tone); }
+
+      &.active {
+        background: var(--tone);
+      }
     }
 
-    &-dot { width: 100%; aspect-ratio: 1 / 1; }
+    &-dot {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+    }
 
     &-pill-row {
       display: grid;
@@ -431,7 +462,9 @@
       gap: 0.27vh;
     }
 
-    &-pill { height: 0.5vh; }
+    &-pill {
+      height: 0.5vh;
+    }
 
     &-ring {
       width: 2.9vh;
@@ -545,10 +578,21 @@
         font-size: 0.85vh;
         color: rgba(255, 255, 255, 0.85);
 
-        &.personality-strategist .console-aggregate-distribution-fill { background: #4dbb89; }
-        &.personality-pioneer    .console-aggregate-distribution-fill { background: #4c78ff; }
-        &.personality-catalyst   .console-aggregate-distribution-fill { background: #d66bba; }
-        &.personality-architect  .console-aggregate-distribution-fill { background: #ff6200; }
+        &.personality-strategist .console-aggregate-distribution-fill {
+          background: #4dbb89;
+        }
+
+        &.personality-pioneer .console-aggregate-distribution-fill {
+          background: #4c78ff;
+        }
+
+        &.personality-catalyst .console-aggregate-distribution-fill {
+          background: #d66bba;
+        }
+
+        &.personality-architect .console-aggregate-distribution-fill {
+          background: #ff6200;
+        }
       }
 
       &-label {
@@ -627,10 +671,25 @@
         background: linear-gradient(90deg, var(--tone), color-mix(in srgb, var(--tone), #ffffff 35%));
       }
 
-      &.personality-strategist { --tone: #4dbb89; --tone-soft: #e7f6ee; }
-      &.personality-pioneer    { --tone: #4c78ff; --tone-soft: #e9efff; }
-      &.personality-catalyst   { --tone: #d66bba; --tone-soft: #fbe9f5; }
-      &.personality-architect  { --tone: #ff6200; --tone-soft: #fff0e6; }
+      &.personality-strategist {
+        --tone: #4dbb89;
+        --tone-soft: #e7f6ee;
+      }
+
+      &.personality-pioneer {
+        --tone: #4c78ff;
+        --tone-soft: #e9efff;
+      }
+
+      &.personality-catalyst {
+        --tone: #d66bba;
+        --tone-soft: #fbe9f5;
+      }
+
+      &.personality-architect {
+        --tone: #ff6200;
+        --tone-soft: #fff0e6;
+      }
     }
 
     &-ring {
@@ -721,13 +780,26 @@
   background: rgba(255, 255, 255, 0.3);
   transition: background-color 160ms linear;
 
-  &.active { background: #fff; }
+  &.active {
+    background: #fff;
+  }
 }
 
 // ── Keyframes ──────────────────────────────────────────────────────────────────
 
 @keyframes console-pulse {
-  0%   { opacity: 0.4; transform: scale(0.8); }
-  50%  { opacity: 1;   transform: scale(1);   }
-  100% { opacity: 0.4; transform: scale(0.8); }
+  0% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
 }
