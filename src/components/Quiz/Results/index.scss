@@ -23,7 +23,9 @@ $layout-padding: 2vh;
     min-height: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     padding: $layout-padding;
     border-radius: 1.25vh;
     background: rgba(5, 8, 6, 0.88);
@@ -31,6 +33,7 @@ $layout-padding: 2vh;
     box-shadow: 0 1.56vh 3.13vh rgba(0, 0, 0, 0.55);
     overflow-y: auto;
     margin: 2vh;
+    gap: 1.5vh;
   }
 
   &-title {
@@ -41,67 +44,74 @@ $layout-padding: 2vh;
   }
 
   &-instruction {
-    margin: 0.37vh 0 1.85vh;
+    margin: 0;
     color: rgba(255, 255, 255, 0.78);
     font-size: 1.18vh;
   }
 
-  &-navigation {
-    width: calc(100% - 4vh);
-    max-width: 57.3vh;
+  &-error {
+    margin: 0;
+    color: #ffc2c2;
+    font-size: 1vh;
+  }
+
+  &-content-nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    gap: 2.22vh;
-    margin: $layout-margin auto 0;
-    padding: $layout-padding 0 0;
+    gap: 2vh;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 1.5vh;
 
     button {
       flex: 0 0 auto;
+      padding: 0.89vh 1.48vh;
+      border-radius: 999vh;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.86vh;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .question-navigation-prev-button {
+      border: 0.052vh solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.92);
+      transition: opacity 0.3s linear;
+    }
+
+    .question-navigation-next-button {
+      border: none;
+      background: src.$orange;
+      color: #1a130d;
+      box-shadow: 0 0.94vh 1.46vh rgba(0, 0, 0, 0.45);
+      transition: opacity 0.3s linear;
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
     }
   }
 
-  &-navigation .question-navigation-prev-button,
-  &-navigation .question-navigation-next-button {
-    padding: 0.89vh 1.48vh;
-    border-radius: 999vh;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.86vh;
-    font-weight: 700;
-    cursor: pointer;
-    transition: opacity 0.16s ease;
-  }
-
-  &-navigation .question-navigation-prev-button {
-    border: 0.052vh solid rgba(255, 255, 255, 0.16);
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.92);
-  }
-
-  &-navigation .question-navigation-next-button {
-    border: none;
-    background: src.$orange;
-    color: #1a130d;
-    box-shadow: 0 0.94vh 1.46vh rgba(0, 0, 0, 0.45);
-  }
-
-  &-navigation .question-navigation-next-button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    box-shadow: none;
-  }
-
   &-status {
-    margin: 0;
+    width: 100%;
     color: #d7f7df;
     padding: 1vh;
     border-radius: 1.04vh;
     background: rgba(27, 41, 36, 0.95);
     border: 0.052vh solid rgba(255, 255, 255, 0.12);
 
+
+    &>* {
+      margin: 1vh;
+    }
+
     &-summary {
-      position: sticky;
+      // position: sticky;
       top: 0;
       z-index: 2;
       background: rgba(8, 12, 18, 0.92);
@@ -592,13 +602,23 @@ $layout-padding: 2vh;
 }
 
 @keyframes blobIdlePulse {
-  from { opacity: 0.35; }
-  to { opacity: 0.65; }
+  from {
+    opacity: 0.35;
+  }
+
+  to {
+    opacity: 0.65;
+  }
 }
 
 @keyframes blobActivePulse {
-  from { opacity: 0.4; }
-  to { opacity: 1; }
+  from {
+    opacity: 0.4;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .results-blob-placeholder {
@@ -608,8 +628,7 @@ $layout-padding: 2vh;
   min-height: 0;
   border-radius: 1.25vh;
   overflow: hidden;
-  margin-top: 1.5vh;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 0.09vh solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.3);
 }
 

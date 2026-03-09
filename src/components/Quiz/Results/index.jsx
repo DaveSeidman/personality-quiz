@@ -265,7 +265,6 @@ export default function Results({ result, analytics, questions, answers, session
                   <RadarCanvas composite={radarData.composite} byQuestion={radarData.byQuestion} />
                 </>
               ) : null}
-
             </div>
 
             <div className="results-status-legend">
@@ -278,39 +277,39 @@ export default function Results({ result, analytics, questions, answers, session
             </div>
           </div>
         )}
-      </div>
 
-      <div className="results-navigation">
-        {status !== 'submitted' ? (
-          <>
+        {status === 'error' && <p className="results-error">Submit failed. Try again.</p>}
+
+        <div className="results-content-nav">
+          {status !== 'submitted' ? (
+            <>
+              <button
+                className="question-navigation-prev-button"
+                onClick={onPrevious}
+                onPointerDown={triggerActivePress}
+              >
+                Review
+              </button>
+              <button
+                className="question-navigation-next-button"
+                onClick={handleSubmit}
+                onPointerDown={triggerActivePress}
+                disabled={status === 'submitting'}
+              >
+                {status === 'submitting' ? 'Submitting…' : 'Submit'}
+              </button>
+            </>
+          ) : (
             <button
               className="question-navigation-prev-button"
-              onClick={onPrevious}
+              onClick={onStartOver}
               onPointerDown={triggerActivePress}
             >
-              Review
+              Start Over
             </button>
-            <button
-              className="question-navigation-next-button"
-              onClick={handleSubmit}
-              onPointerDown={triggerActivePress}
-              disabled={status === 'submitting'}
-            >
-              {status === 'submitting' ? 'Submitting…' : 'Submit'}
-            </button>
-          </>
-        ) : (
-          <button
-            className="question-navigation-prev-button"
-            onClick={onStartOver}
-            onPointerDown={triggerActivePress}
-          >
-            Start Over
-          </button>
-        )}
+          )}
+        </div>
       </div>
-
-      {status === 'error' && <p className="results-status error">Submit failed. Try again.</p>}
 
       {status === 'submitting' && (
         <div className="results-loading">
