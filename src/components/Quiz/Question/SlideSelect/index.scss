@@ -73,8 +73,8 @@
     &-thumb {
       position: absolute;
       top: 50%;
-      width: 1.58vh;
-      height: 1.58vh;
+      width: 1.0vh;
+      height: 1.0vh;
       border-radius: 50%;
       background: src.$orange;
       border: none;
@@ -82,7 +82,7 @@
       transition: left 0.18s ease, background-color 0.5s linear;
       pointer-events: none;
       box-sizing: border-box;
-      box-shadow: 0 0.74vh 1.48vh rgba(0, 0, 0, 0.35);
+      box-shadow: 0 0.37vh 0.74vh rgba(0, 0, 0, 0.35);
 
       &::after {
         content: '';
@@ -92,9 +92,9 @@
         transform: translate(-50%, -50%);
         width: 0;
         height: 0;
-        border-top: 0.28vh solid transparent;
-        border-bottom: 0.28vh solid transparent;
-        border-left: 0.37vh solid #1a130d;
+        border-top: 0.18vh solid transparent;
+        border-bottom: 0.18vh solid transparent;
+        border-left: 0.24vh solid #1a130d;
       }
     }
 
