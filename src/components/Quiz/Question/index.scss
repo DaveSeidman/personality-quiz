@@ -26,7 +26,6 @@ $layout-padding: 2vh;
     backdrop-filter: blur(.5vh);
     border: 0.052vh solid rgba(255, 255, 255, 0.22);
     box-shadow: 0 1.3vh 2.34vh rgba(0, 0, 0, 0.35);
-    // margin: $layout-margin 0;
     margin: 7vh 0 0;
 
     h2 {
@@ -40,12 +39,10 @@ $layout-padding: 2vh;
     width: 100%;
     display: flex;
     justify-content: space-between;
-    // margin: $layout-margin auto 0;
     margin: 1vh 0;
     padding: $layout-padding 0 0;
     background: color.change(src.$green, $alpha: 0.9);
     border-radius: 1vh;
-    // border: 1px solid rgba(64, 255, 162, 0.35);
     box-shadow: 0 0 1vh 1vh color.change(src.$green, $alpha: 0.9);
 
     .button-secondary {
@@ -104,9 +101,6 @@ $layout-padding: 2vh;
         letter-spacing: 0.14em;
         box-shadow: 0 0.63vh 1.25vh rgba(0, 0, 0, 0.35);
 
-        // &:hover:not(.disabled) {
-        //   background: color.adjust(src.$orange, $lightness: 6%);
-        // }
 
         &.disabled {
           opacity: 0.45;
@@ -119,7 +113,6 @@ $layout-padding: 2vh;
 }
 
 .question-content.build-on {
-  // outline: 0.1vh solid red;
 }
 
 .question.before-visited {}

@@ -8,12 +8,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  // padding: 2rem;
   background: rgb(2 20 4 / 80%);
   backdrop-filter: blur(1vh);
   color: white;
   gap: 1.48vh;
-  // z-index: 3;
   opacity: 1;
   transition: opacity 300ms ease, visibility 300ms ease;
 
@@ -47,7 +45,6 @@
     object-fit: cover;
     border-radius: 50%;
     pointer-events: none;
-    // box-shadow: 0 0 2.78vh rgba(255, 255, 255, 0.18);
   }
 
   &.hidden {

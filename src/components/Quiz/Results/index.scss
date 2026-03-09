@@ -182,7 +182,6 @@ $layout-padding: 2vh;
     }
   }
 
-  // ── Submitted state ───────────────────────────────────────────────────────
 
   &-status {
     width: 100%;
@@ -279,7 +278,7 @@ $layout-padding: 2vh;
 
       canvas {
         max-width: 52vh;
-        height: 26vh;
+        height: 25vh;
       }
     }
 
@@ -558,7 +557,6 @@ $layout-padding: 2vh;
       }
     }
 
-    // Personality colour overrides
     &.personality-strategist .results-status-heading {
       color: #9af0be;
     }

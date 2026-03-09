@@ -1,4 +1,3 @@
-@use 'sass:color';
 @use '../../../../index.scss' as src;
 
 .slide-select {
@@ -10,7 +9,6 @@
 
   &-subtitle {
     margin: 0;
-    // margin: 0 0 1.48vh;
     min-height: 1.85vh;
     color: rgba(255, 255, 255, 0.7);
     font-size: clamp(0.9vh, 1.02vh, 1.18vh);
@@ -27,20 +25,22 @@
     padding: 1.48vh 1.85vh;
     border-radius: 1.3vh;
     border: 0.09vh solid rgba(255, 255, 255, 0.18);
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.05);
     opacity: 0.9;
     transition: background-color 0.5s linear, border-color 0.5s linear, box-shadow 0.5s linear, transform 0.18s ease, opacity 0.5s linear;
 
-    // &:hover {
-    //   opacity: 1;
-    // }
-
     &.selected {
-      background: color.adjust(src.$green, $lightness: 4%);
+      background: src.$orange;
+      color: black;
       border-color: rgba(src.$orange, 0.85);
       box-shadow: 0 1.48vh 2.59vh rgba(0, 0, 0, 0.45);
       opacity: 1;
       transform: scale(1.02);
+
+      .slide-select-row-fill,
+      .slide-select-row-thumb {
+        background: #fff;
+      }
     }
 
     &-label {
@@ -66,7 +66,7 @@
       position: absolute;
       inset: 0 auto 0 0;
       background: src.$orange;
-      transition: width 0.18s ease;
+      transition: width 0.18s ease, background-color 0.5s linear;
       pointer-events: none;
       border-radius: inherit;
     }
@@ -80,7 +80,7 @@
       background: src.$orange;
       border: none;
       transform: translate(-52%, -50%);
-      transition: left 0.18s ease;
+      transition: left 0.18s ease, background-color 0.5s linear;
       pointer-events: none;
       box-sizing: border-box;
       box-shadow: 0 0.74vh 1.48vh rgba(0, 0, 0, 0.35);

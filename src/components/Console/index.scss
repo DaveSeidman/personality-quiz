@@ -102,7 +102,6 @@
     display: flex;
   }
 
-  // ── Live feed ──────────────────────────────────────────────────────────────
 
   &-feed {
     flex: 1;
@@ -230,7 +229,6 @@
     }
   }
 
-  // ── Attract message ────────────────────────────────────────────────────────
 
   &-attract-message {
     position: absolute;
@@ -265,7 +263,6 @@
     }
   }
 
-  // ── Breakdown panel ────────────────────────────────────────────────────────
 
   &-breakdown {
     width: 100%;
@@ -520,7 +517,6 @@
     }
   }
 
-  // ── Aggregate view ─────────────────────────────────────────────────────────
 
   &-aggregate {
     position: absolute;
@@ -720,7 +716,6 @@
   }
 }
 
-// ── Confidence widget ──────────────────────────────────────────────────────────
 
 .confidence-horizontal {
   width: 100%;
@@ -764,7 +759,6 @@
   letter-spacing: 0.08em;
 }
 
-// ── Interaction dot grid ───────────────────────────────────────────────────────
 
 .interaction-dot-grid {
   display: grid;
@@ -785,7 +779,6 @@
   }
 }
 
-// ── Keyframes ──────────────────────────────────────────────────────────────────
 
 @keyframes console-pulse {
   0% {
