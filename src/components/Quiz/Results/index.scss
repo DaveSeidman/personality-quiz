@@ -17,7 +17,7 @@ $layout-padding: 2vh;
   &-content {
     width: 100%;
     max-width: 57.3vh;
-    height: 72vh;
+    height: 50vh;
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;
@@ -97,8 +97,13 @@ $layout-padding: 2vh;
       object-fit: cover;
       transition: opacity 600ms linear;
 
-      &.blob-idle  { opacity: 0.5; }
-      &.blob-active { opacity: 1; }
+      &.blob-idle {
+        opacity: 0.5;
+      }
+
+      &.blob-active {
+        opacity: 1;
+      }
     }
 
     &-overlay {
@@ -115,7 +120,9 @@ $layout-padding: 2vh;
       transition: opacity 400ms linear;
       pointer-events: none;
 
-      &.visible { opacity: 1; }
+      &.visible {
+        opacity: 1;
+      }
 
       p {
         margin: 0;
@@ -190,11 +197,14 @@ $layout-padding: 2vh;
       flex-shrink: 0;
       background: rgba(8, 12, 18, 0.92);
       border-radius: 0.52vh;
-      padding: 0.4vh;
+      padding: 1.2vh;
+      display: flex;
+      flex-direction: column;
+      gap: 1vh;
     }
 
     &-heading {
-      margin: 0 0 0.3vh;
+      margin: 0;
       font-weight: 700;
       color: #baf7c8;
       text-align: center;
