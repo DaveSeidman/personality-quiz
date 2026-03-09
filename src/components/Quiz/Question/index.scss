@@ -39,8 +39,8 @@ $layout-padding: 2vh;
     width: 100%;
     display: flex;
     justify-content: space-between;
-    margin: 1vh 0;
-    padding: $layout-padding 0 0;
+    margin: 2vh 0;
+    // padding: $layout-padding 0 0;
     background: color.change(src.$green, $alpha: 0.9);
     border-radius: 1vh;
     box-shadow: 0 0 1vh 1vh color.change(src.$green, $alpha: 0.9);
@@ -112,8 +112,7 @@ $layout-padding: 2vh;
   }
 }
 
-.question-content.build-on {
-}
+.question-content.build-on {}
 
 .question.before-visited {}
 
