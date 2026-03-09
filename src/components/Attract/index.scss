@@ -13,7 +13,7 @@
   backdrop-filter: blur(1vh);
   color: white;
   gap: 1.48vh;
-  z-index: 3;
+  // z-index: 3;
   opacity: 1;
   transition: opacity 300ms ease, visibility 300ms ease;
 
@@ -29,7 +29,7 @@
     margin: 0;
     font-size: clamp(2.37vh, 4vw, 4.15vh);
     letter-spacing: 0.05em;
-    // text-transform: uppercase;
+    text-transform: uppercase;
   }
 
   p {
@@ -47,7 +47,7 @@
     object-fit: cover;
     border-radius: 50%;
     pointer-events: none;
-    box-shadow: 0 0 2.78vh rgba(255, 255, 255, 0.18);
+    // box-shadow: 0 0 2.78vh rgba(255, 255, 255, 0.18);
   }
 
   &.hidden {

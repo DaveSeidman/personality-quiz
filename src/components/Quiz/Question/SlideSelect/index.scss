@@ -47,6 +47,7 @@
       margin-bottom: 0.93vh;
       font-size: clamp(1.0vh, 1.28vh, 1.52vh);
       line-height: 1.4;
+      text-wrap: pretty;
     }
 
     &-track {
@@ -106,6 +107,7 @@
     }
   }
 }
+
 .slide-select-row.answer-animate {
   opacity: 0;
   transform: translateY(1.67vh);

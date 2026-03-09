@@ -14,8 +14,8 @@ export default function Attract({ attract, quizData }) {
         playsInline
       />
       <div className="attract-copy">
-        <h1>Ai PERSONALITY QUIZ</h1>
-        <p>Discover your personality type by answering {quizData.questions.length} questions.</p>
+        <h1>AI Cocktail Quiz</h1>
+        <p>Discover your personality type by<br></br>answering {quizData.questions.length} questions.</p>
       </div>
     </div>
   )
