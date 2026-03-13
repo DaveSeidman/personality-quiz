@@ -45,6 +45,7 @@ body,
   height: 100%;
   display: flex;
   flex-direction: column;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -64,6 +65,7 @@ body,
   height: 100%;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .app-logo {
@@ -113,4 +115,14 @@ body,
     opacity: 1;
     border-color: rgba(255, 255, 255, 0.55);
   }
+}
+
+.app-camera-proxy {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  top: -10px;
+  left: -10px;
 }

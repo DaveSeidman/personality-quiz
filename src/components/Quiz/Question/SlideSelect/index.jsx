@@ -189,15 +189,19 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
               <span className="slide-select-row-label">{option.content}</span>
 
               <div
-                ref={(node) => setTrackRef(option.id, node)}
-                className={`slide-select-row-track ${draggingId === option.id ? 'dragging' : ''}`}
+                className={`slide-select-row-track-hit ${draggingId === option.id ? 'dragging' : ''}`}
                 onPointerDown={(event) => handlePointerDown(event, option.id)}
                 onPointerMove={(event) => handlePointerMove(event, option.id)}
                 onPointerUp={(event) => handlePointerUpOrCancel(event, option.id)}
                 onPointerCancel={(event) => handlePointerUpOrCancel(event, option.id)}
               >
-                <div className="slide-select-row-fill" style={{ width: `${progress * 100}%` }} />
-                <div className="slide-select-row-thumb" style={{ left: `clamp(0.74vh, ${progress * 100}%, calc(100% - 0.74vh))` }} />
+                <div
+                  ref={(node) => setTrackRef(option.id, node)}
+                  className="slide-select-row-track"
+                >
+                  <div className="slide-select-row-fill" style={{ width: `${progress * 100}%` }} />
+                  <div className="slide-select-row-thumb" style={{ left: `clamp(0.74vh, ${progress * 100}%, calc(100% - 0.74vh))` }} />
+                </div>
               </div>
             </div>
           )

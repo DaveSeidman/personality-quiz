@@ -1,5 +1,5 @@
 {
-  "name": "dmns.rockies.js",
+  "name": "personality-quiz",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.32",
     "@vitejs/plugin-react": "^5.1.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",

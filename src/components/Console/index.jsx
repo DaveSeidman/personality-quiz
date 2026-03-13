@@ -2,9 +2,11 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 import { computeQuestionConfidence } from '../Quiz/analytics'
 import { buildQuestionCards, PERSONALITY_LEGEND, clamp } from '../Quiz/behavioralAnalytics'
+import FaceDiagnostics from './FaceDiagnostics'
 import './index.scss'
 
 const PASSIVE_EVENTS = new Set(['question_presented', 'question_revisited', 'answers_presented_order'])
+const FACE_CONFIDENCE_FALLBACK = 0.5
 
 const formatSeconds = (ms) => {
   if (typeof ms !== 'number' || Number.isNaN(ms) || ms <= 0) return 'a beat'
@@ -104,7 +106,7 @@ function AggregateRingChart({ label, value, tone = 'pioneer' }) {
   )
 }
 
-export default function Console({ attract = false, analytics, questions, answers, personalities, activeQuestionId, analysisComplete = false }) {
+export default function Console({ attract = false, analytics, questions, answers, personalities, activeQuestionId, analysisComplete = false, faceAnalysis = null }) {
   const personalityMap = useMemo(() => (
     personalities?.reduce((acc, persona) => {
       acc[persona.id] = persona
@@ -127,6 +129,12 @@ export default function Console({ attract = false, analytics, questions, answers
       target.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
     }
   }, [activeQuestionId])
+
+  const faceConfidence = useMemo(() => {
+    if (!faceAnalysis?.hasFace || !faceAnalysis?.metrics) return FACE_CONFIDENCE_FALLBACK
+    const { focus = 0.5, energy = 0.5, smile = 0.5, jawOpen = 0 } = faceAnalysis.metrics
+    return clamp((focus * 0.55) + (energy * 0.2) + (smile * 0.2) + ((1 - jawOpen) * 0.05))
+  }, [faceAnalysis])
 
   const rows = useMemo(() => (
     questions.map((question) => {
@@ -152,18 +160,19 @@ export default function Console({ attract = false, analytics, questions, answers
       const confidenceValue = typeof liveConfidence === 'number'
         ? liveConfidence
         : (typeof baseConfidence === 'number' ? baseConfidence : 0.5)
+      const blendedConfidence = clamp((confidenceValue * 0.7) + (faceConfidence * 0.3))
 
       return {
         id: questionId,
         label: question.label ?? `Question ${question.id}`,
         summary: buildSummary({ entry, personality }),
-        metrics: buildMetrics(entry, confidenceValue, eventCount),
-        confidence: confidenceValue,
+        metrics: buildMetrics(entry, blendedConfidence, eventCount),
+        confidence: blendedConfidence,
         interactions: eventCount,
         isActive,
       }
     })
-  ), [activeQuestionId, analytics, answers, personalityMap, questions])
+  ), [activeQuestionId, analytics, answers, faceConfidence, personalityMap, questions])
 
   const aggregateStats = useMemo(() => {
     const baseDistribution = PERSONALITY_LEGEND.reduce((acc, persona) => {
@@ -248,6 +257,10 @@ export default function Console({ attract = false, analytics, questions, answers
       </div>
 
       <div className="console-body">
+        <div className="console-live-panel">
+          <FaceDiagnostics faceAnalysis={faceAnalysis} />
+        </div>
+
         <div className={`console-feed ${showFeed ? '' : 'hidden'}`}>
           {rows.map((row) => (
             <div

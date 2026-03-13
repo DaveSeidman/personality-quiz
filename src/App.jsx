@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import Quiz from './components/Quiz'
 import Attract from './components/Attract'
 import Console from './components/Console'
+import useFaceAnalysis from './components/useFaceAnalysis'
 import quizData from './assets/data/quiz.json'
 import backgroundVideo from './assets/videos/pulses1-loop.mp4'
 import logoImg from './assets/images/logo-white.png'
@@ -38,6 +39,7 @@ export default function App() {
   const [analysisComplete, setAnalysisComplete] = useState(false)
   const activityTimeoutRef = useRef(null)
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
+  const { videoRef, faceAnalysis } = useFaceAnalysis({ active: !attract })
   const INACTIVITY_TIMEOUT = 120000
 
   const activityTimeout = () => {
@@ -113,6 +115,7 @@ export default function App() {
           personalities={quizData.personalities}
           activeQuestionId={activeQuestionId}
           analysisComplete={analysisComplete}
+          faceAnalysis={faceAnalysis}
         />
       </div>
 
@@ -136,6 +139,15 @@ export default function App() {
           <path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
         </svg>
       </button>
+
+      <video
+        ref={videoRef}
+        className="app-camera-proxy"
+        autoPlay
+        muted
+        playsInline
+        aria-hidden="true"
+      />
     </div>
   )
 }

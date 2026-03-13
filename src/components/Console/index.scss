@@ -1,8 +1,9 @@
 @use '../../index.scss' as src;
 
 .console {
-  flex: 1;
-  min-height: 34%;
+  flex: 0 0 34%;
+  height: 34%;
+  min-height: 0;
   width: 100%;
   box-sizing: border-box;
   padding: 2vh;
@@ -100,6 +101,113 @@
     flex: 1;
     min-height: 0;
     display: flex;
+    gap: 1.11vh;
+  }
+
+  &-live-panel {
+    width: min(23vh, 24%);
+    min-width: 19vh;
+    display: flex;
+  }
+
+  &-face {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.11vh;
+
+    &-visual {
+      border: 0.09vh solid rgba(255, 255, 255, 0.12);
+      border-radius: 1.48vh;
+      overflow: hidden;
+      background: rgba(8, 12, 9, 0.9);
+      box-shadow: inset 0 0 0 0.09vh rgba(255, 255, 255, 0.04);
+      min-height: 0;
+      flex: 0 0 auto;
+    }
+
+    &-canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 7 / 4;
+    }
+
+    &-readout {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.89vh;
+    }
+
+    &-readout-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.74vh;
+    }
+
+    &-chip {
+      display: flex;
+      flex-direction: column;
+      gap: 0.22vh;
+      padding: 0.74vh 0.89vh;
+      border-radius: 1.04vh;
+      border: 0.09vh solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.05);
+
+      span {
+        font-size: 0.68vh;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      strong {
+        font-size: 0.84vh;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    &-scales {
+      display: flex;
+      flex-direction: column;
+      gap: 0.44vh;
+      padding: 0.89vh;
+      border-radius: 1.11vh;
+      border: 0.09vh solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    &-scale {
+      display: grid;
+      grid-template-columns: 4.44vh 1fr 2.78vh;
+      align-items: center;
+      gap: 0.52vh;
+      font-size: 0.63vh;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: rgba(255, 255, 255, 0.66);
+
+      strong {
+        text-align: right;
+        color: rgba(255, 255, 255, 0.88);
+      }
+    }
+
+    &-scale-track {
+      height: 0.48vh;
+      border-radius: 999vh;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    &-scale-fill {
+      height: 100%;
+      border-radius: 999vh;
+      background: src.$orange;
+    }
   }
 
 
@@ -174,29 +282,29 @@
       &-metrics {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(11.11vh, 1fr));
-        gap: 0.81vh;
-        margin: 0.96vh 0;
+        gap: 0.44vh;
+        margin: 0.44vh 0;
       }
 
       &-metric {
         background: rgba(255, 255, 255, 0.06);
         border: 0.09vh solid rgba(255, 255, 255, 0.08);
         border-radius: 0.93vh;
-        padding: 0.67vh 0.89vh;
+        padding: 0.33vh 0.67vh;
         display: flex;
         flex-direction: column;
-        gap: 0.22vh;
-        min-height: 5.56vh;
+        gap: 0.11vh;
+        min-height: 3.15vh;
 
         &-label {
-          font-size: 0.75vh;
+          font-size: 0.62vh;
           letter-spacing: 0.08em;
           text-transform: uppercase;
           color: rgba(255, 255, 255, 0.55);
         }
 
         &-value {
-          font-size: 1.02vh;
+          font-size: 0.82vh;
           font-weight: 600;
           color: rgba(255, 255, 255, 0.92);
         }
@@ -712,6 +820,19 @@
         font-weight: 700;
         color: #1f2b4b;
       }
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .console {
+    &-body {
+      flex-direction: column;
+    }
+
+    &-live-panel {
+      width: 100%;
+      min-width: 0;
     }
   }
 }
