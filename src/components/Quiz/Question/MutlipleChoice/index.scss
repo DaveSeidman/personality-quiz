@@ -17,9 +17,9 @@
     &-answer {
       margin: 0;
       padding: 1.63vh 2.22vh;
-      border-radius: 1.3vh;
+      border-radius: 0.74vh;
       border: 0.09vh solid rgba(255, 255, 255, 0.18);
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.06);
       color: rgba(255, 255, 255, 0.88);
       cursor: pointer;
       text-align: left;
@@ -30,16 +30,16 @@
       text-wrap: pretty;
 
       &:hover {
-        border-color: rgba(src.$orange, 0.35);
+        border-color: rgba(255, 255, 255, 0.32);
         color: #fff;
         opacity: 1;
       }
 
       &.selected {
         background: src.$orange;
-        border-color: color.adjust(src.$orange, $lightness: 8%);
-        color: #130a04;
-        box-shadow: 0 1.48vh 2.96vh rgba(0, 0, 0, 0.45);
+        border-color: rgba(255, 255, 255, 0.88);
+        color: #070707;
+        box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.34);
         opacity: 1;
         // transform: scale(1.05);
       }
@@ -57,7 +57,7 @@
         padding: 0;
         aspect-ratio: 1;
         overflow: hidden;
-        border-radius: 1.48vh;
+        border-radius: 0.74vh;
         border: 0.19vh solid rgba(255, 255, 255, 0.18);
         background: rgba(255, 255, 255, 0.08);
         opacity: 0.9;
@@ -65,14 +65,14 @@
 
         &:hover {
           transform: translateY(-0.19vh);
-          border-color: rgba(src.$orange, 0.35);
+          border-color: rgba(255, 255, 255, 0.32);
           opacity: 1;
         }
 
         &.selected {
           transform: translateY(-0.19vh);
-          border-color: rgba(src.$orange, 0.9);
-          box-shadow: 0 0 0 0.28vh rgba(src.$orange, 0.35);
+          border-color: rgba(255, 255, 255, 0.88);
+          box-shadow: 0 0 0 0.18vh rgba(255, 255, 255, 0.2);
           opacity: 1;
         }
 

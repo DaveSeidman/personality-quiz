@@ -115,6 +115,7 @@ export default function Console({ attract = false, analytics, questions, answers
   ), [personalities])
 
   const rowRefs = useRef({})
+  const lockedConfidenceRef = useRef({})
   const questionCards = useMemo(() => buildQuestionCards(analytics, questions, answers), [analytics, questions, answers])
 
   const showAggregate = analysisComplete && !attract
@@ -132,8 +133,8 @@ export default function Console({ attract = false, analytics, questions, answers
 
   const faceConfidence = useMemo(() => {
     if (!faceAnalysis?.hasFace || !faceAnalysis?.metrics) return FACE_CONFIDENCE_FALLBACK
-    const { focus = 0.5, energy = 0.5, smile = 0.5, jawOpen = 0 } = faceAnalysis.metrics
-    return clamp((focus * 0.55) + (energy * 0.2) + (smile * 0.2) + ((1 - jawOpen) * 0.05))
+    const { focus = 0.5, energy = 0.5, smile = 0.5, jawOpen = 0, gazeAlignment = 0.5 } = faceAnalysis.metrics
+    return clamp((focus * 0.42) + (gazeAlignment * 0.33) + (energy * 0.13) + (smile * 0.08) + ((1 - jawOpen) * 0.04))
   }, [faceAnalysis])
 
   const rows = useMemo(() => (
@@ -148,7 +149,11 @@ export default function Console({ attract = false, analytics, questions, answers
       const entryEvents = Array.isArray(entry?.data?.events) ? entry.data.events : []
       const activityEvents = entryEvents.filter((event) => !PASSIVE_EVENTS.has(event.type))
       const eventCount = entryEvents.filter((event) => event.type === 'pointer_down').length
-      const hasMeaningfulSignals = eventCount > 0 || (entry?.data?.revisitCount ?? 0) > 0 || Boolean(entry?.data?.answerCommittedAt)
+      const answerCommittedAt = entry?.data?.answerCommittedAt ?? null
+      const hasCommittedAnswer = committedAnswerId !== undefined && committedAnswerId !== null
+        ? true
+        : Boolean(answerCommittedAt)
+      const hasMeaningfulSignals = eventCount > 0 || (entry?.data?.revisitCount ?? 0) > 0 || Boolean(answerCommittedAt)
 
       let liveConfidence = null
       if (hasMeaningfulSignals && entry?.data) {
@@ -161,13 +166,31 @@ export default function Console({ attract = false, analytics, questions, answers
         ? liveConfidence
         : (typeof baseConfidence === 'number' ? baseConfidence : 0.5)
       const blendedConfidence = clamp((confidenceValue * 0.7) + (faceConfidence * 0.3))
+      const hasPostCommitInteraction = Boolean(answerCommittedAt) && activityEvents.some((event) => (
+        event.timestamp > answerCommittedAt && (
+          event.type.startsWith('pointer_') || event.type === 'answer_changed'
+        )
+      ))
+      const isUnlocked = isActive && hasCommittedAnswer && hasPostCommitInteraction
+
+      if (!hasCommittedAnswer) {
+        delete lockedConfidenceRef.current[questionId]
+      } else if (!isUnlocked && typeof lockedConfidenceRef.current[questionId] !== 'number') {
+        lockedConfidenceRef.current[questionId] = blendedConfidence
+      } else if (isUnlocked) {
+        lockedConfidenceRef.current[questionId] = blendedConfidence
+      }
+
+      const displayConfidence = hasCommittedAnswer && !isUnlocked
+        ? lockedConfidenceRef.current[questionId]
+        : blendedConfidence
 
       return {
         id: questionId,
         label: question.label ?? `Question ${question.id}`,
         summary: buildSummary({ entry, personality }),
-        metrics: buildMetrics(entry, blendedConfidence, eventCount),
-        confidence: blendedConfidence,
+        metrics: buildMetrics(entry, displayConfidence, eventCount),
+        confidence: displayConfidence,
         interactions: eventCount,
         isActive,
       }

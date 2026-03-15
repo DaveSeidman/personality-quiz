@@ -1,8 +1,7 @@
-@use 'sass:color';
 @use '../../../index.scss' as src;
 
-$layout-margin: 2vh;
-$layout-padding: 2vh;
+$layout-margin: 1.2vh;
+$layout-padding: 1.5vh;
 
 .question {
   width: calc(100% - $layout-padding);
@@ -16,57 +15,39 @@ $layout-padding: 2vh;
   justify-content: center;
 
   &-content {
-    width: calc(100% - 4vh);
+    width: calc(100% - 3vh);
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: $layout-padding;
-    border-radius: 1.48vh;
-    background: rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(.5vh);
-    border: 0.052vh solid rgba(255, 255, 255, 0.22);
-    box-shadow: 0 1.3vh 2.34vh rgba(0, 0, 0, 0.35);
-    margin: 7vh 0 0;
+    border-radius: var(--radius-sm);
+    // background:
+    //   linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 34%),
+    //   rgba(8, 8, 8, 0.5);
+    // backdrop-filter: blur(.65vh);
+    border: var(--line-hair) solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.32);
+    margin: 4vh 0 0;
 
     h2 {
-      margin: 0 0 1.48vh;
+      // margin: 0 0 1.5vh;
       font-size: clamp(1.3vh, 1.6vh, 2.3vh);
       line-height: 1.25;
     }
   }
 
   &-navigation {
-    width: 100%;
+    width: calc(100% - 3vh);
     display: flex;
     justify-content: space-between;
-    margin: 2vh 0;
-    // padding: $layout-padding 0 0;
-    background: color.change(src.$green, $alpha: 0.9);
-    border-radius: 1vh;
-    box-shadow: 0 0 1vh 1vh color.change(src.$green, $alpha: 0.9);
+    margin: 1vh;
 
-    .button-secondary {
-      padding: 0.89vh 1.48vh;
-      border-radius: 999vh;
-      border: 0.052vh solid rgba(255, 255, 255, 0.16);
-      background: rgba(255, 255, 255, 0.08);
-      color: rgba(255, 255, 255, 0.92);
-      cursor: pointer;
-      text-transform: uppercase;
-      font-size: 0.86vh;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      transition: border-color 0.5s linear, background-color 0.5s linear, transform 0.18s ease, opacity 0.5s linear;
+    &-prev-button {
+      @include src.ui-pill-button-secondary;
 
       &:disabled {
         opacity: 0.35;
         cursor: not-allowed;
-      }
-    }
-
-    &-prev {
-      &-button {
-        @extend .button-secondary;
       }
     }
 
@@ -77,8 +58,8 @@ $layout-padding: 2vh;
 
       &-message {
         position: absolute;
-        right: 7.41vh;
-        bottom: .7.41vh;
+        right: 7.4vh;
+        bottom: .75vh;
         margin: 0;
         font-size: 1vh;
         color: src.$orange;
@@ -89,18 +70,7 @@ $layout-padding: 2vh;
       }
 
       &-button {
-        padding: 0.89vh 1.48vh;
-        border-radius: 999vh;
-        border: none;
-        background: src.$orange;
-        color: #1a130d;
-        cursor: pointer;
-        text-transform: uppercase;
-        font-size: 0.93vh;
-        font-weight: 800;
-        letter-spacing: 0.14em;
-        box-shadow: 0 0.63vh 1.25vh rgba(0, 0, 0, 0.35);
-
+        @include src.ui-pill-button-primary;
 
         &.disabled {
           opacity: 0.45;

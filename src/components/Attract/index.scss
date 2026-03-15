@@ -8,9 +8,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgb(2 20 4 / 80%);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 32%),
+    rgba(4, 4, 4, 0.82);
   backdrop-filter: blur(1vh);
-  color: white;
+  color: src.$orange;
   gap: 1.48vh;
   opacity: 1;
   transition: opacity 300ms ease, visibility 300ms ease;
@@ -26,7 +28,7 @@
   h1 {
     margin: 0;
     font-size: clamp(2.37vh, 4vw, 4.15vh);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
@@ -34,7 +36,7 @@
     margin: 0;
     max-width: 48.15vh;
     font-size: clamp(1.18vh, 2.4vw, 1.66vh);
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.72);
   }
 
   &-blob {
@@ -43,7 +45,7 @@
     aspect-ratio: 1 / 1;
     opacity: 0.5;
     object-fit: cover;
-    border-radius: 50%;
+    border-radius: 0.9vh;
     pointer-events: none;
   }
 

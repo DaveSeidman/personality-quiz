@@ -255,7 +255,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
             isFirst={index === 0}
             sessionKey={sessionKey}
             isActive={currentStep === index}
-            hasVisited={Boolean(visitedQuestions[question.id])}
+            hasVisited={Boolean(visitedQuestions[String(question.id)])}
             onExit={onExit}
           />
         </div>

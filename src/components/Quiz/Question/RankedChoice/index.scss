@@ -29,9 +29,9 @@
     display: flex;
     align-items: center;
     gap: 1.48vh;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
     border: 0.09vh solid rgba(255, 255, 255, 0.18);
-    border-radius: 1.48vh;
+    border-radius: 0.74vh;
     padding: 1.63vh 2.0vh;
     color: rgba(255, 255, 255, 0.9);
     cursor: grab;
@@ -41,7 +41,7 @@
     transition: transform 0.18s ease, background-color 0.5s linear, box-shadow 0.5s linear, color 0.5s linear, border-color 0.5s linear, opacity 0.5s linear;
 
     &.touched {
-      border-color: rgba(src.$orange, 0.7);
+      border-color: rgba(255, 255, 255, 0.36);
       color: #fff;
       opacity: 1;
     }
@@ -51,8 +51,8 @@
       cursor: grabbing;
       transform: scale(1.02);
       background: src.$orange;
-      box-shadow: 0 1.67vh 2.96vh rgba(0, 0, 0, 0.35);
-      color: #1a130d;
+      box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.32);
+      color: #070707;
       opacity: 1;
     }
   }
@@ -68,7 +68,7 @@
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(0, 0, 0, 0.9);
     color: #fff;
     font-weight: 700;
   }
@@ -78,4 +78,3 @@
     line-height: 1.35;
   }
 }
-

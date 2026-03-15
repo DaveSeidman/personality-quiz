@@ -1,33 +1,35 @@
 @use '../../index.scss' as src;
 
 .console {
-  flex: 0 0 34%;
-  height: 34%;
+  flex: 0 0 38%;
+  height: 38%;
   min-height: 0;
   width: 100%;
   box-sizing: border-box;
-  padding: 2vh;
-  background: rgba(3, 6, 4, 0.8);
-  border-top: 0.09vh solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(.25vh);
+  padding: 1.4vh;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 32%),
+    rgba(4, 4, 4, 0.8);
+  border-top: 0.09vh solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(.4vh);
   display: flex;
   flex-direction: column;
   gap: 1.48vh;
-  color: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 -1.67vh 2.96vh rgba(0, 0, 0, 0.45);
+  color: rgba(243, 239, 230, 0.94);
+  box-shadow: 0 -1vh 2.2vh rgba(0, 0, 0, 0.48);
 
   &-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1.48vh;
+    gap: 0.96vh;
 
     &-label {
       margin: 0;
       font-size: 0.91vh;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.58);
     }
 
     &-sub {
@@ -74,7 +76,7 @@
         height: 0.93vh;
         border-radius: 50%;
         background: src.$orange;
-        box-shadow: 0 0 1.11vh rgba(src.$orange, 0.8);
+        box-shadow: 0 0 0.8vh rgba(255, 255, 255, 0.42);
         animation: console-pulse 2s infinite ease-in-out;
       }
 
@@ -101,7 +103,7 @@
     flex: 1;
     min-height: 0;
     display: flex;
-    gap: 1.11vh;
+    gap: 0.74vh;
   }
 
   &-live-panel {
@@ -118,9 +120,11 @@
 
     &-visual {
       border: 0.09vh solid rgba(255, 255, 255, 0.12);
-      border-radius: 1.48vh;
+      border-radius: 0.74vh;
       overflow: hidden;
-      background: rgba(8, 12, 9, 0.9);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 44%),
+        rgba(8, 8, 8, 0.92);
       box-shadow: inset 0 0 0 0.09vh rgba(255, 255, 255, 0.04);
       min-height: 0;
       flex: 0 0 auto;
@@ -131,6 +135,8 @@
       height: auto;
       display: block;
       aspect-ratio: 7 / 4;
+      min-height: 11.2vh;
+      background: #000;
     }
 
     &-readout {
@@ -138,13 +144,13 @@
       min-height: 0;
       display: flex;
       flex-direction: column;
-      gap: 0.89vh;
+      gap: 0.63vh;
     }
 
     &-readout-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.74vh;
+      gap: 0.44vh;
     }
 
     &-chip {
@@ -152,9 +158,9 @@
       flex-direction: column;
       gap: 0.22vh;
       padding: 0.74vh 0.89vh;
-      border-radius: 1.04vh;
+      border-radius: 0.63vh;
       border: 0.09vh solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.035);
 
       span {
         font-size: 0.68vh;
@@ -174,10 +180,10 @@
       display: flex;
       flex-direction: column;
       gap: 0.44vh;
-      padding: 0.89vh;
-      border-radius: 1.11vh;
+      padding: 0.67vh;
+      border-radius: 0.63vh;
       border: 0.09vh solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.03);
     }
 
     &-scale {
@@ -200,7 +206,7 @@
       height: 0.48vh;
       border-radius: 999vh;
       overflow: hidden;
-      background: rgba(255, 255, 255, 0.09);
+      background: rgba(255, 255, 255, 0.07);
     }
 
     &-scale-fill {
@@ -232,9 +238,11 @@
 
     &-row {
       border: 0.09vh solid rgba(255, 255, 255, 0.12);
-      border-radius: 1.48vh;
-      padding: 1.33vh 1.63vh;
-      background: rgba(8, 12, 9, 0.8);
+      border-radius: 0.74vh;
+      padding: 1.04vh 1.26vh;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 36%),
+        rgba(8, 8, 8, 0.82);
       box-shadow: inset 0 0 0 0.09vh rgba(255, 255, 255, 0.04);
       flex: 1;
       display: flex;
@@ -242,8 +250,8 @@
       justify-content: space-between;
 
       &.active {
-        border-color: rgba(src.$orange, 0.85);
-        box-shadow: 0 1.11vh 2.04vh rgba(0, 0, 0, 0.4);
+        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0.9vh 1.8vh rgba(0, 0, 0, 0.34);
       }
 
       &-label {
@@ -262,8 +270,8 @@
         letter-spacing: 0.12em;
         padding: 0.15vh 0.74vh;
         border-radius: 999vh;
-        background: rgba(src.$orange, 0.85);
-        color: #1a130d;
+        background: rgba(255, 255, 255, 0.12);
+        color: rgba(243, 239, 230, 0.92);
       }
 
       &-summary {
@@ -287,9 +295,9 @@
       }
 
       &-metric {
-        background: rgba(255, 255, 255, 0.06);
+        background: rgba(255, 255, 255, 0.04);
         border: 0.09vh solid rgba(255, 255, 255, 0.08);
-        border-radius: 0.93vh;
+        border-radius: 0.52vh;
         padding: 0.33vh 0.67vh;
         display: flex;
         flex-direction: column;
@@ -350,9 +358,9 @@
     font-size: 1.06vh;
     line-height: 1.6;
     letter-spacing: 0.01em;
-    background: rgba(8, 12, 9, 0.78);
+    background: rgba(7, 7, 7, 0.84);
     border: 0.09vh dashed rgba(255, 255, 255, 0.18);
-    border-radius: 1.67vh;
+    border-radius: 0.74vh;
     box-shadow: inset 0 0 3.24vh rgba(0, 0, 0, 0.25);
     opacity: 0;
     visibility: hidden;
@@ -376,7 +384,7 @@
     width: 100%;
     margin-top: 1.85vh;
     padding: 2.22vh;
-    border-radius: 1.67vh;
+    border-radius: 0.74vh;
     border: 0.09vh solid rgba(255, 255, 255, 0.12);
     background: rgba(6, 10, 8, 0.9);
     box-shadow: inset 0 0 0 0.09vh rgba(255, 255, 255, 0.03);
@@ -427,7 +435,7 @@
       flex: 0 0 calc(33.333% - 0.89vh);
       min-width: 22.22vh;
       padding: 1.04vh;
-      border-radius: 1.11vh;
+      border-radius: 0.63vh;
       border: 0.09vh solid rgba(255, 255, 255, 0.1);
       background: rgba(255, 255, 255, 0.03);
 
@@ -849,7 +857,7 @@
     width: 100%;
     height: 1.11vh;
     border-radius: 999vh;
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
     overflow: visible;
   }
 
@@ -871,6 +879,7 @@
     background: src.$orange;
     border-radius: 999vh;
     opacity: 0.95;
+    box-shadow: 0 0 0.74vh rgba(255, 255, 255, 0.34);
   }
 }
 
@@ -892,11 +901,11 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.12);
   transition: background-color 160ms linear;
 
   &.active {
-    background: #fff;
+    background: rgba(255, 255, 255, 0.82);
   }
 }
 

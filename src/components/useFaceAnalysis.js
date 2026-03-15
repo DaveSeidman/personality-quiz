@@ -24,7 +24,34 @@ const getBlendshapeScore = (blendshapes, name) => {
   return category?.score ?? 0
 }
 
-function deriveMood(blendshapes, headTilt) {
+function computeGazeAlignment(landmarks) {
+  const leftFace = landmarks?.[234]
+  const rightFace = landmarks?.[454]
+  const leftEye = landmarks?.[33]
+  const rightEye = landmarks?.[263]
+  const noseTip = landmarks?.[1]
+  const upperLip = landmarks?.[13]
+  const lowerLip = landmarks?.[14]
+
+  if (!leftFace || !rightFace || !leftEye || !rightEye || !noseTip || !upperLip || !lowerLip) {
+    return 0.5
+  }
+
+  const faceWidth = Math.max(0.001, Math.abs(rightFace.x - leftFace.x))
+  const eyeMidY = (leftEye.y + rightEye.y) / 2
+  const mouthMidY = (upperLip.y + lowerLip.y) / 2
+  const lowerFaceHeight = Math.max(0.001, mouthMidY - eyeMidY)
+
+  const normalizedX = (noseTip.x - leftFace.x) / faceWidth
+  const horizontalAlignment = clamp(1 - Math.abs(normalizedX - 0.5) / 0.24)
+
+  const normalizedY = (noseTip.y - eyeMidY) / lowerFaceHeight
+  const verticalAlignment = clamp(1 - Math.abs(normalizedY - 0.63) / 0.32)
+
+  return clamp((horizontalAlignment * 0.68) + (verticalAlignment * 0.32))
+}
+
+function deriveMood(blendshapes, headTilt, gazeAlignment) {
   const smile = average(
     getBlendshapeScore(blendshapes, 'mouthSmileLeft'),
     getBlendshapeScore(blendshapes, 'mouthSmileRight'),
@@ -51,7 +78,7 @@ function deriveMood(blendshapes, headTilt) {
     getBlendshapeScore(blendshapes, 'browDownRight'),
   )
 
-  const focus = clamp(0.55 + browDown * 0.5 + (1 - blink) * 0.3 - jawOpen * 0.15)
+  const focus = clamp(0.45 + browDown * 0.42 + (1 - blink) * 0.24 - jawOpen * 0.15 + gazeAlignment * 0.24)
   const energy = clamp(eyeWide * 0.45 + browLift * 0.25 + smile * 0.3)
 
   let moodLabel = 'Neutral'
@@ -71,6 +98,7 @@ function deriveMood(blendshapes, headTilt) {
       eyeWide: clamp(eyeWide),
       browLift: clamp(browLift),
       blink: clamp(blink),
+      gazeAlignment: clamp(gazeAlignment),
       headTilt,
     },
   }
@@ -103,6 +131,7 @@ export default function useFaceAnalysis({ active = false } = {}) {
       jawOpen: 0,
       focus: 0,
       energy: 0,
+      gazeAlignment: 0.5,
       headTilt: 0,
     },
   })
@@ -175,7 +204,8 @@ export default function useFaceAnalysis({ active = false } = {}) {
 
         if (landmarks) {
           const headTilt = computeHeadTilt(landmarks)
-          const mood = deriveMood(blendshapes, headTilt)
+          const gazeAlignment = computeGazeAlignment(landmarks)
+          const mood = deriveMood(blendshapes, headTilt, gazeAlignment)
 
           if (aliveRef.current && !cancelled) {
             setFaceAnalysis((prev) => ({

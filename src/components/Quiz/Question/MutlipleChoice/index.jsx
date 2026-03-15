@@ -100,7 +100,6 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
                   <img
                     className="multiple-choice-answers-answer-image"
                     src={`${option.content}`}
-                    alt={option.id}
                   />
                 )
               ) : (

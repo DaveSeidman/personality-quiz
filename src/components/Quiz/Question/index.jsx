@@ -150,7 +150,7 @@ export default function Question({
         <div className="question-navigation-prev">
           {isFirst ? (
             <button
-              className="question-navigation-prev-button button-secondary question-navigation-exit-button"
+              className="question-navigation-prev-button question-navigation-exit-button"
               onClick={(event) => { event.stopPropagation(); onExit(); }}
               onPointerDown={triggerActivePress}
               data-exit-button="true"
@@ -159,7 +159,7 @@ export default function Question({
             </button>
           ) : (
             <button
-              className="question-navigation-prev-button button-secondary"
+              className="question-navigation-prev-button"
               onClick={onPrevious}
               onPointerDown={triggerActivePress}
             >
@@ -170,7 +170,7 @@ export default function Question({
 
         <div className="question-navigation-next">
           {validationMessage ? (
-            <p className="question-navigation-next-message" role="alert" aria-live="polite">
+            <p className="question-navigation-next-message">
               {validationMessage}
             </p>
           ) : null}

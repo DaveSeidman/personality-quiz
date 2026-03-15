@@ -25,10 +25,12 @@ $layout-padding: 2vh;
     justify-content: center;
     text-align: center;
     padding: $layout-padding;
-    border-radius: 1.25vh;
-    background: rgba(5, 8, 6, 0.88);
-    border: 0.052vh solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 1.56vh 3.13vh rgba(0, 0, 0, 0.55);
+    border-radius: var(--radius-sm);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 30%),
+      rgba(8, 8, 8, 0.88);
+    border: var(--line-hair) solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 1vh 2.2vh rgba(0, 0, 0, 0.42);
     box-sizing: border-box;
     gap: 1.5vh;
     overflow: hidden;
@@ -61,14 +63,14 @@ $layout-padding: 2vh;
   &-title {
     margin: 0;
     color: #fff;
-    font-size: 2.37vh;
-    letter-spacing: 0.04em;
+    font-size: 2.4vh;
+    letter-spacing: var(--tracking-tight);
   }
 
   &-instruction {
     margin: 0;
     color: rgba(255, 255, 255, 0.78);
-    font-size: 1.18vh;
+    font-size: 1.2vh;
   }
 
   &-error {
@@ -83,9 +85,9 @@ $layout-padding: 2vh;
       width: 100%;
       height: 25vh;
       min-height: 0;
-      border-radius: 1.25vh;
+      border-radius: var(--radius-sm);
       overflow: hidden;
-      border: 0.052vh solid rgba(255, 255, 255, 0.08);
+      border: var(--line-hair) solid rgba(255, 255, 255, 0.08);
       background: rgba(0, 0, 0, 0.3);
     }
 
@@ -127,7 +129,7 @@ $layout-padding: 2vh;
       p {
         margin: 0;
         font-size: 1.8vh;
-        letter-spacing: 0.08em;
+        letter-spacing: var(--tracking-ui);
         color: #fff;
       }
 
@@ -149,29 +151,16 @@ $layout-padding: 2vh;
     width: 100%;
     flex-shrink: 0;
 
-    button {
-      flex: 0 0 auto;
-      padding: 0.89vh 1.48vh;
-      border-radius: 999vh;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-size: 0.86vh;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
     .question-navigation-prev-button {
-      border: 0.052vh solid rgba(255, 255, 255, 0.16);
-      background: rgba(255, 255, 255, 0.08);
-      color: rgba(255, 255, 255, 0.92);
+      flex: 0 0 auto;
+      @include src.ui-pill-button-secondary;
       transition: opacity 0.3s linear;
     }
 
     .question-navigation-next-button {
-      border: none;
-      background: src.$orange;
-      color: #1a130d;
-      box-shadow: 0 0.94vh 1.46vh rgba(0, 0, 0, 0.45);
+      flex: 0 0 auto;
+      @include src.ui-pill-button-primary;
+      box-shadow: 0 .9vh 1.5vh rgba(0, 0, 0, 0.45);
       transition: opacity 0.3s linear;
 
       &:disabled {
@@ -186,16 +175,16 @@ $layout-padding: 2vh;
   &-status {
     width: 100%;
     height: 100%;
-    color: #d7f7df;
-    border-radius: 1.04vh;
+    color: rgba(243, 239, 230, 0.92);
+    border-radius: var(--radius-sm);
     display: flex;
     flex-direction: column;
     gap: 0.75vh;
 
     &-summary {
       flex-shrink: 0;
-      background: rgba(8, 12, 18, 0.92);
-      border-radius: 0.52vh;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius-xs);
       padding: 1.2vh;
       display: flex;
       flex-direction: column;
@@ -205,7 +194,7 @@ $layout-padding: 2vh;
     &-heading {
       margin: 0;
       font-weight: 700;
-      color: #baf7c8;
+      color: rgba(243, 239, 230, 0.92);
       text-align: center;
     }
 
@@ -229,8 +218,7 @@ $layout-padding: 2vh;
     &-confidence {
       font-size: 0.8vh;
       font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      @include src.ui-label(.14em);
       color: rgba(255, 255, 255, 0.5);
     }
 
@@ -271,9 +259,8 @@ $layout-padding: 2vh;
 
       &-title {
         margin: 0;
-        font-size: 0.93vh;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
+        font-size: .95vh;
+        @include src.ui-label(.06em);
         color: #d3e4ff;
       }
 
@@ -310,17 +297,16 @@ $layout-padding: 2vh;
     &-analytics {
       display: flex;
       flex-direction: column;
-      gap: 1.11vh;
+      gap: 1.1vh;
 
       &-toggle {
         align-self: center;
-        padding: 0.74vh 1.48vh;
+        padding: .75vh 1.5vh;
         border-radius: 999vh;
-        border: 0.052vh solid rgba(255, 255, 255, 0.25);
+        border: var(--line-hair) solid rgba(255, 255, 255, 0.25);
         background: transparent;
         color: #fff;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
+        @include src.ui-label;
         cursor: pointer;
       }
 
@@ -333,7 +319,7 @@ $layout-padding: 2vh;
         flex-wrap: wrap;
         align-items: flex-start;
         justify-content: center;
-        gap: 0.96vh;
+        gap: .95vh;
 
         &.expanded {
           max-height: 104.2vh;
@@ -345,9 +331,8 @@ $layout-padding: 2vh;
         margin: 0 0 0.3vh;
         width: 100%;
         color: #c9e7ff;
-        font-size: 0.97vh;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-size: .95vh;
+        @include src.ui-label(.05em);
         text-align: center;
       }
 
@@ -363,19 +348,18 @@ $layout-padding: 2vh;
 
     &-question {
       box-sizing: border-box;
-      width: calc(33.333% - 0.74vh);
-      flex: 0 0 calc(33.333% - 0.74vh);
-      padding: 0.96vh;
-      border-radius: 0.52vh;
+      width: calc(33.333% - .75vh);
+      flex: 0 0 calc(33.333% - .75vh);
+      padding: .95vh;
+      border-radius: var(--radius-xs);
       background: rgba(255, 255, 255, 0.05);
-      border: 0.052vh solid rgba(255, 255, 255, 0.12);
+      border: var(--line-hair) solid rgba(255, 255, 255, 0.12);
 
       &-title {
-        margin: 0 0 0.74vh;
-        font-size: 0.93vh;
+        margin: 0 0 .75vh;
+        font-size: .95vh;
         color: #f1f6ff;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
+        @include src.ui-label(.04em);
       }
 
       &-charts {
@@ -383,8 +367,8 @@ $layout-padding: 2vh;
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         background: #fff;
-        border: 0.052vh solid rgba(30, 50, 90, 0.12);
-        border-radius: 0.52vh;
+        border: var(--line-hair) solid rgba(30, 50, 90, 0.12);
+        border-radius: var(--radius-xs);
         overflow: hidden;
 
         &::before,
@@ -399,16 +383,16 @@ $layout-padding: 2vh;
           top: 0;
           bottom: 0;
           left: 50%;
-          width: 0.052vh;
-          transform: translateX(-0.026vh);
+          width: var(--line-hair);
+          transform: translateX(-.025vh);
         }
 
         &::after {
           left: 0;
           right: 0;
           top: 50%;
-          height: 0.052vh;
-          transform: translateY(-0.026vh);
+          height: var(--line-hair);
+          transform: translateY(-.025vh);
         }
       }
     }
@@ -419,7 +403,7 @@ $layout-padding: 2vh;
 
       min-height: 8vh;
       color: #1b2440;
-      padding: 0.96vh;
+      padding: .95vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
