@@ -6,6 +6,10 @@ import "./index.scss"
 
 const REMOTE_API = 'https://personality-quiz-backend-eogn.onrender.com'
 
+const countRevisitsFromEvents = (events = []) => (
+  events.filter((event) => event?.type === 'question_revisited').length
+)
+
 async function submitAnswersToBackend(payload) {
   const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   const baseUrl = isLocalhost
@@ -112,10 +116,16 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
   }, [attract, setAnalytics, onAnalysisCompleteChange])
 
   useEffect(() => {
+    if (attract) return
+
     const element = document.getElementById(`step-${currentStep}`)
     if (!element) return
 
-    element.scrollIntoView({ behavior: isResettingRef.current ? 'auto' : 'smooth', block: 'center', inline: 'center' })
+    element.scrollIntoView({
+      behavior: (isResettingRef.current || currentStep === 0) ? 'auto' : 'smooth',
+      block: 'center',
+      inline: 'center'
+    })
 
     if (currentStep < questions.length) {
       const question = questions[currentStep]
@@ -123,19 +133,30 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
       const now = Date.now()
 
       let shouldMarkVisited = false
-      let nextRevisitCount = 0
       setAnalytics((prev) => {
         const prevEntry = prev[questionId] ?? { confidence: 0, data: { events: [], revisitCount: 0, visitCount: 0 } }
         const prevData = prevEntry.data ?? { events: [], revisitCount: 0, visitCount: 0 }
-        const nextVisitCount = (prevData.visitCount ?? 0) + 1
-        nextRevisitCount = Math.max(0, nextVisitCount - 1)
-        const hasSeen = nextVisitCount > 1
+        const priorEvents = prevData.events ?? []
+        const hasSeen = priorEvents.some((event) => (
+          event?.type === 'question_presented' || event?.type === 'question_revisited'
+        ))
         if (!seenQuestionIdsRef.current.has(questionId)) {
           seenQuestionIdsRef.current.add(questionId)
         }
-        if (nextVisitCount === 1) {
+        if (!hasSeen) {
           shouldMarkVisited = true
         }
+
+        const nextEvents = [
+          ...priorEvents,
+          {
+            timestamp: now,
+            type: hasSeen ? 'question_revisited' : 'question_presented',
+            payload: { stepIndex: currentStep },
+          },
+        ]
+        const nextRevisitCount = countRevisitsFromEvents(nextEvents)
+        const nextVisitCount = nextRevisitCount + 1
 
         const nextData = {
           ...prevData,
@@ -144,14 +165,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
           presentedAt: now,
           visitCount: nextVisitCount,
           revisitCount: nextRevisitCount,
-          events: [
-            ...(prevData.events ?? []),
-            {
-              timestamp: now,
-              type: hasSeen ? 'question_revisited' : 'question_presented',
-              payload: { stepIndex: currentStep },
-            },
-          ],
+          events: nextEvents,
         }
 
         return {
@@ -167,7 +181,7 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
         setVisitedQuestions(prev => (prev[questionId] ? prev : { ...prev, [questionId]: true }))
       }
     }
-  }, [currentStep, questions, setAnalytics])
+  }, [attract, currentStep, questions, sessionKey, setAnalytics])
 
   useEffect(() => {
     if (!questions || questions.length === 0) {

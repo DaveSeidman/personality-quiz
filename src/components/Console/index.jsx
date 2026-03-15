@@ -8,6 +8,13 @@ import './index.scss'
 const PASSIVE_EVENTS = new Set(['question_presented', 'question_revisited', 'answers_presented_order'])
 const FACE_CONFIDENCE_FALLBACK = 0.5
 
+const getRevisitCount = (data = {}) => {
+  const eventRevisits = Array.isArray(data.events)
+    ? data.events.filter((event) => event?.type === 'question_revisited').length
+    : 0
+  return Math.max(data.revisitCount ?? 0, eventRevisits)
+}
+
 const formatSeconds = (ms) => {
   if (typeof ms !== 'number' || Number.isNaN(ms) || ms <= 0) return 'a beat'
   if (ms < 600) return 'almost instantly'
@@ -30,7 +37,7 @@ const buildSummary = ({ entry, personality }) => {
   const latencyMs = data.answerCommittedAt && data.firstInteractionAt
     ? data.answerCommittedAt - data.firstInteractionAt
     : null
-  const revisitCount = data.revisitCount ?? 0
+  const revisitCount = getRevisitCount(data)
 
   const parts = []
   parts.push(`Spent ${formatSeconds(latencyMs)} reflecting`)
@@ -52,7 +59,7 @@ const buildMetrics = (entry, confidenceOverride = null, eventCount = 0) => {
   const latencyMs = data.answerCommittedAt && data.firstInteractionAt
     ? data.answerCommittedAt - data.firstInteractionAt
     : null
-  const revisitCount = data.revisitCount ?? 0
+  const revisitCount = getRevisitCount(data)
   const confidence = typeof confidenceOverride === 'number'
     ? confidenceOverride
     : (typeof entry.confidence === 'number' ? entry.confidence : null)
@@ -150,10 +157,11 @@ export default function Console({ attract = false, analytics, questions, answers
       const activityEvents = entryEvents.filter((event) => !PASSIVE_EVENTS.has(event.type))
       const eventCount = entryEvents.filter((event) => event.type === 'pointer_down').length
       const answerCommittedAt = entry?.data?.answerCommittedAt ?? null
+      const revisitCount = getRevisitCount(entry?.data)
       const hasCommittedAnswer = committedAnswerId !== undefined && committedAnswerId !== null
         ? true
         : Boolean(answerCommittedAt)
-      const hasMeaningfulSignals = eventCount > 0 || (entry?.data?.revisitCount ?? 0) > 0 || Boolean(answerCommittedAt)
+      const hasMeaningfulSignals = eventCount > 0 || revisitCount > 0 || Boolean(answerCommittedAt)
 
       let liveConfidence = null
       if (hasMeaningfulSignals && entry?.data) {
@@ -280,7 +288,7 @@ export default function Console({ attract = false, analytics, questions, answers
       </div>
 
       <div className="console-body">
-        <div className="console-live-panel">
+        <div className={`console-live-panel ${showAggregate ? 'hidden' : ''}`}>
           <FaceDiagnostics faceAnalysis={faceAnalysis} />
         </div>
 
@@ -389,7 +397,7 @@ export default function Console({ attract = false, analytics, questions, answers
         </div>
 
         <div className={`console-attract-message ${attract ? 'visible' : ''}`}>
-          <p>This app uses behavioral analysis to enhace it's prediction of your personalty. Metrics like touch pressure, speed, hesitation, and returning to previous questions are tracked and used for analysis. Your metrics are not saved after each session.</p>
+          <p>Attention: your pace, pressure, hesitation, revisits, gaze, and expression are being measured to sharpen the analysis. These signals reset after each session.</p>
         </div>
       </div>
     </div>

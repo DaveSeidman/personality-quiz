@@ -38,7 +38,9 @@
     opacity: 0.9;
     font-size: clamp(1.0vh, 1.34vh, 1.52vh);
     line-height: 1.45;
-    transition: transform 0.18s ease, background-color 0.5s linear, box-shadow 0.5s linear, color 0.5s linear, border-color 0.5s linear, opacity 0.5s linear;
+    transition: transform .16s ease, background-color .22s ease, box-shadow .22s ease, color .22s ease, border-color .22s ease, opacity .22s ease;
+    position: relative;
+    will-change: transform;
 
     &.touched {
       border-color: rgba(255, 255, 255, 0.36);
@@ -46,10 +48,17 @@
       opacity: 1;
     }
 
-    &.dragging,
-    &.locked {
+    &.dragging {
       cursor: grabbing;
-      transform: scale(1.02);
+      transform: scale(1.03);
+      background: src.$orange;
+      box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.32);
+      color: #070707;
+      opacity: 1;
+      z-index: 2;
+    }
+
+    &.locked {
       background: src.$orange;
       box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.32);
       color: #070707;

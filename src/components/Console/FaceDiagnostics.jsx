@@ -5,18 +5,17 @@ const LEFT_BROW = [70, 63, 105, 66, 107]
 const RIGHT_BROW = [336, 296, 334, 293, 300]
 const LEFT_EYE = [33, 160, 158, 133, 153, 144, 33]
 const RIGHT_EYE = [362, 385, 387, 263, 373, 380, 362]
-const NOSE = [168, 197, 195, 5, 4, 1, 19, 94]
 const UPPER_LIP = [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291]
 const LOWER_LIP = [78, 191, 80, 81, 82, 13, 312, 311, 310, 415, 308]
 const OUTER_MOUTH = [61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291]
 const INNER_MOUTH = [78, 95, 88, 178, 87, 14, 317, 402, 318, 324, 308]
 
 const DISPLAY_WIDTH = 280
-const DISPLAY_HEIGHT = 160
+const DISPLAY_HEIGHT = 240
 const RENDER_WIDTH = 320
-const RENDER_HEIGHT = 180
-const BLOCK_COLUMNS = 20
-const BLOCK_ROWS = 10
+const RENDER_HEIGHT = 276
+const PIXEL_WIDTH = 22
+const PIXEL_HEIGHT = 19
 const ZOOM_X = 1.36
 const ZOOM_Y = 1.42
 const CENTER_X = 0.5
@@ -65,83 +64,123 @@ function drawIdleFrame(ctx, width, height, label) {
   ctx.fillText(label, width / 2, height / 2)
 }
 
-function applyGlassBlocks(sourceCanvas, destinationCtx, width, height) {
+function presentFrame(sourceCanvas, pixelCanvas, destinationCtx, width, height) {
+  const pixelCtx = pixelCanvas.getContext('2d')
+  if (!pixelCtx) return
+
+  pixelCtx.clearRect(0, 0, pixelCanvas.width, pixelCanvas.height)
+  pixelCtx.filter = 'blur(1.8px)'
+  pixelCtx.drawImage(sourceCanvas, 0, 0, pixelCanvas.width, pixelCanvas.height)
+  pixelCtx.filter = 'none'
+
   destinationCtx.clearRect(0, 0, width, height)
-  destinationCtx.fillStyle = '#000'
+  destinationCtx.fillStyle = '#181818'
   destinationCtx.fillRect(0, 0, width, height)
 
-  const blockWidth = width / BLOCK_COLUMNS
-  const blockHeight = height / BLOCK_ROWS
+  const cellWidth = width / pixelCanvas.width
+  const cellHeight = height / pixelCanvas.height
+  const gap = Math.max(1.2, Math.min(cellWidth, cellHeight) * 0.18)
+  const imageData = pixelCtx.getImageData(0, 0, pixelCanvas.width, pixelCanvas.height)
+  const { data } = imageData
 
-  for (let row = 0; row < BLOCK_ROWS; row += 1) {
-    for (let column = 0; column < BLOCK_COLUMNS; column += 1) {
-      const dx = column * blockWidth
-      const dy = row * blockHeight
-      const offsetX = Math.sin((column + 1) * 0.9) * 2.6
-      const offsetY = Math.cos((row + 1) * 0.85) * 1.8
-      const sourceX = (dx / width) * sourceCanvas.width + offsetX
-      const sourceY = (dy / height) * sourceCanvas.height + offsetY
-      const sourceWidth = (blockWidth / width) * sourceCanvas.width * 1.06
-      const sourceHeight = (blockHeight / height) * sourceCanvas.height * 1.06
+  for (let y = 0; y < pixelCanvas.height; y += 1) {
+    for (let x = 0; x < pixelCanvas.width; x += 1) {
+      const index = (y * pixelCanvas.width + x) * 4
+      const alpha = data[index + 3] / 255
+      if (alpha <= 0) continue
 
-      destinationCtx.drawImage(
-        sourceCanvas,
-        sourceX,
-        sourceY,
-        sourceWidth,
-        sourceHeight,
-        dx,
-        dy,
-        blockWidth,
-        blockHeight,
-      )
+      const red = data[index]
+      const green = data[index + 1]
+      const blue = data[index + 2]
+      const drawX = x * cellWidth + gap
+      const drawY = y * cellHeight + gap
+      const drawWidth = Math.max(0, cellWidth - (gap * 2))
+      const drawHeight = Math.max(0, cellHeight - (gap * 2))
+      const radius = Math.min(drawWidth, drawHeight) * 0.22
 
-      destinationCtx.strokeStyle = 'rgba(255, 255, 255, 0.09)'
-      destinationCtx.lineWidth = 1
-      destinationCtx.strokeRect(dx + 0.5, dy + 0.5, blockWidth - 1, blockHeight - 1)
+      destinationCtx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha})`
+      destinationCtx.beginPath()
+      destinationCtx.roundRect(drawX, drawY, drawWidth, drawHeight, radius)
+      destinationCtx.fill()
     }
   }
 }
 
-function renderFace(sourceCtx, landmarks, moodLabel) {
+function renderFace(sourceCtx, landmarks) {
   const { width, height } = sourceCtx.canvas
   sourceCtx.clearRect(0, 0, width, height)
   sourceCtx.fillStyle = '#000'
   sourceCtx.fillRect(0, 0, width, height)
 
-  const noseTip = getFeaturePoint(landmarks, 1, width, height) ?? { x: width / 2, y: height / 2 }
-  const leftCheek = getFeaturePoint(landmarks, 234, width, height) ?? { x: width * 0.24, y: height * 0.52 }
-  const rightCheek = getFeaturePoint(landmarks, 454, width, height) ?? { x: width * 0.76, y: height * 0.52 }
-
   tracePath(sourceCtx, landmarks, FACE_OVAL, width, height, true)
-  sourceCtx.fillStyle = 'rgba(172, 172, 172, 0.92)'
+  const faceGradient = sourceCtx.createLinearGradient(0, height * 0.18, 0, height * 0.9)
+  faceGradient.addColorStop(0, 'rgba(242, 242, 242, 0.98)')
+  faceGradient.addColorStop(1, 'rgba(188, 188, 188, 0.94)')
+  sourceCtx.fillStyle = faceGradient
   sourceCtx.fill()
 
+  const faceHighlight = sourceCtx.createRadialGradient(
+    width * 0.5,
+    height * 0.38,
+    width * 0.06,
+    width * 0.5,
+    height * 0.44,
+    width * 0.34,
+  )
+  faceHighlight.addColorStop(0, 'rgba(255, 255, 255, 0.28)')
+  faceHighlight.addColorStop(0.45, 'rgba(255, 255, 255, 0.12)')
+  faceHighlight.addColorStop(1, 'rgba(255, 255, 255, 0)')
   tracePath(sourceCtx, landmarks, FACE_OVAL, width, height, true)
-  const sideShade = sourceCtx.createLinearGradient(leftCheek.x, noseTip.y, rightCheek.x, noseTip.y)
-  sideShade.addColorStop(0, 'rgba(0, 0, 0, 0.22)')
-  sideShade.addColorStop(0.22, 'rgba(255, 255, 255, 0.04)')
-  sideShade.addColorStop(0.5, 'rgba(255, 255, 255, 0.12)')
-  sideShade.addColorStop(0.78, 'rgba(255, 255, 255, 0.04)')
-  sideShade.addColorStop(1, 'rgba(0, 0, 0, 0.22)')
-  sourceCtx.fillStyle = sideShade
+  sourceCtx.fillStyle = faceHighlight
+  sourceCtx.fill()
+
+  const lowerShade = sourceCtx.createRadialGradient(
+    width * 0.5,
+    height * 0.78,
+    width * 0.08,
+    width * 0.5,
+    height * 0.82,
+    width * 0.28,
+  )
+  lowerShade.addColorStop(0, 'rgba(0, 0, 0, 0.16)')
+  lowerShade.addColorStop(1, 'rgba(0, 0, 0, 0)')
+  tracePath(sourceCtx, landmarks, FACE_OVAL, width, height, true)
+  sourceCtx.fillStyle = lowerShade
+  sourceCtx.fill()
+
+  const edgeVignette = sourceCtx.createRadialGradient(
+    width * 0.5,
+    height * 0.5,
+    width * 0.18,
+    width * 0.5,
+    height * 0.5,
+    width * 0.52,
+  )
+  edgeVignette.addColorStop(0, 'rgba(0, 0, 0, 0)')
+  edgeVignette.addColorStop(0.72, 'rgba(0, 0, 0, 0.05)')
+  edgeVignette.addColorStop(1, 'rgba(0, 0, 0, 0.24)')
+  tracePath(sourceCtx, landmarks, FACE_OVAL, width, height, true)
+  sourceCtx.fillStyle = edgeVignette
   sourceCtx.fill()
 
   sourceCtx.save()
   tracePath(sourceCtx, landmarks, FACE_OVAL, width, height, true)
   sourceCtx.clip()
 
-  sourceCtx.fillStyle = 'rgba(255, 255, 255, 0.08)'
-  sourceCtx.fillRect(width * 0.24, height * 0.18, width * 0.52, height * 0.56)
+  sourceCtx.globalCompositeOperation = 'destination-out'
+  ;[LEFT_EYE, RIGHT_EYE, OUTER_MOUTH, INNER_MOUTH, UPPER_LIP].forEach((path) => {
+    tracePath(sourceCtx, landmarks, path, width, height, true)
+    sourceCtx.fill()
+    sourceCtx.lineWidth = 6.8
+    sourceCtx.lineJoin = 'round'
+    sourceCtx.lineCap = 'round'
+    sourceCtx.stroke()
+  })
+  sourceCtx.restore()
 
-  sourceCtx.strokeStyle = 'rgba(255, 255, 255, 0.22)'
-  sourceCtx.lineWidth = 8
-  tracePath(sourceCtx, landmarks, NOSE, width, height)
-  sourceCtx.stroke()
-
-  sourceCtx.strokeStyle = 'rgba(255, 255, 255, 0.9)'
+  sourceCtx.strokeStyle = 'rgba(255, 255, 255, 0.95)'
   sourceCtx.lineWidth = 1.1
-  ;[LEFT_BROW, RIGHT_BROW, LEFT_EYE, RIGHT_EYE, NOSE, UPPER_LIP, LOWER_LIP, OUTER_MOUTH, INNER_MOUTH].forEach((path) => {
+  ;[LEFT_BROW, RIGHT_BROW].forEach((path) => {
     tracePath(sourceCtx, landmarks, path, width, height)
     sourceCtx.stroke()
   })
@@ -150,12 +189,14 @@ function renderFace(sourceCtx, landmarks, moodLabel) {
   sourceCtx.lineWidth = 1.4
   tracePath(sourceCtx, landmarks, FACE_OVAL, width, height, true)
   sourceCtx.stroke()
-  sourceCtx.restore()
 
-  sourceCtx.fillStyle = 'rgba(255, 255, 255, 0.72)'
-  sourceCtx.font = '600 12px Montserrat, sans-serif'
-  sourceCtx.textAlign = 'left'
-  sourceCtx.fillText(moodLabel ?? 'Neutral', 14, height - 14)
+  sourceCtx.strokeStyle = 'rgba(0, 0, 0, 0.9)'
+  sourceCtx.lineWidth = 2.4
+  ;[LEFT_EYE, RIGHT_EYE, UPPER_LIP, LOWER_LIP].forEach((path) => {
+    tracePath(sourceCtx, landmarks, path, width, height)
+    sourceCtx.stroke()
+  })
+
 }
 
 export default function FaceDiagnostics({ faceAnalysis }) {
@@ -180,6 +221,10 @@ export default function FaceDiagnostics({ faceAnalysis }) {
     const sourceCtx = sourceCanvas.getContext('2d')
     if (!sourceCtx) return undefined
 
+    const pixelCanvas = document.createElement('canvas')
+    pixelCanvas.width = PIXEL_WIDTH
+    pixelCanvas.height = PIXEL_HEIGHT
+
     let animationFrameId = null
 
     const tick = () => {
@@ -193,7 +238,7 @@ export default function FaceDiagnostics({ faceAnalysis }) {
             ? 'Requesting camera access'
             : 'Awaiting face'
         drawIdleFrame(sourceCtx, sourceCanvas.width, sourceCanvas.height, label)
-        applyGlassBlocks(sourceCanvas, displayCtx, DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        presentFrame(sourceCanvas, pixelCanvas, displayCtx, DISPLAY_WIDTH, DISPLAY_HEIGHT)
         animationFrameId = requestAnimationFrame(tick)
         return
       }
@@ -218,8 +263,8 @@ export default function FaceDiagnostics({ faceAnalysis }) {
         }
       }
 
-      renderFace(sourceCtx, smoothedLandmarksRef.current, faceAnalysis?.moodLabel)
-      applyGlassBlocks(sourceCanvas, displayCtx, DISPLAY_WIDTH, DISPLAY_HEIGHT)
+      renderFace(sourceCtx, smoothedLandmarksRef.current)
+      presentFrame(sourceCanvas, pixelCanvas, displayCtx, DISPLAY_WIDTH, DISPLAY_HEIGHT)
       animationFrameId = requestAnimationFrame(tick)
     }
 
@@ -233,6 +278,11 @@ export default function FaceDiagnostics({ faceAnalysis }) {
 
   return (
     <div className="console-face">
+      <div className="console-face-mood">
+        <span>Mood</span>
+        <strong>{faceAnalysis?.moodLabel ?? 'Neutral'}</strong>
+      </div>
+
       <div className="console-face-visual">
         <canvas
           ref={canvasRef}
@@ -251,10 +301,6 @@ export default function FaceDiagnostics({ faceAnalysis }) {
           <div className="console-face-chip">
             <span>Face</span>
             <strong>{faceAnalysis?.hasFace ? 'Tracked' : 'Searching'}</strong>
-          </div>
-          <div className="console-face-chip">
-            <span>Mood</span>
-            <strong>{faceAnalysis?.moodLabel ?? 'Neutral'}</strong>
           </div>
           <div className="console-face-chip">
             <span>Tilt</span>

@@ -18,6 +18,7 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
 
   const pointerRef = useRef({ pointerId: null, optionId: null })
   const trackRefs = useRef({})
+  const rowRefs = useRef({})
 
   const selectRule = useMemo(() => getSelectRule(question.select), [question.select])
 
@@ -65,9 +66,28 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
     trackRefs.current[optionId] = node
   }
 
+  const setRowRef = (optionId, node) => {
+    rowRefs.current[optionId] = node
+  }
+
   const getProgressFromPoint = (optionId, clientX) => {
+    const row = rowRefs.current[optionId]
     const track = trackRefs.current[optionId]
-    if (!track) return 0
+    if (!row && !track) return 0
+
+    if (row) {
+      const rowRect = row.getBoundingClientRect()
+      const styles = window.getComputedStyle(row)
+      const paddingLeft = Number.parseFloat(styles.paddingLeft) || 0
+      const paddingRight = Number.parseFloat(styles.paddingRight) || 0
+      const innerLeft = rowRect.left + paddingLeft
+      const innerWidth = rowRect.width - paddingLeft - paddingRight
+
+      if (innerWidth > 0) {
+        const rawProgress = (clientX - innerLeft) / innerWidth
+        return Math.max(0, Math.min(1, rawProgress))
+      }
+    }
 
     const rect = track.getBoundingClientRect()
     if (rect.width <= 0) return 0
@@ -76,9 +96,22 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
     return Math.max(0, Math.min(1, rawProgress))
   }
 
+  const capturePointer = (event) => {
+    if (typeof event.currentTarget.setPointerCapture === 'function') {
+      event.currentTarget.setPointerCapture(event.pointerId)
+    }
+  }
+
+  const releasePointer = (event) => {
+    if (typeof event.currentTarget.hasPointerCapture === 'function' &&
+      event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
+  }
+
   const handlePointerDown = (event, optionId) => {
     event.preventDefault()
-    event.currentTarget.setPointerCapture(event.pointerId)
+    capturePointer(event)
 
     onAnalyticsEvent(String(question.id), 'pointer_down', {
       optionId,
@@ -110,9 +143,7 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
       pressure: typeof event.pressure === 'number' ? event.pressure : 0,
     })
 
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId)
-    }
+    releasePointer(event)
 
     const optionProgress = progressById[optionId] ?? 0
     const didConfirm = optionProgress >= CONFIRM_THRESHOLD
@@ -183,24 +214,26 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
           return (
             <div
               key={option.id}
-              className={`slide-select-row ${isSelected ? 'selected' : ''} ${animateAnswers ? 'answer-animate' : ''}`}
-              style={animateAnswers ? { animationDelay: `${index * 140}ms` } : undefined}
+              ref={(node) => setRowRef(option.id, node)}
+              className={`slide-select-row ${isSelected ? 'selected' : ''} ${draggingId === option.id ? 'dragging' : ''} ${animateAnswers ? 'answer-animate' : ''}`}
+              style={{
+                ...(animateAnswers ? { animationDelay: `${index * 140}ms` } : undefined),
+                '--slide-progress': progress.toFixed(3),
+              }}
+              onPointerDown={(event) => handlePointerDown(event, option.id)}
+              onPointerMove={(event) => handlePointerMove(event, option.id)}
+              onPointerUp={(event) => handlePointerUpOrCancel(event, option.id)}
+              onPointerCancel={(event) => handlePointerUpOrCancel(event, option.id)}
             >
               <span className="slide-select-row-label">{option.content}</span>
 
-              <div
-                className={`slide-select-row-track-hit ${draggingId === option.id ? 'dragging' : ''}`}
-                onPointerDown={(event) => handlePointerDown(event, option.id)}
-                onPointerMove={(event) => handlePointerMove(event, option.id)}
-                onPointerUp={(event) => handlePointerUpOrCancel(event, option.id)}
-                onPointerCancel={(event) => handlePointerUpOrCancel(event, option.id)}
-              >
+              <div className={`slide-select-row-track-hit ${draggingId === option.id ? 'dragging' : ''}`}>
                 <div
                   ref={(node) => setTrackRef(option.id, node)}
                   className="slide-select-row-track"
                 >
                   <div className="slide-select-row-fill" style={{ width: `${progress * 100}%` }} />
-                  <div className="slide-select-row-thumb" style={{ left: `clamp(0.74vh, ${progress * 100}%, calc(100% - 0.74vh))` }} />
+                  <div className="slide-select-row-thumb" style={{ left: `clamp(.74vh, ${progress * 100}%, calc(100% - .74vh))` }} />
                 </div>
               </div>
             </div>

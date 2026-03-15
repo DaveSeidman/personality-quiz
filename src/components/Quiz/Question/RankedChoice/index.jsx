@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { shuffle } from '../../../utils'
 import './index.scss'
 
@@ -9,6 +9,16 @@ export default function RankedChoice({ question, sessionKey, onDraftChange, onRe
   const [touchedIds, setTouchedIds] = useState({})
 
   const dragRef = useRef({ pointerId: null, optionId: null })
+  const rowRefs = useRef({})
+  const prevPositionsRef = useRef(new Map())
+
+  const setRowRef = (optionId, node) => {
+    if (node) {
+      rowRefs.current[optionId] = node
+    } else {
+      delete rowRefs.current[optionId]
+    }
+  }
 
   useEffect(() => {
     const nextOrder = shuffle(question.answers)
@@ -36,6 +46,34 @@ export default function RankedChoice({ question, sessionKey, onDraftChange, onRe
 
     onReadyChange(allTouched)
   }, [orderedOptions, touchedIds, onReadyChange])
+
+  useLayoutEffect(() => {
+    const nextPositions = new Map()
+
+    orderedOptions.forEach((option) => {
+      const node = rowRefs.current[option.id]
+      if (!node) return
+
+      const currentTop = node.getBoundingClientRect().top
+      nextPositions.set(option.id, currentTop)
+
+      const previousTop = prevPositionsRef.current.get(option.id)
+      if (typeof previousTop !== 'number') return
+
+      const deltaY = previousTop - currentTop
+      if (Math.abs(deltaY) < 1) return
+
+      node.style.transition = 'none'
+      node.style.transform = `translateY(${deltaY}px)`
+
+      requestAnimationFrame(() => {
+        node.style.transition = ''
+        node.style.transform = ''
+      })
+    })
+
+    prevPositionsRef.current = nextPositions
+  }, [orderedOptions])
 
   const handlePointerDown = (event, optionId) => {
     event.preventDefault()
@@ -120,6 +158,7 @@ export default function RankedChoice({ question, sessionKey, onDraftChange, onRe
           return (
             <div
               key={option.id}
+              ref={(node) => setRowRef(option.id, node)}
               data-option-id={option.id}
               className={rowClass}
               onPointerDown={(event) => handlePointerDown(event, option.id)}

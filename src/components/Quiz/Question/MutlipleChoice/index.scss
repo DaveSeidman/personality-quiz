@@ -26,7 +26,7 @@
       opacity: 0.9;
       font-size: clamp(1.0vh, 1.34vh, 1.52vh);
       line-height: 1.5;
-      transition: background-color 0.5s linear, border-color 0.5s linear, transform 0.18s ease, color 0.5s linear, opacity 0.5s linear;
+      transition: background-color .22s ease, border-color .22s ease, transform .14s ease, color .22s ease, opacity .22s ease;
       text-wrap: pretty;
 
       &:hover {
@@ -61,7 +61,7 @@
         border: 0.19vh solid rgba(255, 255, 255, 0.18);
         background: rgba(255, 255, 255, 0.08);
         opacity: 0.9;
-        transition: border-color 0.5s linear, transform 0.18s ease, opacity 0.5s linear;
+        transition: border-color .22s ease, transform .14s ease, opacity .22s ease;
 
         &:hover {
           transform: translateY(-0.19vh);

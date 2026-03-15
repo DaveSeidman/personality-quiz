@@ -125,7 +125,7 @@ export default function App() {
       </div>
 
       <button
-        className={`app-camera-btn${cameraEnabled ? ' is-active' : ''}`}
+        className={`app-camera-btn${cameraEnabled ? ' is-active hidden' : ''}`}
         onClick={() => setCameraEnabled((enabled) => !enabled)}
         data-exit-button="true"
       >

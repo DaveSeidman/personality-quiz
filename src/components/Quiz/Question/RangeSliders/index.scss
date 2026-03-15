@@ -30,7 +30,7 @@
     border: 0.09vh solid rgba(255, 255, 255, 0.18);
     background: rgba(255, 255, 255, 0.06);
     color: rgba(255, 255, 255, 0.65);
-    transition: background-color 0.5s linear, border-color 0.5s linear, color 0.5s linear;
+    transition: background-color .22s ease, border-color .22s ease, color .22s ease;
 
     &.touched {
       background: rgba(255, 255, 255, 0.14);

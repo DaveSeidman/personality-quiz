@@ -164,7 +164,7 @@ body,
 }
 
 .app-camera-btn {
-  position: fixed;
+  position: absolute;
   bottom: 2vh;
   left: 2vh;
   z-index: 100;
@@ -178,7 +178,7 @@ body,
   color: rgba(243, 239, 230, 0.78);
   backdrop-filter: blur(0.5vh);
   font-size: .8vh;
-  transition: opacity .3s linear, border-color .3s linear, color .3s linear;
+  transition: opacity .3s linear, border-color .3s linear, color .3s linear, visibility .3s linear;
 
   &.is-active {
     color: rgba(255, 255, 255, 0.98);

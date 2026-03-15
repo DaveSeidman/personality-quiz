@@ -24,18 +24,20 @@
   }
 
   &-row {
+    --slide-progress: 0;
     margin: 0;
     padding: 1.3vh 1.5vh;
     border-radius: var(--radius-sm);
     border: .1vh solid rgba(255, 255, 255, 0.18);
     background: rgba(255, 255, 255, 0.04);
     opacity: 0.9;
-    transition: background-color 0.5s linear, border-color 0.5s linear, box-shadow 0.5s linear, transform 0.18s ease, opacity 0.5s linear;
+    transition: background-color .22s ease, border-color .22s ease, box-shadow .22s ease, transform .14s ease, opacity .22s ease;
     background: rgba(0, 0, 0, .05);
     backdrop-filter: blur(.1vh);
     display: flex;
     flex-direction: column;
     gap: .75vh;
+    cursor: pointer;
 
     &.selected {
       background: src.$orange;
@@ -50,25 +52,45 @@
       }
     }
 
+    &.dragging {
+      background: color-mix(in srgb, rgba(0, 0, 0, 0.08) calc(100% - (var(--slide-progress) * 100%)), src.$orange calc(var(--slide-progress) * 100%));
+      color: color-mix(in srgb, rgba(255, 255, 255, 0.92) calc(100% - (var(--slide-progress) * 100%)), #050505 calc(var(--slide-progress) * 100%));
+      border-color: color-mix(in srgb, rgba(255, 255, 255, 0.18) calc(100% - (var(--slide-progress) * 100%)), rgba(255, 255, 255, 0.88) calc(var(--slide-progress) * 100%));
+      opacity: 1;
+
+      .slide-select-row-fill {
+        background: #050505;
+      }
+
+      .slide-select-row-thumb {
+        background: #050505;
+
+        &::after {
+          border-left-color: src.$orange;
+        }
+      }
+    }
+
     &-label {
       display: block;
       font-size: clamp(1vh, 1.25vh, 1.5vh);
       line-height: 1.35;
       text-wrap: pretty;
+      transition: color .18s ease;
     }
 
     &-track-hit {
       position: relative;
       display: flex;
       align-items: center;
-      padding: .2vh .35vh;
+      padding: .2vh 0;
       border-radius: 92.5vh;
-      cursor: pointer;
+      width: 100%;
       touch-action: none;
       -webkit-tap-highlight-color: transparent;
 
       @media (pointer: coarse) {
-        padding: .45vh .6vh;
+        padding: .45vh 0;
       }
     }
 
@@ -86,7 +108,7 @@
       position: absolute;
       inset: 0 auto 0 0;
       background: src.$orange;
-      transition: width 0.18s ease, background-color 0.5s linear;
+      transition: width .14s ease, background-color .22s ease;
       pointer-events: none;
       border-radius: inherit;
       z-index: 1;
@@ -101,7 +123,7 @@
       background: src.$orange;
       border: none;
       transform: translate(-50%, -50%);
-      transition: left 0.18s ease, background-color 0.5s linear;
+      transition: left .14s ease, background-color .22s ease;
       pointer-events: none;
       box-sizing: border-box;
       box-shadow: 0 .35vh .75vh rgba(0, 0, 0, 0.35);

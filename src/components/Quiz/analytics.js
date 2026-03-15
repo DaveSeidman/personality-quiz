@@ -9,6 +9,14 @@ export const CONFIDENCE_WEIGHTS = {
 
 const clamp = (n, min = 0, max = 1) => Math.max(min, Math.min(max, n))
 
+function getRevisitCount(questionData) {
+  const stored = questionData?.revisitCount ?? 0
+  const fromEvents = Array.isArray(questionData?.events)
+    ? questionData.events.filter((event) => event?.type === 'question_revisited').length
+    : 0
+  return Math.max(stored, fromEvents)
+}
+
 function normalizePressure(events = []) {
   const pressures = events
     .map(event => event?.payload?.pressure)
@@ -38,7 +46,7 @@ export function computeQuestionConfidence(questionData, weights = CONFIDENCE_WEI
 
   const changeCount = countEvents(events, 'answer_changed')
   const blockedNext = countEvents(events, 'next_clicked_blocked')
-  const revisitCount = questionData?.revisitCount ?? 0
+  const revisitCount = getRevisitCount(questionData)
 
   const answerSpeed = clamp(1 - answerMs / 12000)
   const nextDecisiveness = clamp(1 - nextDelayMs / 7000)

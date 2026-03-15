@@ -2,7 +2,7 @@ export function shuffle(items) {
   const array = [...items]
   for (let i = array.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1))
-    ;[array[i], array[j]] = [array[j], array[i]]
+      ;[array[i], array[j]] = [array[j], array[i]]
   }
   return array
 }
@@ -65,7 +65,7 @@ export function getSlideSelectValidationMessage(select = 'single') {
   const rule = getSelectRule(select)
 
   if (rule.mode === 'exact' && rule.count === 1) {
-    return 'Please slide one answer at least halfway to confirm before proceeding.'
+    return 'Slide one answer to confirm before proceeding.'
   }
 
   if (rule.mode === 'at-least' && rule.count === 1) {

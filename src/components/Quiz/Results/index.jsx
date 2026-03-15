@@ -1,36 +1,37 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { triggerActivePress } from '../../utils'
-import loadingVideo from '../../../assets/videos/blobs.webm'
+import loadingVideo from '../../../assets/videos/logospin.webm'
 import './index.scss'
 import {
   clamp,
   PERSONALITY_LEGEND,
   PERSONALITY_COLORS,
-  PERSONALITY_AREA_COLORS,
   QUESTION_TYPE_COLORS,
   buildQuestionCards,
   buildRadarData,
 } from '../behavioralAnalytics'
 
-const POLY_COLORS = [
-  'rgba(98, 200, 255, 0.22)',
-  'rgba(255, 155, 98, 0.22)',
-  'rgba(130, 255, 170, 0.22)',
-  'rgba(220, 142, 255, 0.22)',
-  'rgba(255, 220, 80, 0.22)',
-  'rgba(80, 200, 220, 0.22)',
-  'rgba(255, 100, 150, 0.22)',
-]
+const PERSONALITY_RGB = {
+  strategist: [77, 187, 137],
+  pioneer: [76, 120, 255],
+  catalyst: [214, 107, 186],
+  architect: [255, 98, 0],
+}
 
-const POLY_STROKE_COLORS = [
-  'rgba(98, 200, 255, 0.7)',
-  'rgba(255, 155, 98, 0.7)',
-  'rgba(130, 255, 170, 0.7)',
-  'rgba(220, 142, 255, 0.7)',
-  'rgba(255, 220, 80, 0.7)',
-  'rgba(80, 200, 220, 0.7)',
-  'rgba(255, 100, 150, 0.7)',
-]
+function mixVectorColor(vector = {}, alpha = 1) {
+  const entries = Object.entries(PERSONALITY_RGB)
+  const total = entries.reduce((sum, [key]) => sum + Math.max(0, vector?.[key] || 0), 0) || 1
+
+  const [r, g, b] = entries.reduce((acc, [key, rgb]) => {
+    const weight = Math.max(0, vector?.[key] || 0) / total
+    acc[0] += rgb[0] * weight
+    acc[1] += rgb[1] * weight
+    acc[2] += rgb[2] * weight
+    return acc
+  }, [0, 0, 0])
+
+  return `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, ${alpha})`
+}
 
 function RadarCanvas({ composite, byQuestion }) {
   const [canvasId] = useState(() => `radar-${Math.random().toString(36).slice(2)}`)
@@ -66,21 +67,33 @@ function RadarCanvas({ composite, byQuestion }) {
         return { axis, x: cx + Math.cos(axis.angle) * radius * val, y: cy + Math.sin(axis.angle) * radius * val, val }
       })
 
+    const drawDiamondPath = (r) => {
+      axes.forEach((axis, i) => {
+        const x = cx + Math.cos(axis.angle) * r
+        const y = cy + Math.sin(axis.angle) * r
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      })
+      ctx.closePath()
+    }
+
     const draw = (now) => {
       const elapsed = (now - start) / 1000
       ctx.clearRect(0, 0, width, height)
 
-      // quadrant fills
-      axes.forEach((axis, i) => {
-        const next = axes[(i + 1) % axes.length]
-        ctx.beginPath()
-        ctx.moveTo(cx, cy)
-        ctx.lineTo(cx + Math.cos(axis.angle) * radius, cy + Math.sin(axis.angle) * radius)
-        ctx.lineTo(cx + Math.cos(next.angle) * radius, cy + Math.sin(next.angle) * radius)
-        ctx.closePath()
-        ctx.fillStyle = PERSONALITY_AREA_COLORS[axis.id]
-        ctx.fill()
-      })
+      ctx.save()
+      ctx.beginPath()
+      drawDiamondPath(radius)
+      ctx.clip()
+
+      const tile = 22
+      for (let y = cy - radius - tile; y < cy + radius + tile; y += tile) {
+        for (let x = cx - radius - tile; x < cx + radius + tile; x += tile) {
+          const isEven = ((Math.floor((x - (cx - radius)) / tile) + Math.floor((y - (cy - radius)) / tile)) % 2) === 0
+          ctx.fillStyle = isEven ? 'rgba(255,255,255,0.025)' : 'rgba(255,255,255,0.05)'
+          ctx.fillRect(x, y, tile, tile)
+        }
+      }
+      ctx.restore()
 
       // concentric grid polygons
       ctx.strokeStyle = 'rgba(255,255,255,0.1)'
@@ -88,12 +101,7 @@ function RadarCanvas({ composite, byQuestion }) {
       for (let level = 1; level <= 4; level++) {
         const r = (radius * level) / 4
         ctx.beginPath()
-        axes.forEach((axis, i) => {
-          const x = cx + Math.cos(axis.angle) * r
-          const y = cy + Math.sin(axis.angle) * r
-          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
-        })
-        ctx.closePath()
+        drawDiamondPath(r)
         ctx.stroke()
       }
 
@@ -116,8 +124,8 @@ function RadarCanvas({ composite, byQuestion }) {
         ; (byQuestion || []).forEach((entry, qi) => {
           const progress = clamp(elapsed - qi * 0.18)
           const pts = polygonPoints(entry.vector, progress)
-          const fill = POLY_COLORS[qi % POLY_COLORS.length]
-          const stroke = POLY_STROKE_COLORS[qi % POLY_STROKE_COLORS.length]
+          const fill = mixVectorColor(entry.vector, 0.2)
+          const stroke = mixVectorColor(entry.vector, 0.78)
 
           ctx.beginPath()
           pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
@@ -153,9 +161,9 @@ function RadarCanvas({ composite, byQuestion }) {
       ctx.beginPath()
       compPts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
       ctx.closePath()
-      ctx.fillStyle = 'rgba(220,235,255,0.18)'
+      ctx.fillStyle = mixVectorColor(composite, 0.22)
       ctx.fill()
-      ctx.strokeStyle = 'rgba(245,250,255,0.95)'
+      ctx.strokeStyle = mixVectorColor(composite, 0.96)
       ctx.lineWidth = 2
       ctx.stroke()
 

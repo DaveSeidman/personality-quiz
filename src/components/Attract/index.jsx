@@ -1,5 +1,5 @@
 import React from "react"
-import blobVideo from '../../assets/videos/blobs.webm'
+import blobVideo from '../../assets/videos/logospin.webm'
 import './index.scss'
 
 export default function Attract({ attract, quizData }) {
