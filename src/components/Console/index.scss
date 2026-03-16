@@ -135,7 +135,17 @@
       align-items: baseline;
       justify-content: space-between;
       gap: .6vh;
-      padding: 0 .2vh;
+      position: absolute;
+      left: .7vh;
+      right: .7vh;
+      bottom: .7vh;
+      padding: .55vh .7vh;
+      border-radius: .5vh;
+      background: rgba(8, 8, 8, 0.72);
+      border: .09vh solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(.25vh);
+      pointer-events: none;
+      z-index: 1;
 
       span {
         font-size: .68vh;
@@ -152,6 +162,7 @@
     }
 
     &-visual {
+      position: relative;
       border: 0.09vh solid rgba(255, 255, 255, 0.12);
       border-radius: 0.74vh;
       overflow: hidden;
@@ -931,7 +942,6 @@
 .interaction-dot-grid {
   display: grid;
   grid-template-columns: repeat(30, minmax(0, 1fr));
-  grid-auto-rows: 0.93vh;
   align-content: start;
   gap: 0.3vh;
 }

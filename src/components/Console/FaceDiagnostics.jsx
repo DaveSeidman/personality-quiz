@@ -65,6 +65,20 @@ function easeOutBack(t) {
   return 1 + (c3 * Math.pow(t - 1, 3)) + (c1 * Math.pow(t - 1, 2))
 }
 
+function easeInOutCubic(t) {
+  return t < 0.5
+    ? 4 * t * t * t
+    : 1 - Math.pow(-2 * t + 2, 3) / 2
+}
+
+function lerp(start, end, amount) {
+  return start + ((end - start) * amount)
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value))
+}
+
 function presentFrame(sourceCanvas, destinationCtx, width, height, scale = 1) {
   destinationCtx.clearRect(0, 0, width, height)
   const drawWidth = width * scale
@@ -79,13 +93,21 @@ function createAmbientPoints() {
     index,
     baseX: ((Math.sin(index * 12.9898) * 43758.5453) % 1 + 1) % 1,
     baseY: ((Math.sin((index + 17) * 9.4217) * 24634.6345) % 1 + 1) % 1,
+    startX: 0,
+    startY: 0,
+    targetX: 0,
+    targetY: 0,
     driftX: 5 + (((index * 17.7) % 9) * 1.1),
     driftY: 4 + (((index * 11.3) % 7) * 1),
     phase: index * 0.73,
-    amplitude: 5 + ((index % 5) * 1.6),
+    amplitude: 4.4 + ((index % 5) * 1.25),
     opacity: 0.42 + ((index % 6) * 0.045),
+    startOpacity: 0,
+    targetOpacity: 0,
     bornAt: 0,
     lifeMs: PARTICLE_LIFE_MIN_MS + ((index * 673) % (PARTICLE_LIFE_MAX_MS - PARTICLE_LIFE_MIN_MS)),
+    transitionStart: 0,
+    transitionMs: 0,
   }))
 }
 
@@ -93,24 +115,53 @@ function randomUnit(seed) {
   return ((Math.sin(seed) * 43758.5453) % 1 + 1) % 1
 }
 
-function getLifecycleAlpha(now, bornAt, lifeMs, fadeMs = 500) {
-  const age = now - bornAt
-  if (age < 0 || age > lifeMs) return 0
-  if (age < fadeMs) return age / fadeMs
-  if (age > lifeMs - fadeMs) return (lifeMs - age) / fadeMs
-  return 1
-}
-
 function updateAmbientPoints(now, points) {
   points.forEach((point, index) => {
-    if (!point.bornAt) point.bornAt = now - ((index * 97) % point.lifeMs)
-    if (now - point.bornAt <= point.lifeMs) return
+    if (!point.bornAt) {
+      point.bornAt = now - ((index * 97) % point.lifeMs)
+      point.startX = point.baseX
+      point.startY = point.baseY
+      point.targetX = point.baseX
+      point.targetY = point.baseY
+      point.startOpacity = point.opacity
+      point.targetOpacity = point.opacity
+    }
 
-    point.baseX = randomUnit(now * 0.001 + index * 1.17)
-    point.baseY = randomUnit(now * 0.0013 + index * 2.31)
+    if (point.transitionStart) {
+      const progress = Math.min(1, (now - point.transitionStart) / point.transitionMs)
+      const eased = easeInOutCubic(progress)
+      point.baseX = lerp(point.startX, point.targetX, eased)
+      point.baseY = lerp(point.startY, point.targetY, eased)
+      point.opacity = lerp(point.startOpacity, point.targetOpacity, eased)
+
+      if (progress >= 1) {
+        point.transitionStart = 0
+        point.baseX = point.targetX
+        point.baseY = point.targetY
+        point.opacity = point.targetOpacity
+      }
+    }
+
+    if (now - point.bornAt <= point.lifeMs || point.transitionStart) return
+
+    point.startX = point.baseX
+    point.startY = point.baseY
+    point.targetX = clamp(
+      point.baseX + ((randomUnit(now * 0.001 + index * 1.17) - 0.5) * 0.16),
+      0.04,
+      0.96,
+    )
+    point.targetY = clamp(
+      point.baseY + ((randomUnit(now * 0.0013 + index * 2.31) - 0.5) * 0.14),
+      0.04,
+      0.96,
+    )
     point.phase = randomUnit(now * 0.0007 + index * 3.91) * Math.PI * 2
-    point.amplitude = 4.5 + randomUnit(now * 0.0009 + index * 4.73) * 6
-    point.opacity = 0.38 + randomUnit(now * 0.0011 + index * 5.19) * 0.28
+    point.amplitude = 4 + randomUnit(now * 0.0009 + index * 4.73) * 4.6
+    point.startOpacity = point.opacity
+    point.targetOpacity = 0.38 + randomUnit(now * 0.0011 + index * 5.19) * 0.28
+    point.transitionStart = now
+    point.transitionMs = 2600 + (randomUnit(now * 0.0018 + index * 4.19) * 2200)
     point.lifeMs = PARTICLE_LIFE_MIN_MS + randomUnit(now * 0.0015 + index * 6.11) * (PARTICLE_LIFE_MAX_MS - PARTICLE_LIFE_MIN_MS)
     point.bornAt = now
   })
@@ -135,25 +186,62 @@ function pickRandomFaceIndex(now, pool, usedIndices, salt = 0) {
   return source[pickIndex]
 }
 
+function pickNearbyFaceIndex(now, pool, usedIndices, landmarks, width, height, currentX, currentY, salt = 0) {
+  const available = pool.filter((index) => !usedIndices.has(index))
+  const source = available.length ? available : pool
+  if (!source.length) return null
+
+  const ranked = source
+    .map((index) => {
+      const point = landmarks[index]
+      if (!point) return null
+      const canvasPoint = toCanvasPoint(point, width, height)
+      const distance = Math.hypot(canvasPoint.x - currentX, canvasPoint.y - currentY)
+      return { index, distance }
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.distance - b.distance)
+
+  const nearbyCount = Math.max(8, Math.min(18, Math.floor(ranked.length * 0.18)))
+  const nearby = ranked.slice(0, nearbyCount)
+  const pickIndex = Math.floor(randomUnit(now * 0.0017 + salt * 13.11) * nearby.length)
+  return nearby[pickIndex]?.index ?? ranked[0]?.index ?? null
+}
+
 function buildAmbientParticles(now, width, height, points) {
   return points
     .map((point, index) => {
-      const alphaEnvelope = getLifecycleAlpha(now, point.bornAt, point.lifeMs, 450)
-      if (alphaEnvelope <= 0) return null
       return {
         type: 'ambient',
         x: (point.baseX * width) + Math.sin(now * 0.00018 * point.driftX + point.phase) * point.amplitude,
         y: (point.baseY * height) + Math.cos(now * 0.00016 * point.driftY + point.phase) * point.amplitude,
-        opacity: (point.opacity * alphaEnvelope),
+        opacity: point.opacity,
         radius: 0.9 + (Math.max(0, Math.sin(now * 0.0009 + index)) * 0.45),
       }
     })
     .filter(Boolean)
 }
 
-function updateFaceParticles(now, width, height, landmarks, faceParticlesRef) {
-  const fadeMs = 1200
+function getFaceAmbientLinks(particles, neighborCount = 2) {
+  const faceParticles = particles.filter((particle) => particle.type === 'face')
+  const ambientParticles = particles.filter((particle) => particle.type === 'ambient')
+  const maxDistance = AMBIENT_CONNECTION_DISTANCE * 2.35
 
+  return faceParticles.flatMap((faceParticle) => {
+    return ambientParticles
+      .map((ambientParticle) => {
+        const dx = faceParticle.x - ambientParticle.x
+        const dy = faceParticle.y - ambientParticle.y
+        const distance = Math.hypot(dx, dy)
+        return { faceParticle, ambientParticle, distance }
+      })
+      .filter((link) => link.distance <= maxDistance)
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, neighborCount)
+  })
+}
+
+function updateFaceParticles(now, width, height, landmarks, faceParticlesRef) {
   if (!landmarks?.length) {
     faceParticlesRef.current = []
     return []
@@ -161,42 +249,95 @@ function updateFaceParticles(now, width, height, landmarks, faceParticlesRef) {
 
   const pool = getFaceCandidatePool(landmarks)
   const nextParticles = [...faceParticlesRef.current]
-  const usedIndices = new Set()
-
-  for (let i = nextParticles.length - 1; i >= 0; i -= 1) {
-    const particle = nextParticles[i]
-    if (now - particle.bornAt > particle.lifeMs + fadeMs) {
-      nextParticles.splice(i, 1)
-      continue
-    }
-    usedIndices.add(particle.landmarkIndex)
-  }
+  const usedIndices = new Set(nextParticles.flatMap((particle) => {
+    const indices = [particle.landmarkIndex]
+    if (typeof particle.nextLandmarkIndex === 'number') indices.push(particle.nextLandmarkIndex)
+    return indices
+  }))
 
   while (nextParticles.length < Math.min(FACE_PARTICLE_TARGET, pool.length)) {
     const landmarkIndex = pickRandomFaceIndex(now, pool, usedIndices, nextParticles.length + now)
     if (landmarkIndex == null) break
     usedIndices.add(landmarkIndex)
+    const anchor = toCanvasPoint(landmarks[landmarkIndex], width, height)
     nextParticles.push({
       landmarkIndex,
+      nextLandmarkIndex: null,
+      transitionStart: 0,
+      transitionMs: 0,
+      startX: anchor.x,
+      startY: anchor.y,
+      x: anchor.x,
+      y: anchor.y,
       bornAt: now,
       lifeMs: getParticleLifeMs(now + (nextParticles.length * 19.7)),
     })
   }
 
+  nextParticles.forEach((particle, order) => {
+    const shouldRetarget = !particle.transitionStart && (now - particle.bornAt > particle.lifeMs)
+
+    if (shouldRetarget) {
+      usedIndices.delete(particle.landmarkIndex)
+      const nextLandmarkIndex = pickNearbyFaceIndex(
+        now,
+        pool,
+        usedIndices,
+        landmarks,
+        width,
+        height,
+        particle.x,
+        particle.y,
+        order + now,
+      )
+      if (typeof nextLandmarkIndex === 'number') {
+        particle.nextLandmarkIndex = nextLandmarkIndex
+        particle.transitionStart = now
+        particle.transitionMs = 2600 + (randomUnit(now * 0.0019 + order * 0.73) * 1800)
+        particle.startX = particle.x
+        particle.startY = particle.y
+        usedIndices.add(nextLandmarkIndex)
+      } else {
+        usedIndices.add(particle.landmarkIndex)
+      }
+      particle.bornAt = now
+      particle.lifeMs = getParticleLifeMs(now + (order * 31.1))
+    }
+
+    if (particle.transitionStart && typeof particle.nextLandmarkIndex === 'number') {
+      const progress = Math.min(1, (now - particle.transitionStart) / particle.transitionMs)
+      const eased = easeInOutCubic(progress)
+      const targetPoint = landmarks[particle.nextLandmarkIndex]
+      if (targetPoint) {
+        const target = toCanvasPoint(targetPoint, width, height)
+        particle.x = lerp(particle.startX, target.x, eased)
+        particle.y = lerp(particle.startY, target.y, eased)
+      }
+
+      if (progress >= 1) {
+        particle.landmarkIndex = particle.nextLandmarkIndex
+        particle.nextLandmarkIndex = null
+        particle.transitionStart = 0
+      }
+      return
+    }
+
+    const point = landmarks[particle.landmarkIndex]
+    if (!point) return
+    const target = toCanvasPoint(point, width, height)
+    particle.x += (target.x - particle.x) * 0.14
+    particle.y += (target.y - particle.y) * 0.14
+  })
+
   faceParticlesRef.current = nextParticles
 
   return nextParticles
     .map((particle, order) => {
-      const point = landmarks[particle.landmarkIndex]
-      if (!point) return null
-      const next = toCanvasPoint(point, width, height)
-      const alphaEnvelope = getLifecycleAlpha(now, particle.bornAt, particle.lifeMs + fadeMs, fadeMs)
-
       return {
         type: 'face',
-        x: next.x,
-        y: next.y,
-        opacity: 0.34 + (alphaEnvelope * 0.54),
+        x: particle.x,
+        y: particle.y,
+        opacity: 0.72,
         radius: 1.25 + (Math.max(0, Math.sin(now * 0.001 + order)) * 0.4),
       }
     })
@@ -204,6 +345,19 @@ function updateFaceParticles(now, width, height, landmarks, faceParticlesRef) {
 }
 
 function drawParticleField(ctx, now, particles) {
+  const faceAmbientLinks = getFaceAmbientLinks(particles, 3)
+
+  faceAmbientLinks.forEach(({ faceParticle, ambientParticle, distance }) => {
+    const maxDistance = AMBIENT_CONNECTION_DISTANCE * 2.35
+    const alpha = (1 - (distance / maxDistance)) * 0.34 * Math.max(faceParticle.opacity, ambientParticle.opacity)
+    ctx.beginPath()
+    ctx.moveTo(faceParticle.x, faceParticle.y)
+    ctx.lineTo(ambientParticle.x, ambientParticle.y)
+    ctx.strokeStyle = `rgba(243, 239, 230, ${alpha})`
+    ctx.lineWidth = 0.88
+    ctx.stroke()
+  })
+
   for (let i = 0; i < particles.length; i += 1) {
     const a = particles[i]
     for (let j = i + 1; j < particles.length; j += 1) {
@@ -211,17 +365,21 @@ function drawParticleField(ctx, now, particles) {
       const dx = a.x - b.x
       const dy = a.y - b.y
       const distance = Math.hypot(dx, dy)
-      const boosted = a.type === 'face' || b.type === 'face'
-      const maxDistance = boosted ? AMBIENT_CONNECTION_DISTANCE * 1.35 : AMBIENT_CONNECTION_DISTANCE
+      const isFaceAmbient = a.type !== b.type
+      const isFaceFace = a.type === 'face' && b.type === 'face'
+      if (isFaceFace) continue
+      const maxDistance = isFaceAmbient
+        ? AMBIENT_CONNECTION_DISTANCE * 1.7
+        : AMBIENT_CONNECTION_DISTANCE
       if (distance > maxDistance) continue
 
-      const alphaBoost = boosted ? 0.22 : 0.12
+      const alphaBoost = isFaceAmbient ? 0.05 : 0.12
       const alpha = (1 - (distance / maxDistance)) * alphaBoost * Math.max(a.opacity, b.opacity)
       ctx.beginPath()
       ctx.moveTo(a.x, a.y)
       ctx.lineTo(b.x, b.y)
       ctx.strokeStyle = `rgba(243, 239, 230, ${alpha})`
-      ctx.lineWidth = boosted ? 0.72 : 0.52
+      ctx.lineWidth = isFaceAmbient ? 0.34 : 0.52
       ctx.stroke()
     }
   }
@@ -236,32 +394,23 @@ function drawParticleField(ctx, now, particles) {
 
 function drawFaceParticleDebug(ctx, particles) {
   const faceParticles = particles.filter((particle) => particle.type === 'face')
+  const faceAmbientLinks = getFaceAmbientLinks(particles, 3)
 
-  for (let i = 0; i < faceParticles.length; i += 1) {
-    const a = faceParticles[i]
-    for (let j = 0; j < particles.length; j += 1) {
-      const b = particles[j]
-      if (a === b) continue
-      const dx = a.x - b.x
-      const dy = a.y - b.y
-      const distance = Math.hypot(dx, dy)
-      const maxDistance = AMBIENT_CONNECTION_DISTANCE * 1.75
-      if (distance > maxDistance) continue
-
-      const alpha = (1 - (distance / maxDistance)) * (b.type === 'face' ? 0.36 : 0.22) * Math.max(a.opacity, b.opacity)
-      ctx.beginPath()
-      ctx.moveTo(a.x, a.y)
-      ctx.lineTo(b.x, b.y)
-      ctx.strokeStyle = `rgba(255, 72, 72, ${alpha})`
-      ctx.lineWidth = 0.9
-      ctx.stroke()
-    }
-  }
+  faceAmbientLinks.forEach(({ faceParticle, ambientParticle, distance }) => {
+    const maxDistance = AMBIENT_CONNECTION_DISTANCE * 2.35
+    const alpha = (1 - (distance / maxDistance)) * 0.42 * Math.max(faceParticle.opacity, ambientParticle.opacity)
+    ctx.beginPath()
+    ctx.moveTo(faceParticle.x, faceParticle.y)
+    ctx.lineTo(ambientParticle.x, ambientParticle.y)
+    ctx.strokeStyle = `rgba(243, 239, 230, ${alpha})`
+    ctx.lineWidth = 1.1
+    ctx.stroke()
+  })
 
   faceParticles.forEach((point) => {
     ctx.beginPath()
     ctx.arc(point.x, point.y, Math.max(2.2, point.radius * 1.8), 0, Math.PI * 2)
-    ctx.fillStyle = `rgba(255, 72, 72, ${Math.min(1, point.opacity + 0.28)})`
+    ctx.fillStyle = `rgba(243, 239, 230, ${Math.min(1, point.opacity + 0.28)})`
     ctx.fill()
   })
 }
@@ -273,7 +422,6 @@ export default function FaceDiagnostics({ faceAnalysis }) {
   const ambientPointsRef = useRef(createAmbientPoints())
   const faceParticlesRef = useRef([])
   const pulseRef = useRef({
-    direction: 1,
     activeSince: 0,
     duration: 0,
     nextPulseAt: 0,
@@ -300,25 +448,30 @@ export default function FaceDiagnostics({ faceAnalysis }) {
 
     const getPulseScale = (now) => {
       const pulse = pulseRef.current
-      if (!pulse.nextPulseAt) pulse.nextPulseAt = now + 2800 + (randomUnit(now * 0.001) * 1200)
+
+      if (!pulse.nextPulseAt) {
+        pulse.nextPulseAt = now + 2200 + (randomUnit(now * 0.0011) * 2200)
+      }
 
       if (pulse.duration && now < pulse.activeSince + pulse.duration) {
         const progress = Math.min(1, (now - pulse.activeSince) / pulse.duration)
-        const eased = easeOutBack(progress)
-        const amount = pulse.direction > 0 ? 0.028 : -0.024
-        return 1 + (amount * eased)
+
+        if (progress < 0.38) {
+          return lerp(1, 1.024, easeOutBack(progress / 0.38))
+        }
+
+        return lerp(1.024, 1, easeOutBack((progress - 0.38) / 0.62))
       }
 
       if (pulse.duration && now >= pulse.activeSince + pulse.duration) {
         pulse.duration = 0
-        pulse.nextPulseAt = now + 2400 + (randomUnit(now * 0.0013) * 2200)
-        pulse.direction *= -1
+        pulse.nextPulseAt = now + 1800 + (randomUnit(now * 0.0017) * 2600)
         return 1
       }
 
       if (now >= pulse.nextPulseAt) {
         pulse.activeSince = now
-        pulse.duration = 920 + (randomUnit(now * 0.0019) * 420)
+        pulse.duration = 1200 + (randomUnit(now * 0.0019) * 700)
       }
 
       return 1
@@ -394,11 +547,6 @@ export default function FaceDiagnostics({ faceAnalysis }) {
 
   return (
     <div className="console-face">
-      <div className="console-face-mood">
-        <span>Mood</span>
-        <strong>{faceAnalysis?.moodLabel ?? 'Neutral'}</strong>
-      </div>
-
       <div className="console-face-visual">
         <canvas
           ref={canvasRef}
@@ -406,6 +554,10 @@ export default function FaceDiagnostics({ faceAnalysis }) {
           width={DISPLAY_WIDTH}
           height={DISPLAY_HEIGHT}
         />
+        <div className="console-face-mood">
+          <span>Mood</span>
+          <strong>{faceAnalysis?.moodLabel ?? 'Neutral'}</strong>
+        </div>
       </div>
 
       <div className="console-face-readout">

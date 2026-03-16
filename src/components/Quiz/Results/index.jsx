@@ -33,10 +33,10 @@ function mixVectorColor(vector = {}, alpha = 1) {
 }
 
 const QUESTION_POLYGON_STYLES = [
-  { dash: [], fillAlpha: 0.08, strokeAlpha: 0.82, labelAlpha: 0.92 },
-  { dash: [8, 5], fillAlpha: 0.06, strokeAlpha: 0.7, labelAlpha: 0.86 },
-  { dash: [3, 5], fillAlpha: 0.05, strokeAlpha: 0.62, labelAlpha: 0.8 },
-  { dash: [14, 5, 3, 5], fillAlpha: 0.04, strokeAlpha: 0.54, labelAlpha: 0.76 },
+  { dash: [], fillAlpha: 0.08, strokeAlpha: 0.82 },
+  { dash: [8, 5], fillAlpha: 0.06, strokeAlpha: 0.7 },
+  { dash: [3, 5], fillAlpha: 0.05, strokeAlpha: 0.62 },
+  { dash: [14, 5, 3, 5], fillAlpha: 0.04, strokeAlpha: 0.54 },
 ]
 
 function RadarCanvas({ composite, byQuestion }) {
@@ -131,11 +131,6 @@ function RadarCanvas({ composite, byQuestion }) {
           const progress = clamp(elapsed - qi * 0.18)
           const pts = polygonPoints(entry.vector, progress)
           const style = QUESTION_POLYGON_STYLES[qi % QUESTION_POLYGON_STYLES.length]
-          const label = `Q${entry.questionId}`
-          const centroid = pts.reduce((acc, point) => ({
-            x: acc.x + point.x / pts.length,
-            y: acc.y + point.y / pts.length,
-          }), { x: 0, y: 0 })
 
           ctx.beginPath()
           pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
@@ -154,18 +149,6 @@ function RadarCanvas({ composite, byQuestion }) {
             ctx.fillStyle = 'rgba(255,255,255,0.78)'
             ctx.fill()
           })
-
-          ctx.font = '600 11px Montserrat, sans-serif'
-          const labelWidth = ctx.measureText(label).width + 10
-          ctx.fillStyle = `rgba(5,5,5,${0.76 + (style.labelAlpha * 0.14)})`
-          ctx.fillRect(centroid.x - (labelWidth / 2), centroid.y - 7, labelWidth, 14)
-          ctx.strokeStyle = `rgba(255,255,255,${style.labelAlpha})`
-          ctx.lineWidth = 1
-          ctx.strokeRect(centroid.x - (labelWidth / 2), centroid.y - 7, labelWidth, 14)
-          ctx.fillStyle = `rgba(255,255,255,${style.labelAlpha})`
-          ctx.textAlign = 'center'
-          ctx.textBaseline = 'middle'
-          ctx.fillText(label, centroid.x, centroid.y + 0.5)
         })
 
       // composite polygon (delayed until after per-question)
@@ -210,20 +193,6 @@ function RadarCanvas({ composite, byQuestion }) {
     <div className="results-status-radar">
       <p className="results-status-radar-title">Composite Personality Radar</p>
       <canvas id={canvasId} width={560} height={480} />
-      <div className="results-status-radar-legend">
-        {(byQuestion || []).map((entry, index) => {
-          const style = QUESTION_POLYGON_STYLES[index % QUESTION_POLYGON_STYLES.length]
-          return (
-            <div key={entry.questionId} className="results-status-radar-legend-item">
-              <span
-                className={`results-status-radar-legend-line style-${index % QUESTION_POLYGON_STYLES.length}`}
-                style={{ '--dash-a': `${style.dash[0] ?? 999}px`, '--dash-b': `${style.dash[1] ?? 0}px` }}
-              />
-              <span className="results-status-radar-legend-label">{`Q${entry.questionId}`}</span>
-            </div>
-          )
-        })}
-      </div>
     </div>
   )
 }
