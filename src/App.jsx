@@ -40,7 +40,7 @@ export default function App() {
   const activityTimeoutRef = useRef(null)
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   const { videoRef: faceVideoRef, faceAnalysis } = useFaceAnalysis({ active: !attract && cameraEnabled })
-  const INACTIVITY_TIMEOUT = 120000
+  const INACTIVITY_TIMEOUT = 60000
 
   const activityTimeout = () => {
     setAttract(true)
