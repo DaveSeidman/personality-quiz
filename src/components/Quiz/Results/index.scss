@@ -17,7 +17,7 @@ $layout-padding: 2vh;
   &-content {
     width: 100%;
     max-width: 57.3vh;
-    height: 50vh;
+    height: 54vh;
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;
@@ -267,6 +267,51 @@ $layout-padding: 2vh;
       canvas {
         max-width: 52vh;
         height: 23vh;
+      }
+
+      &-legend {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .8vh 1.4vh;
+        width: 100%;
+
+        &-item {
+          display: inline-flex;
+          align-items: center;
+          gap: .45vh;
+          color: rgba(255, 255, 255, 0.72);
+          font-size: .72vh;
+          letter-spacing: .08em;
+          text-transform: uppercase;
+        }
+
+        &-line {
+          width: 2.2vh;
+          height: .3vh;
+          background: rgba(255, 255, 255, 0.9);
+          border-radius: 999vh;
+
+          &.style-1 {
+            background: repeating-linear-gradient(90deg,
+                rgba(255, 255, 255, 0.84) 0 .6vh,
+                transparent .6vh 1vh);
+          }
+
+          &.style-2 {
+            background: repeating-linear-gradient(90deg,
+                rgba(255, 255, 255, 0.8) 0 .25vh,
+                transparent .25vh .7vh);
+          }
+
+          &.style-3 {
+            background: repeating-linear-gradient(90deg,
+                rgba(255, 255, 255, 0.76) 0 .85vh,
+                transparent .85vh 1.2vh,
+                rgba(255, 255, 255, 0.76) 1.2vh 1.45vh,
+                transparent 1.45vh 1.9vh);
+          }
+        }
       }
     }
 

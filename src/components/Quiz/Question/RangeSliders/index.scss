@@ -28,9 +28,10 @@
     padding: 1.3vh 1.48vh;
     border-radius: 0.93vh;
     border: 0.09vh solid rgba(255, 255, 255, 0.18);
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--question-answer-backing);
+    backdrop-filter: var(--question-answer-blur);
     color: rgba(255, 255, 255, 0.65);
-    transition: background-color .22s ease, border-color .22s ease, color .22s ease;
+    transition: background-color .28s ease, border-color .28s ease, color .28s ease;
 
     &.touched {
       background: rgba(255, 255, 255, 0.14);

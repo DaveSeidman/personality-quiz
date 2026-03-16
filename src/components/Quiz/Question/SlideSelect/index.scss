@@ -29,10 +29,10 @@
     padding: 1.3vh 1.5vh;
     border-radius: var(--radius-sm);
     border: .1vh solid rgba(255, 255, 255, 0.18);
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--question-answer-backing);
+    backdrop-filter: var(--question-answer-blur);
     opacity: 0.9;
-    transition: background-color .22s ease, border-color .22s ease, box-shadow .22s ease, transform .14s ease, opacity .22s ease;
-    background: rgba(0, 0, 0, .05);
+    transition: background-color .28s ease, border-color .28s ease, box-shadow .28s ease, transform .18s ease, opacity .28s ease;
     backdrop-filter: blur(.1vh);
     display: flex;
     flex-direction: column;
@@ -100,7 +100,7 @@
       height: 1.15vh;
       border-radius: inherit;
       border: 0.1vh solid rgba(255, 255, 255, 0.2);
-      background: rgba(12, 12, 12, 0.74);
+      background: rgba(255, 255, 255, 0.25);
       overflow: visible;
     }
 
@@ -108,7 +108,7 @@
       position: absolute;
       inset: 0 auto 0 0;
       background: src.$orange;
-      transition: width .14s ease, background-color .22s ease;
+      transition: width .18s ease, background-color .28s ease;
       pointer-events: none;
       border-radius: inherit;
       z-index: 1;
@@ -118,12 +118,12 @@
       position: absolute;
       top: 50%;
       width: .9vh;
-      height: .9vh;
-      border-radius: 50%;
+      height: 100%;
+      border-radius: inherit;
       background: src.$orange;
       border: none;
       transform: translate(-50%, -50%);
-      transition: left .14s ease, background-color .22s ease;
+      transition: left .18s ease, background-color .28s ease;
       pointer-events: none;
       box-sizing: border-box;
       box-shadow: 0 .35vh .75vh rgba(0, 0, 0, 0.35);

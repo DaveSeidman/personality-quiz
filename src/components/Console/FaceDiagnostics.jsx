@@ -5,23 +5,38 @@ const LEFT_BROW = [70, 63, 105, 66, 107]
 const RIGHT_BROW = [336, 296, 334, 293, 300]
 const LEFT_EYE = [33, 160, 158, 133, 153, 144, 33]
 const RIGHT_EYE = [362, 385, 387, 263, 373, 380, 362]
+const NOSE_BRIDGE = [168, 197, 195, 5, 4, 1, 19, 94]
 const UPPER_LIP = [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291]
 const LOWER_LIP = [78, 191, 80, 81, 82, 13, 312, 311, 310, 415, 308]
 const OUTER_MOUTH = [61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291]
-const INNER_MOUTH = [78, 95, 88, 178, 87, 14, 317, 402, 318, 324, 308]
 
 const DISPLAY_WIDTH = 280
 const DISPLAY_HEIGHT = 240
 const RENDER_WIDTH = 320
 const RENDER_HEIGHT = 276
-const PIXEL_WIDTH = 22
-const PIXEL_HEIGHT = 19
 const ZOOM_X = 1.36
 const ZOOM_Y = 1.42
 const CENTER_X = 0.5
 const CENTER_Y = 0.46
 const FOLLOW_STRENGTH = 0.18
 const SETTLE_EPSILON = 0.0008
+const AMBIENT_POINT_COUNT = 74
+const AMBIENT_CONNECTION_DISTANCE = 34
+const FACE_PARTICLE_TARGET = 60
+const PARTICLE_LIFE_MIN_MS = 5000
+const PARTICLE_LIFE_MAX_MS = 10000
+
+const IMPORTANT_POINTS = new Set([
+  ...FACE_OVAL,
+  ...LEFT_BROW,
+  ...RIGHT_BROW,
+  ...LEFT_EYE,
+  ...RIGHT_EYE,
+  ...NOSE_BRIDGE,
+  ...UPPER_LIP,
+  ...LOWER_LIP,
+  ...OUTER_MOUTH,
+])
 
 function toCanvasPoint(point, width, height) {
   const mirroredX = 1 - point.x
@@ -31,29 +46,9 @@ function toCanvasPoint(point, width, height) {
   }
 }
 
-function tracePath(ctx, landmarks, indices, width, height, close = false) {
-  ctx.beginPath()
-  indices.forEach((index, pointIndex) => {
-    const point = landmarks[index]
-    if (!point) return
-    const canvasPoint = toCanvasPoint(point, width, height)
-    if (pointIndex === 0) {
-      ctx.moveTo(canvasPoint.x, canvasPoint.y)
-    } else {
-      ctx.lineTo(canvasPoint.x, canvasPoint.y)
-    }
-  })
-  if (close) ctx.closePath()
-}
-
-function getFeaturePoint(landmarks, index, width, height) {
-  const point = landmarks[index]
-  return point ? toCanvasPoint(point, width, height) : null
-}
-
 function drawIdleFrame(ctx, width, height, label) {
   ctx.clearRect(0, 0, width, height)
-  ctx.fillStyle = '#000'
+  ctx.fillStyle = '#050505'
   ctx.fillRect(0, 0, width, height)
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)'
   ctx.lineWidth = 1
@@ -64,145 +59,225 @@ function drawIdleFrame(ctx, width, height, label) {
   ctx.fillText(label, width / 2, height / 2)
 }
 
-function presentFrame(sourceCanvas, pixelCanvas, destinationCtx, width, height) {
-  const pixelCtx = pixelCanvas.getContext('2d')
-  if (!pixelCtx) return
-
-  pixelCtx.clearRect(0, 0, pixelCanvas.width, pixelCanvas.height)
-  pixelCtx.filter = 'blur(1.8px)'
-  pixelCtx.drawImage(sourceCanvas, 0, 0, pixelCanvas.width, pixelCanvas.height)
-  pixelCtx.filter = 'none'
-
-  destinationCtx.clearRect(0, 0, width, height)
-  destinationCtx.fillStyle = '#181818'
-  destinationCtx.fillRect(0, 0, width, height)
-
-  const cellWidth = width / pixelCanvas.width
-  const cellHeight = height / pixelCanvas.height
-  const gap = Math.max(1.2, Math.min(cellWidth, cellHeight) * 0.18)
-  const imageData = pixelCtx.getImageData(0, 0, pixelCanvas.width, pixelCanvas.height)
-  const { data } = imageData
-
-  for (let y = 0; y < pixelCanvas.height; y += 1) {
-    for (let x = 0; x < pixelCanvas.width; x += 1) {
-      const index = (y * pixelCanvas.width + x) * 4
-      const alpha = data[index + 3] / 255
-      if (alpha <= 0) continue
-
-      const red = data[index]
-      const green = data[index + 1]
-      const blue = data[index + 2]
-      const drawX = x * cellWidth + gap
-      const drawY = y * cellHeight + gap
-      const drawWidth = Math.max(0, cellWidth - (gap * 2))
-      const drawHeight = Math.max(0, cellHeight - (gap * 2))
-      const radius = Math.min(drawWidth, drawHeight) * 0.22
-
-      destinationCtx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha})`
-      destinationCtx.beginPath()
-      destinationCtx.roundRect(drawX, drawY, drawWidth, drawHeight, radius)
-      destinationCtx.fill()
-    }
-  }
+function easeOutBack(t) {
+  const c1 = 1.70158
+  const c3 = c1 + 1
+  return 1 + (c3 * Math.pow(t - 1, 3)) + (c1 * Math.pow(t - 1, 2))
 }
 
-function renderFace(sourceCtx, landmarks) {
-  const { width, height } = sourceCtx.canvas
-  sourceCtx.clearRect(0, 0, width, height)
-  sourceCtx.fillStyle = '#000'
-  sourceCtx.fillRect(0, 0, width, height)
+function presentFrame(sourceCanvas, destinationCtx, width, height, scale = 1) {
+  destinationCtx.clearRect(0, 0, width, height)
+  const drawWidth = width * scale
+  const drawHeight = height * scale
+  const offsetX = (width - drawWidth) * 0.5
+  const offsetY = (height - drawHeight) * 0.5
+  destinationCtx.drawImage(sourceCanvas, offsetX, offsetY, drawWidth, drawHeight)
+}
 
-  tracePath(sourceCtx, landmarks, FACE_OVAL, width, height, true)
-  const faceGradient = sourceCtx.createLinearGradient(0, height * 0.18, 0, height * 0.9)
-  faceGradient.addColorStop(0, 'rgba(242, 242, 242, 0.98)')
-  faceGradient.addColorStop(1, 'rgba(188, 188, 188, 0.94)')
-  sourceCtx.fillStyle = faceGradient
-  sourceCtx.fill()
+function createAmbientPoints() {
+  return Array.from({ length: AMBIENT_POINT_COUNT }, (_, index) => ({
+    index,
+    baseX: ((Math.sin(index * 12.9898) * 43758.5453) % 1 + 1) % 1,
+    baseY: ((Math.sin((index + 17) * 9.4217) * 24634.6345) % 1 + 1) % 1,
+    driftX: 5 + (((index * 17.7) % 9) * 1.1),
+    driftY: 4 + (((index * 11.3) % 7) * 1),
+    phase: index * 0.73,
+    amplitude: 5 + ((index % 5) * 1.6),
+    opacity: 0.42 + ((index % 6) * 0.045),
+    bornAt: 0,
+    lifeMs: PARTICLE_LIFE_MIN_MS + ((index * 673) % (PARTICLE_LIFE_MAX_MS - PARTICLE_LIFE_MIN_MS)),
+  }))
+}
 
-  const faceHighlight = sourceCtx.createRadialGradient(
-    width * 0.5,
-    height * 0.38,
-    width * 0.06,
-    width * 0.5,
-    height * 0.44,
-    width * 0.34,
-  )
-  faceHighlight.addColorStop(0, 'rgba(255, 255, 255, 0.28)')
-  faceHighlight.addColorStop(0.45, 'rgba(255, 255, 255, 0.12)')
-  faceHighlight.addColorStop(1, 'rgba(255, 255, 255, 0)')
-  tracePath(sourceCtx, landmarks, FACE_OVAL, width, height, true)
-  sourceCtx.fillStyle = faceHighlight
-  sourceCtx.fill()
+function randomUnit(seed) {
+  return ((Math.sin(seed) * 43758.5453) % 1 + 1) % 1
+}
 
-  const lowerShade = sourceCtx.createRadialGradient(
-    width * 0.5,
-    height * 0.78,
-    width * 0.08,
-    width * 0.5,
-    height * 0.82,
-    width * 0.28,
-  )
-  lowerShade.addColorStop(0, 'rgba(0, 0, 0, 0.16)')
-  lowerShade.addColorStop(1, 'rgba(0, 0, 0, 0)')
-  tracePath(sourceCtx, landmarks, FACE_OVAL, width, height, true)
-  sourceCtx.fillStyle = lowerShade
-  sourceCtx.fill()
+function getLifecycleAlpha(now, bornAt, lifeMs, fadeMs = 500) {
+  const age = now - bornAt
+  if (age < 0 || age > lifeMs) return 0
+  if (age < fadeMs) return age / fadeMs
+  if (age > lifeMs - fadeMs) return (lifeMs - age) / fadeMs
+  return 1
+}
 
-  const edgeVignette = sourceCtx.createRadialGradient(
-    width * 0.5,
-    height * 0.5,
-    width * 0.18,
-    width * 0.5,
-    height * 0.5,
-    width * 0.52,
-  )
-  edgeVignette.addColorStop(0, 'rgba(0, 0, 0, 0)')
-  edgeVignette.addColorStop(0.72, 'rgba(0, 0, 0, 0.05)')
-  edgeVignette.addColorStop(1, 'rgba(0, 0, 0, 0.24)')
-  tracePath(sourceCtx, landmarks, FACE_OVAL, width, height, true)
-  sourceCtx.fillStyle = edgeVignette
-  sourceCtx.fill()
+function updateAmbientPoints(now, points) {
+  points.forEach((point, index) => {
+    if (!point.bornAt) point.bornAt = now - ((index * 97) % point.lifeMs)
+    if (now - point.bornAt <= point.lifeMs) return
 
-  sourceCtx.save()
-  tracePath(sourceCtx, landmarks, FACE_OVAL, width, height, true)
-  sourceCtx.clip()
-
-  sourceCtx.globalCompositeOperation = 'destination-out'
-  ;[LEFT_EYE, RIGHT_EYE, OUTER_MOUTH, INNER_MOUTH, UPPER_LIP].forEach((path) => {
-    tracePath(sourceCtx, landmarks, path, width, height, true)
-    sourceCtx.fill()
-    sourceCtx.lineWidth = 6.8
-    sourceCtx.lineJoin = 'round'
-    sourceCtx.lineCap = 'round'
-    sourceCtx.stroke()
+    point.baseX = randomUnit(now * 0.001 + index * 1.17)
+    point.baseY = randomUnit(now * 0.0013 + index * 2.31)
+    point.phase = randomUnit(now * 0.0007 + index * 3.91) * Math.PI * 2
+    point.amplitude = 4.5 + randomUnit(now * 0.0009 + index * 4.73) * 6
+    point.opacity = 0.38 + randomUnit(now * 0.0011 + index * 5.19) * 0.28
+    point.lifeMs = PARTICLE_LIFE_MIN_MS + randomUnit(now * 0.0015 + index * 6.11) * (PARTICLE_LIFE_MAX_MS - PARTICLE_LIFE_MIN_MS)
+    point.bornAt = now
   })
-  sourceCtx.restore()
+}
 
-  sourceCtx.strokeStyle = 'rgba(255, 255, 255, 0.95)'
-  sourceCtx.lineWidth = 1.1
-  ;[LEFT_BROW, RIGHT_BROW].forEach((path) => {
-    tracePath(sourceCtx, landmarks, path, width, height)
-    sourceCtx.stroke()
+function getParticleLifeMs(seed) {
+  return PARTICLE_LIFE_MIN_MS + (randomUnit(seed) * (PARTICLE_LIFE_MAX_MS - PARTICLE_LIFE_MIN_MS))
+}
+
+function getFaceCandidatePool(landmarks) {
+  return landmarks
+    .map((_, index) => index)
+    .filter((index) => IMPORTANT_POINTS.has(index) || index % 2 === 0)
+}
+
+function pickRandomFaceIndex(now, pool, usedIndices, salt = 0) {
+  if (!pool.length) return null
+
+  const available = pool.filter((index) => !usedIndices.has(index))
+  const source = available.length ? available : pool
+  const pickIndex = Math.floor(randomUnit(now * 0.0017 + salt * 11.37) * source.length)
+  return source[pickIndex]
+}
+
+function buildAmbientParticles(now, width, height, points) {
+  return points
+    .map((point, index) => {
+      const alphaEnvelope = getLifecycleAlpha(now, point.bornAt, point.lifeMs, 450)
+      if (alphaEnvelope <= 0) return null
+      return {
+        type: 'ambient',
+        x: (point.baseX * width) + Math.sin(now * 0.00018 * point.driftX + point.phase) * point.amplitude,
+        y: (point.baseY * height) + Math.cos(now * 0.00016 * point.driftY + point.phase) * point.amplitude,
+        opacity: (point.opacity * alphaEnvelope),
+        radius: 0.9 + (Math.max(0, Math.sin(now * 0.0009 + index)) * 0.45),
+      }
+    })
+    .filter(Boolean)
+}
+
+function updateFaceParticles(now, width, height, landmarks, faceParticlesRef) {
+  const fadeMs = 1200
+
+  if (!landmarks?.length) {
+    faceParticlesRef.current = []
+    return []
+  }
+
+  const pool = getFaceCandidatePool(landmarks)
+  const nextParticles = [...faceParticlesRef.current]
+  const usedIndices = new Set()
+
+  for (let i = nextParticles.length - 1; i >= 0; i -= 1) {
+    const particle = nextParticles[i]
+    if (now - particle.bornAt > particle.lifeMs + fadeMs) {
+      nextParticles.splice(i, 1)
+      continue
+    }
+    usedIndices.add(particle.landmarkIndex)
+  }
+
+  while (nextParticles.length < Math.min(FACE_PARTICLE_TARGET, pool.length)) {
+    const landmarkIndex = pickRandomFaceIndex(now, pool, usedIndices, nextParticles.length + now)
+    if (landmarkIndex == null) break
+    usedIndices.add(landmarkIndex)
+    nextParticles.push({
+      landmarkIndex,
+      bornAt: now,
+      lifeMs: getParticleLifeMs(now + (nextParticles.length * 19.7)),
+    })
+  }
+
+  faceParticlesRef.current = nextParticles
+
+  return nextParticles
+    .map((particle, order) => {
+      const point = landmarks[particle.landmarkIndex]
+      if (!point) return null
+      const next = toCanvasPoint(point, width, height)
+      const alphaEnvelope = getLifecycleAlpha(now, particle.bornAt, particle.lifeMs + fadeMs, fadeMs)
+
+      return {
+        type: 'face',
+        x: next.x,
+        y: next.y,
+        opacity: 0.34 + (alphaEnvelope * 0.54),
+        radius: 1.25 + (Math.max(0, Math.sin(now * 0.001 + order)) * 0.4),
+      }
+    })
+    .filter(Boolean)
+}
+
+function drawParticleField(ctx, now, particles) {
+  for (let i = 0; i < particles.length; i += 1) {
+    const a = particles[i]
+    for (let j = i + 1; j < particles.length; j += 1) {
+      const b = particles[j]
+      const dx = a.x - b.x
+      const dy = a.y - b.y
+      const distance = Math.hypot(dx, dy)
+      const boosted = a.type === 'face' || b.type === 'face'
+      const maxDistance = boosted ? AMBIENT_CONNECTION_DISTANCE * 1.35 : AMBIENT_CONNECTION_DISTANCE
+      if (distance > maxDistance) continue
+
+      const alphaBoost = boosted ? 0.22 : 0.12
+      const alpha = (1 - (distance / maxDistance)) * alphaBoost * Math.max(a.opacity, b.opacity)
+      ctx.beginPath()
+      ctx.moveTo(a.x, a.y)
+      ctx.lineTo(b.x, b.y)
+      ctx.strokeStyle = `rgba(243, 239, 230, ${alpha})`
+      ctx.lineWidth = boosted ? 0.72 : 0.52
+      ctx.stroke()
+    }
+  }
+
+  particles.forEach((point) => {
+    ctx.beginPath()
+    ctx.arc(point.x, point.y, point.radius, 0, Math.PI * 2)
+    ctx.fillStyle = `rgba(243, 239, 230, ${point.opacity})`
+    ctx.fill()
   })
+}
 
-  sourceCtx.strokeStyle = 'rgba(255, 255, 255, 0.62)'
-  sourceCtx.lineWidth = 1.4
-  tracePath(sourceCtx, landmarks, FACE_OVAL, width, height, true)
-  sourceCtx.stroke()
+function drawFaceParticleDebug(ctx, particles) {
+  const faceParticles = particles.filter((particle) => particle.type === 'face')
 
-  sourceCtx.strokeStyle = 'rgba(0, 0, 0, 0.9)'
-  sourceCtx.lineWidth = 2.4
-  ;[LEFT_EYE, RIGHT_EYE, UPPER_LIP, LOWER_LIP].forEach((path) => {
-    tracePath(sourceCtx, landmarks, path, width, height)
-    sourceCtx.stroke()
+  for (let i = 0; i < faceParticles.length; i += 1) {
+    const a = faceParticles[i]
+    for (let j = 0; j < particles.length; j += 1) {
+      const b = particles[j]
+      if (a === b) continue
+      const dx = a.x - b.x
+      const dy = a.y - b.y
+      const distance = Math.hypot(dx, dy)
+      const maxDistance = AMBIENT_CONNECTION_DISTANCE * 1.75
+      if (distance > maxDistance) continue
+
+      const alpha = (1 - (distance / maxDistance)) * (b.type === 'face' ? 0.36 : 0.22) * Math.max(a.opacity, b.opacity)
+      ctx.beginPath()
+      ctx.moveTo(a.x, a.y)
+      ctx.lineTo(b.x, b.y)
+      ctx.strokeStyle = `rgba(255, 72, 72, ${alpha})`
+      ctx.lineWidth = 0.9
+      ctx.stroke()
+    }
+  }
+
+  faceParticles.forEach((point) => {
+    ctx.beginPath()
+    ctx.arc(point.x, point.y, Math.max(2.2, point.radius * 1.8), 0, Math.PI * 2)
+    ctx.fillStyle = `rgba(255, 72, 72, ${Math.min(1, point.opacity + 0.28)})`
+    ctx.fill()
   })
-
 }
 
 export default function FaceDiagnostics({ faceAnalysis }) {
   const canvasRef = useRef(null)
   const targetLandmarksRef = useRef(null)
   const smoothedLandmarksRef = useRef(null)
+  const ambientPointsRef = useRef(createAmbientPoints())
+  const faceParticlesRef = useRef([])
+  const pulseRef = useRef({
+    direction: 1,
+    activeSince: 0,
+    duration: 0,
+    nextPulseAt: 0,
+  })
 
   useEffect(() => {
     targetLandmarksRef.current = faceAnalysis?.landmarks ?? null
@@ -221,24 +296,51 @@ export default function FaceDiagnostics({ faceAnalysis }) {
     const sourceCtx = sourceCanvas.getContext('2d')
     if (!sourceCtx) return undefined
 
-    const pixelCanvas = document.createElement('canvas')
-    pixelCanvas.width = PIXEL_WIDTH
-    pixelCanvas.height = PIXEL_HEIGHT
-
     let animationFrameId = null
 
-    const tick = () => {
+    const getPulseScale = (now) => {
+      const pulse = pulseRef.current
+      if (!pulse.nextPulseAt) pulse.nextPulseAt = now + 2800 + (randomUnit(now * 0.001) * 1200)
+
+      if (pulse.duration && now < pulse.activeSince + pulse.duration) {
+        const progress = Math.min(1, (now - pulse.activeSince) / pulse.duration)
+        const eased = easeOutBack(progress)
+        const amount = pulse.direction > 0 ? 0.028 : -0.024
+        return 1 + (amount * eased)
+      }
+
+      if (pulse.duration && now >= pulse.activeSince + pulse.duration) {
+        pulse.duration = 0
+        pulse.nextPulseAt = now + 2400 + (randomUnit(now * 0.0013) * 2200)
+        pulse.direction *= -1
+        return 1
+      }
+
+      if (now >= pulse.nextPulseAt) {
+        pulse.activeSince = now
+        pulse.duration = 920 + (randomUnit(now * 0.0019) * 420)
+      }
+
+      return 1
+    }
+
+    const tick = (now) => {
       const targetLandmarks = targetLandmarksRef.current
+      const pulseScale = getPulseScale(now)
 
       if (!targetLandmarks?.length) {
         smoothedLandmarksRef.current = null
+        faceParticlesRef.current = []
         const label = faceAnalysis?.status === 'error'
           ? 'Camera unavailable'
           : faceAnalysis?.status === 'requesting'
             ? 'Requesting camera access'
             : 'Awaiting face'
         drawIdleFrame(sourceCtx, sourceCanvas.width, sourceCanvas.height, label)
-        presentFrame(sourceCanvas, pixelCanvas, displayCtx, DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        updateAmbientPoints(now, ambientPointsRef.current)
+        const ambientParticles = buildAmbientParticles(now, sourceCanvas.width, sourceCanvas.height, ambientPointsRef.current)
+        drawParticleField(sourceCtx, now, ambientParticles)
+        presentFrame(sourceCanvas, displayCtx, DISPLAY_WIDTH, DISPLAY_HEIGHT, pulseScale)
         animationFrameId = requestAnimationFrame(tick)
         return
       }
@@ -263,8 +365,22 @@ export default function FaceDiagnostics({ faceAnalysis }) {
         }
       }
 
-      renderFace(sourceCtx, smoothedLandmarksRef.current)
-      presentFrame(sourceCanvas, pixelCanvas, displayCtx, DISPLAY_WIDTH, DISPLAY_HEIGHT)
+      updateAmbientPoints(now, ambientPointsRef.current)
+      sourceCtx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height)
+      sourceCtx.fillStyle = '#050505'
+      sourceCtx.fillRect(0, 0, sourceCanvas.width, sourceCanvas.height)
+      const ambientParticles = buildAmbientParticles(now, sourceCanvas.width, sourceCanvas.height, ambientPointsRef.current)
+      const faceParticles = updateFaceParticles(
+        now,
+        sourceCanvas.width,
+        sourceCanvas.height,
+        smoothedLandmarksRef.current,
+        faceParticlesRef,
+      )
+      const particles = [...ambientParticles, ...faceParticles]
+      drawParticleField(sourceCtx, now, particles)
+      drawFaceParticleDebug(sourceCtx, particles)
+      presentFrame(sourceCanvas, displayCtx, DISPLAY_WIDTH, DISPLAY_HEIGHT, pulseScale)
       animationFrameId = requestAnimationFrame(tick)
     }
 
@@ -272,7 +388,7 @@ export default function FaceDiagnostics({ faceAnalysis }) {
     return () => {
       if (animationFrameId) cancelAnimationFrame(animationFrameId)
     }
-  }, [faceAnalysis?.moodLabel, faceAnalysis?.status])
+  }, [faceAnalysis?.status])
 
   const metrics = faceAnalysis?.metrics ?? {}
 
