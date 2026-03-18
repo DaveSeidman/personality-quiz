@@ -5,7 +5,7 @@ import Console from './components/Console'
 import Background from './components/Background'
 import useFaceAnalysis from './components/useFaceAnalysis'
 import quizData from './assets/data/quiz.json'
-import logoImg from './assets/images/logo-white.svg'
+import logoImg from './assets/images/logo-white.png'
 import './index.scss'
 
 function useFullscreen() {
