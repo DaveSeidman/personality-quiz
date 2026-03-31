@@ -4,8 +4,7 @@ import Attract from './components/Attract'
 import Console from './components/Console'
 import Background from './components/Background'
 import useFaceAnalysis from './components/useFaceAnalysis'
-import quizData from './assets/data/quiz.json'
-import logoImg from './assets/images/logo-white.png'
+import { applyBrandTheme, loadBrandExperience } from './branding'
 import './index.scss'
 
 function useFullscreen() {
@@ -31,6 +30,12 @@ function useFullscreen() {
 }
 
 export default function App() {
+  const [experienceState, setExperienceState] = useState({
+    status: 'loading',
+    brand: null,
+    quizData: null,
+    error: null,
+  })
   const [attract, setAttract] = useState(true)
   const [answers, setAnswers] = useState({})
   const [analytics, setAnalytics] = useState({})
@@ -41,6 +46,41 @@ export default function App() {
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   const { videoRef: faceVideoRef, faceAnalysis } = useFaceAnalysis({ active: !attract && cameraEnabled })
   const INACTIVITY_TIMEOUT = 60000
+
+  useEffect(() => {
+    let cancelled = false
+
+    const loadExperience = async () => {
+      try {
+        const nextExperience = await loadBrandExperience()
+        if (cancelled) return
+
+        applyBrandTheme(nextExperience.brand)
+        setExperienceState({
+          status: 'ready',
+          brand: nextExperience.brand,
+          quizData: nextExperience.quizData,
+          error: null,
+        })
+      } catch (error) {
+        console.error('Unable to load brand experience', error)
+        if (cancelled) return
+
+        setExperienceState({
+          status: 'error',
+          brand: null,
+          quizData: null,
+          error,
+        })
+      }
+    }
+
+    loadExperience()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const activityTimeout = () => {
     setAttract(true)
@@ -84,12 +124,30 @@ export default function App() {
     }
   }, [])
 
+  if (experienceState.status !== 'ready') {
+    return (
+      <div className="app app--loading">
+        <div className="app-loading-panel">
+          <p>Loading quiz experience...</p>
+          <span>
+            {experienceState.status === 'error'
+              ? 'Unable to load the selected brand. Please check the configuration and try again.'
+              : 'Preparing assets, copy, and questions.'}
+          </span>
+        </div>
+      </div>
+    )
+  }
+
+  const { brand, quizData } = experienceState
+
   return (
     <div className="app">
       <Background />
 
       <div className="app-layout">
         <Quiz
+          brand={brand}
           attract={attract}
           quizId={quizData.quizId}
           questions={quizData.questions}
@@ -118,10 +176,11 @@ export default function App() {
       <Attract
         attract={attract}
         quizData={quizData}
+        brand={brand}
       />
 
       <div className="app-logo">
-        <img src={logoImg} />
+        <img src={brand.assets.logo} alt={`${brand.displayName || 'Quiz'} logo`} />
       </div>
 
       <button

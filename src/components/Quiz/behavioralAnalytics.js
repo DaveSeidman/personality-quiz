@@ -1,5 +1,23 @@
 export const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value))
 
+const LEGACY_PERSONALITY_COLORS = {
+  strategist: '#4dbb89',
+  pioneer: '#4c78ff',
+  catalyst: '#d66bba',
+  architect: '#ff6200',
+}
+
+const DEFAULT_PERSONALITY_PALETTE = [
+  '#4dbb89',
+  '#4c78ff',
+  '#d66bba',
+  '#ff6200',
+  '#ffd166',
+  '#7bdff2',
+  '#c792ea',
+  '#ff8fab',
+]
+
 export const PERSONALITY_LEGEND = [
   { id: 'strategist', label: 'The Strategist' },
   { id: 'pioneer', label: 'The Pioneer' },
@@ -7,25 +25,75 @@ export const PERSONALITY_LEGEND = [
   { id: 'architect', label: 'The Architect' },
 ]
 
-export const PERSONALITY_COLORS = {
-  strategist: 'rgba(77, 187, 137, 0.72)',
-  pioneer: 'rgba(76, 120, 255, 0.72)',
-  catalyst: 'rgba(214, 107, 186, 0.72)',
-  architect: 'rgba(255, 98, 0, 0.72)',
-}
-
-export const PERSONALITY_AREA_COLORS = {
-  strategist: 'rgba(77, 187, 137, 0.16)',
-  pioneer: 'rgba(76, 120, 255, 0.16)',
-  catalyst: 'rgba(214, 107, 186, 0.16)',
-  architect: 'rgba(255, 98, 0, 0.16)',
-}
-
 export const QUESTION_TYPE_COLORS = {
   'multiple-choice': 'rgba(98, 170, 255, 0.22)',
   'ranked-choice': 'rgba(255, 155, 98, 0.22)',
   'range-sliders': 'rgba(130, 225, 170, 0.22)',
   'slide-select': 'rgba(220, 142, 235, 0.22)',
+}
+
+function parseHexColor(value) {
+  const hex = value.replace('#', '').trim()
+  if (hex.length === 3) {
+    return hex.split('').map((char) => Number.parseInt(`${char}${char}`, 16))
+  }
+
+  if (hex.length === 6) {
+    return [
+      Number.parseInt(hex.slice(0, 2), 16),
+      Number.parseInt(hex.slice(2, 4), 16),
+      Number.parseInt(hex.slice(4, 6), 16),
+    ]
+  }
+
+  return null
+}
+
+function parseRgbColor(value) {
+  const matches = value.match(/[\d.]+/g)
+  if (!matches || matches.length < 3) return null
+
+  return matches.slice(0, 3).map((entry) => Number.parseFloat(entry))
+}
+
+function parseColorToRgb(value) {
+  if (!value || typeof value !== 'string') return null
+  if (value.startsWith('#')) return parseHexColor(value)
+  if (value.startsWith('rgb')) return parseRgbColor(value)
+  return null
+}
+
+export function toAlphaColor(value, alpha = 1) {
+  const rgb = parseColorToRgb(value)
+  if (!rgb) return `rgba(255, 255, 255, ${alpha})`
+  const [r, g, b] = rgb
+  return `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, ${alpha})`
+}
+
+export function getPersonalityLegend(personalities = []) {
+  if (Array.isArray(personalities) && personalities.length) {
+    return personalities.map((personality) => ({
+      id: personality.id,
+      label: personality.name || titleCase(humanizePersonality(personality.id)),
+      color: personality.color,
+    }))
+  }
+
+  return PERSONALITY_LEGEND
+}
+
+export function getPersonalityBaseColor(personality = {}, index = 0) {
+  if (personality?.color) return personality.color
+  if (personality?.id && LEGACY_PERSONALITY_COLORS[personality.id]) return LEGACY_PERSONALITY_COLORS[personality.id]
+  return DEFAULT_PERSONALITY_PALETTE[index % DEFAULT_PERSONALITY_PALETTE.length]
+}
+
+export function buildPersonalityColorMap(personalities = [], alpha = 0.72) {
+  const legend = getPersonalityLegend(personalities)
+  return legend.reduce((acc, entry, index) => {
+    acc[entry.id] = toAlphaColor(getPersonalityBaseColor(entry, index), alpha)
+    return acc
+  }, {})
 }
 
 export function normalizeType(type = '') {
@@ -150,57 +218,88 @@ export function buildQuestionCards(analytics = {}, questions = [], answers = {})
   })
 }
 
-function buildVectorFromCard(card) {
-  const vector = { strategist: 0.08, pioneer: 0.08, catalyst: 0.08, architect: 0.08 }
-
-  if (card.type === 'multiple-choice') {
-    vector.pioneer += card.metrics.speed * 0.55
-    vector.strategist += card.metrics.nextDecisiveness * 0.45
-    vector.architect += clamp(card.metrics.changeCount / 8) * 0.35
-    vector.catalyst += (1 - card.metrics.hesitation) * 0.3
-  }
-
-  if (card.type === 'ranked-choice') {
-    vector.architect += card.metrics.reorderDensity * 0.6
-    vector.catalyst += card.metrics.coverage * 0.4
-    vector.strategist += card.metrics.avgPressure * 0.45
-    vector.pioneer += card.confidence * 0.35
-  }
-
-  if (card.type === 'range-sliders') {
-    vector.strategist += (1 - card.metrics.hesitation) * 0.55
-    vector.catalyst += card.metrics.coverage * 0.4
-    vector.architect += card.metrics.sliderDensity * 0.45
-    vector.pioneer += card.confidence * 0.3
-  }
-
-  if (card.type === 'slide-select') {
-    vector.pioneer += card.metrics.slidePrecision * 0.55
-    vector.strategist += card.metrics.avgPressure * 0.45
-    vector.architect += card.metrics.speed * 0.35
-    vector.catalyst += card.confidence * 0.25
-  }
-
-  if (card.personalityId && card.personalityId in vector) {
-    vector[card.personalityId] += 0.35
-  }
-
-  const max = Math.max(...Object.values(vector), 0.0001)
-  return {
-    strategist: clamp(vector.strategist / max),
-    pioneer: clamp(vector.pioneer / max),
-    catalyst: clamp(vector.catalyst / max),
-    architect: clamp(vector.architect / max),
-  }
+function buildEmptyVector(legend = []) {
+  return legend.reduce((acc, entry) => {
+    acc[entry.id] = 0
+    return acc
+  }, {})
 }
 
-export function buildRadarData(cards = []) {
-  const compositeTotals = { strategist: 0, pioneer: 0, catalyst: 0, architect: 0 }
+function normalizeVector(vector = {}) {
+  const max = Math.max(...Object.values(vector), 0.0001)
+  return Object.fromEntries(
+    Object.entries(vector).map(([key, value]) => [key, clamp(value / max)])
+  )
+}
+
+function buildVectorFromCard(card, legend = []) {
+  if (!legend.length) return {}
+
+  const vector = buildEmptyVector(legend)
+  const ids = legend.map((entry) => entry.id)
+  const selectedIndex = ids.indexOf(card.personalityId)
+  const selectedId = selectedIndex >= 0 ? ids[selectedIndex] : null
+  const baseline = 0.08
+
+  ids.forEach((id) => {
+    vector[id] = baseline
+  })
+
+  const metrics = card.metrics || {}
+  const resonance = clamp(
+    ((metrics.speed || 0) * 0.24) +
+    ((1 - (metrics.hesitation || 0)) * 0.28) +
+    ((metrics.coverage || 0) * 0.18) +
+    ((card.confidence || 0) * 0.2) +
+    ((metrics.avgPressure || 0) * 0.1),
+  )
+
+  if (selectedId) {
+    vector[selectedId] += 0.48 + (resonance * 0.24)
+
+    const peers = ids.filter((id) => id !== selectedId)
+    const spreadBase = (0.18 + (resonance * 0.12)) / Math.max(peers.length, 1)
+
+    peers.forEach((id, index) => {
+      const dampener = 1 - ((index / Math.max(peers.length, 1)) * 0.2)
+      vector[id] += spreadBase * dampener
+    })
+
+    if (ids.length > 1) {
+      const nextId = ids[(selectedIndex + 1) % ids.length]
+      vector[nextId] += ((metrics.speed || 0) * 0.12) + ((metrics.slidePrecision || 0) * 0.08)
+    }
+
+    if (ids.length > 2) {
+      const previousId = ids[(selectedIndex - 1 + ids.length) % ids.length]
+      vector[previousId] += ((metrics.avgPressure || 0) * 0.12) + ((1 - (metrics.hesitation || 0)) * 0.08)
+    }
+
+    if (ids.length > 3) {
+      const oppositeId = ids[(selectedIndex + Math.floor(ids.length / 2)) % ids.length]
+      vector[oppositeId] += clamp(
+        ((metrics.reorderDensity || 0) * 0.45) +
+        ((metrics.sliderDensity || 0) * 0.35) +
+        (clamp((metrics.changeCount || 0) / 8) * 0.2),
+      ) * 0.14
+    }
+  } else {
+    ids.forEach((id, index) => {
+      vector[id] += 0.16 + (resonance * (index === 0 ? 0.16 : 0.1))
+    })
+  }
+
+  return normalizeVector(vector)
+}
+
+export function buildRadarData(cards = [], personalities = []) {
+  const legend = getPersonalityLegend(personalities)
+  const compositeTotals = buildEmptyVector(legend)
 
   const byQuestion = cards.map((card) => {
-    const vector = buildVectorFromCard(card)
+    const vector = buildVectorFromCard(card, legend)
     Object.keys(compositeTotals).forEach((key) => {
-      compositeTotals[key] += vector[key]
+      compositeTotals[key] += vector[key] || 0
     })
 
     return {
@@ -210,13 +309,9 @@ export function buildRadarData(cards = []) {
     }
   })
 
-  const max = Math.max(...Object.values(compositeTotals), 0.0001)
-  const composite = {
-    strategist: clamp(compositeTotals.strategist / max),
-    pioneer: clamp(compositeTotals.pioneer / max),
-    catalyst: clamp(compositeTotals.catalyst / max),
-    architect: clamp(compositeTotals.architect / max),
+  return {
+    legend,
+    composite: normalizeVector(compositeTotals),
+    byQuestion,
   }
-
-  return { composite, byQuestion }
 }

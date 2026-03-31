@@ -1,35 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { triggerActivePress } from '../../utils'
-import loadingVideo from '../../../assets/videos/logospin.webm'
 import './index.scss'
 import {
   clamp,
-  PERSONALITY_LEGEND,
-  PERSONALITY_COLORS,
+  buildPersonalityColorMap,
   buildQuestionCards,
   buildRadarData,
+  getPersonalityLegend,
+  toAlphaColor,
 } from '../behavioralAnalytics'
 
-const PERSONALITY_RGB = {
-  strategist: [77, 187, 137],
-  pioneer: [76, 120, 255],
-  catalyst: [214, 107, 186],
-  architect: [255, 98, 0],
-}
+function getDominantColor(vector = {}, colorMap = {}, alpha = 0.92) {
+  const dominantId = Object.entries(vector)
+    .sort((a, b) => (b[1] || 0) - (a[1] || 0))[0]?.[0]
 
-function mixVectorColor(vector = {}, alpha = 1) {
-  const entries = Object.entries(PERSONALITY_RGB)
-  const total = entries.reduce((sum, [key]) => sum + Math.max(0, vector?.[key] || 0), 0) || 1
-
-  const [r, g, b] = entries.reduce((acc, [key, rgb]) => {
-    const weight = Math.max(0, vector?.[key] || 0) / total
-    acc[0] += rgb[0] * weight
-    acc[1] += rgb[1] * weight
-    acc[2] += rgb[2] * weight
-    return acc
-  }, [0, 0, 0])
-
-  return `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, ${alpha})`
+  return dominantId ? toAlphaColor(colorMap[dominantId], alpha) : `rgba(255, 255, 255, ${alpha})`
 }
 
 const QUESTION_POLYGON_STYLES = [
@@ -39,10 +24,12 @@ const QUESTION_POLYGON_STYLES = [
   { dash: [14, 5, 3, 5], fillAlpha: 0.04, strokeAlpha: 0.54 },
 ]
 
-function RadarCanvas({ composite, byQuestion }) {
+function RadarCanvas({ composite, byQuestion, legend, colorMap }) {
   const [canvasId] = useState(() => `radar-${Math.random().toString(36).slice(2)}`)
 
   useEffect(() => {
+    if (!legend?.length) return
+
     const canvas = document.getElementById(canvasId)
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -54,12 +41,10 @@ function RadarCanvas({ composite, byQuestion }) {
     const cy = height / 2
     const radius = Math.min(width, height) * 0.36
 
-    const axes = [
-      { id: 'pioneer', angle: -Math.PI / 2, label: 'Pioneer' },
-      { id: 'architect', angle: 0, label: 'Architect' },
-      { id: 'catalyst', angle: Math.PI / 2, label: 'Catalyst' },
-      { id: 'strategist', angle: Math.PI, label: 'Strategist' },
-    ]
+    const axes = legend.map((entry, index) => ({
+      ...entry,
+      angle: (-Math.PI / 2) + ((index / legend.length) * Math.PI * 2),
+    }))
 
     let raf = null
     const start = performance.now()
@@ -73,7 +58,7 @@ function RadarCanvas({ composite, byQuestion }) {
         return { axis, x: cx + Math.cos(axis.angle) * radius * val, y: cy + Math.sin(axis.angle) * radius * val, val }
       })
 
-    const drawDiamondPath = (r) => {
+    const drawRadarPath = (r) => {
       axes.forEach((axis, i) => {
         const x = cx + Math.cos(axis.angle) * r
         const y = cy + Math.sin(axis.angle) * r
@@ -88,7 +73,7 @@ function RadarCanvas({ composite, byQuestion }) {
 
       ctx.save()
       ctx.beginPath()
-      drawDiamondPath(radius)
+      drawRadarPath(radius)
       ctx.clip()
 
       const tile = 22
@@ -107,7 +92,7 @@ function RadarCanvas({ composite, byQuestion }) {
       for (let level = 1; level <= 4; level++) {
         const r = (radius * level) / 4
         ctx.beginPath()
-        drawDiamondPath(r)
+        drawRadarPath(r)
         ctx.stroke()
       }
 
@@ -122,7 +107,7 @@ function RadarCanvas({ composite, byQuestion }) {
 
         ctx.beginPath()
         ctx.arc(cx + Math.cos(axis.angle) * (radius + 8), cy + Math.sin(axis.angle) * (radius + 8), 4, 0, Math.PI * 2)
-        ctx.fillStyle = PERSONALITY_COLORS[axis.id]
+        ctx.fillStyle = colorMap[axis.id] || 'rgba(255,255,255,0.8)'
         ctx.fill()
       })
 
@@ -160,7 +145,7 @@ function RadarCanvas({ composite, byQuestion }) {
         ctx.beginPath()
         ctx.moveTo(cx, cy)
         ctx.lineTo(p.x, p.y)
-        ctx.strokeStyle = PERSONALITY_COLORS[p.axis.id]
+        ctx.strokeStyle = colorMap[p.axis.id] || 'rgba(255,255,255,0.8)'
         ctx.lineWidth = 1.5
         ctx.stroke()
       })
@@ -168,16 +153,16 @@ function RadarCanvas({ composite, byQuestion }) {
       ctx.beginPath()
       compPts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
       ctx.closePath()
-      ctx.fillStyle = mixVectorColor(composite, 0.22)
+      ctx.fillStyle = getDominantColor(composite, colorMap, 0.22)
       ctx.fill()
-      ctx.strokeStyle = mixVectorColor(composite, 0.96)
+      ctx.strokeStyle = getDominantColor(composite, colorMap, 0.96)
       ctx.lineWidth = 2
       ctx.stroke()
 
       compPts.forEach((p) => {
         ctx.beginPath()
         ctx.arc(p.x, p.y, 5, 0, Math.PI * 2)
-        ctx.fillStyle = PERSONALITY_COLORS[p.axis.id]
+        ctx.fillStyle = colorMap[p.axis.id] || 'rgba(255,255,255,0.8)'
         ctx.fill()
       })
 
@@ -187,11 +172,11 @@ function RadarCanvas({ composite, byQuestion }) {
 
     raf = requestAnimationFrame(draw)
     return () => { if (raf) cancelAnimationFrame(raf) }
-  }, [canvasId, composite, byQuestion])
+  }, [canvasId, colorMap, composite, byQuestion, legend])
 
   return (
     <div className="results-status-radar">
-      <p className="results-status-radar-title">Composite Personality Radar</p>
+      <p className="results-status-radar-title">Composite Signal Radar</p>
       <canvas id={canvasId} width={560} height={480} />
     </div>
   )
@@ -212,10 +197,13 @@ function renderStatement(text, highlights) {
   })
 }
 
-export default function Results({ result, analytics, questions, answers, sessionKey, onPrevious, onSubmit, onStartOver }) {
+export default function Results({ brand, result, analytics, questions, personalities, answers, sessionKey, onPrevious, onSubmit, onStartOver }) {
   const [status, setStatus] = useState('idle')
   const cards = useMemo(() => buildQuestionCards(analytics, questions, answers), [analytics, questions, answers])
-  const radarData = useMemo(() => buildRadarData(cards), [cards])
+  const legend = useMemo(() => getPersonalityLegend(personalities || []), [personalities])
+  const colorMap = useMemo(() => buildPersonalityColorMap(personalities || [], 1), [personalities])
+  const radarData = useMemo(() => buildRadarData(cards, personalities || []), [cards, personalities])
+  const copy = brand?.copy || {}
 
   useEffect(() => {
     setStatus('idle')
@@ -250,17 +238,17 @@ export default function Results({ result, analytics, questions, answers, session
 
           {/* Screen A: idle + submitting */}
           <div className={`results-screen ${!isSubmitted ? 'in' : 'out'}`}>
-            <h2 className="results-title">Start AI analysis of your answers and behavioral signals...</h2>
-            <p className="results-instruction">You can review before submitting.</p>
+            <h2 className="results-title">{copy.resultsTitle || 'Start AI analysis of your answers and behavioral signals...'}</h2>
+            <p className="results-instruction">{copy.resultsInstruction || 'You can review before submitting.'}</p>
             <div className="results-blob-placeholder">
               <video
                 className={`results-blob-video ${isSubmitting ? 'blob-active' : 'blob-idle'}`}
-                src={loadingVideo}
+                src={brand?.assets?.loadingVideo}
                 autoPlay muted loop playsInline
               />
               <div className={`results-blob-overlay ${isSubmitting ? 'visible' : ''}`}>
-                <p>Translating your signals…</p>
-                <span>Syncing with the cocktail oracle. This usually takes a beat.</span>
+                <p>{copy.loadingTitle || 'Translating your signals...'}</p>
+                <span>{copy.loadingBody || 'Syncing with the cocktail oracle. This usually takes a beat.'}</span>
               </div>
             </div>
           </div>
@@ -281,14 +269,14 @@ export default function Results({ result, analytics, questions, answers, session
                         [result.result.personalityName, result.result.drinkRecommendation]
                       )}
                     </p>
-                    <RadarCanvas composite={radarData.composite} byQuestion={radarData.byQuestion} />
+                    <RadarCanvas composite={radarData.composite} byQuestion={radarData.byQuestion} legend={radarData.legend} colorMap={colorMap} />
                   </>
                 ) : null}
               </div>
               <div className="results-status-legend">
-                {PERSONALITY_LEGEND.map((entry) => (
-                  <div key={entry.id} className={`results-status-legend-item personality-${entry.id}`}>
-                    <span className="results-status-legend-swatch" />
+                {legend.map((entry) => (
+                  <div key={entry.id} className="results-status-legend-item">
+                    <span className="results-status-legend-swatch" style={{ background: colorMap[entry.id] || '#9fb4dc' }} />
                     <span>{entry.label}</span>
                   </div>
                 ))}
@@ -304,15 +292,15 @@ export default function Results({ result, analytics, questions, answers, session
           {!isSubmitted ? (
             <>
               <button className="question-navigation-prev-button" onClick={onPrevious} onPointerDown={triggerActivePress}>
-                Review
+                {copy.reviewLabel || 'Review'}
               </button>
               <button className="question-navigation-next-button" onClick={handleSubmit} onPointerDown={triggerActivePress} disabled={isSubmitting}>
-                {isSubmitting ? 'Submitting…' : 'Submit'}
+                {isSubmitting ? (copy.submittingLabel || 'Submitting...') : (copy.submitLabel || 'Submit')}
               </button>
             </>
           ) : (
             <button className="question-navigation-prev-button" onClick={onStartOver} onPointerDown={triggerActivePress}>
-              Start Over
+              {copy.startOverLabel || 'Start Over'}
             </button>
           )}
         </div>

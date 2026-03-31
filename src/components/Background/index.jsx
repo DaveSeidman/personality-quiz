@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react'
+import { getCanvasFontFamily } from '../../branding'
 import './index.scss'
 
 const GRID_COLUMNS = 34
@@ -233,7 +234,7 @@ export default function Background() {
       context.fillStyle = `rgba(255, 255, 255, ${spec.alpha})`
       context.textAlign = 'center'
       context.textBaseline = 'middle'
-      context.font = `${spec.size}px "Montserrat", sans-serif`
+      context.font = `${spec.size}px ${getCanvasFontFamily()}`
       context.fillText('x', size / 2, size / 2)
       return canvas
     })

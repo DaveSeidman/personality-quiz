@@ -75,8 +75,8 @@
         width: 0.93vh;
         height: 0.93vh;
         border-radius: 50%;
-        background: src.$orange;
-        box-shadow: 0 0 0.8vh rgba(255, 255, 255, 0.42);
+        background: var(--accent);
+        box-shadow: 0 0 0.8vh color-mix(in srgb, var(--accent), white 55%);
         animation: console-pulse 2s infinite ease-in-out;
       }
 

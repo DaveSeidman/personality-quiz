@@ -1,7 +1,13 @@
 
 import React, { useEffect, useMemo, useRef } from 'react'
 import { computeQuestionConfidence } from '../Quiz/analytics'
-import { buildQuestionCards, PERSONALITY_LEGEND, clamp } from '../Quiz/behavioralAnalytics'
+import {
+  buildPersonalityColorMap,
+  buildQuestionCards,
+  clamp,
+  getPersonalityLegend,
+  toAlphaColor,
+} from '../Quiz/behavioralAnalytics'
 import FaceDiagnostics from './FaceDiagnostics'
 import './index.scss'
 
@@ -89,9 +95,15 @@ const buildMetrics = (entry, confidenceOverride = null, eventCount = 0) => {
   return metrics
 }
 
-function AggregateBarChart({ label, value, tone = 'pioneer' }) {
+function AggregateBarChart({ label, value, color = '#4c78ff' }) {
   return (
-    <div className={`console-aggregate-chart console-aggregate-chart-bar personality-${tone}`}>
+    <div
+      className="console-aggregate-chart console-aggregate-chart-bar"
+      style={{
+        '--tone': color,
+        '--tone-soft': toAlphaColor(color, 0.16),
+      }}
+    >
       <p className="console-aggregate-chart-label">{label}</p>
       <div className="console-aggregate-chart-track">
         <div className="console-aggregate-chart-fill" style={{ width: `${Math.round(clamp(value) * 100)}%` }} />
@@ -101,10 +113,16 @@ function AggregateBarChart({ label, value, tone = 'pioneer' }) {
   )
 }
 
-function AggregateRingChart({ label, value, tone = 'pioneer' }) {
+function AggregateRingChart({ label, value, color = '#4c78ff' }) {
   const degrees = `${Math.round(clamp(value) * 360)}deg`
   return (
-    <div className={`console-aggregate-chart console-aggregate-chart-ring personality-${tone}`}>
+    <div
+      className="console-aggregate-chart console-aggregate-chart-ring"
+      style={{
+        '--tone': color,
+        '--tone-soft': toAlphaColor(color, 0.16),
+      }}
+    >
       <p className="console-aggregate-chart-label">{label}</p>
       <div className="console-aggregate-ring" style={{ '--degrees': degrees }}>
         <span>{Math.round(clamp(value) * 100)}%</span>
@@ -114,6 +132,8 @@ function AggregateRingChart({ label, value, tone = 'pioneer' }) {
 }
 
 export default function Console({ attract = false, analytics, questions, answers, personalities, activeQuestionId, analysisComplete = false, faceAnalysis = null }) {
+  const legend = useMemo(() => getPersonalityLegend(personalities), [personalities])
+  const personalityColors = useMemo(() => buildPersonalityColorMap(personalities, 1), [personalities])
   const personalityMap = useMemo(() => (
     personalities?.reduce((acc, persona) => {
       acc[persona.id] = persona
@@ -206,7 +226,7 @@ export default function Console({ attract = false, analytics, questions, answers
   ), [activeQuestionId, analytics, answers, faceConfidence, personalityMap, questions])
 
   const aggregateStats = useMemo(() => {
-    const baseDistribution = PERSONALITY_LEGEND.reduce((acc, persona) => {
+    const baseDistribution = legend.reduce((acc, persona) => {
       acc[persona.id] = 0
       return acc
     }, {})
@@ -265,7 +285,7 @@ export default function Console({ attract = false, analytics, questions, answers
       avgSpeed: speedCount ? speedSum / speedCount : 0,
       avgHesitation: hesitationCount ? hesitationSum / hesitationCount : 0,
     }
-  }, [questionCards])
+  }, [legend, questionCards])
 
   const setRowRef = (id, node) => {
     if (node) {
@@ -369,13 +389,16 @@ export default function Console({ attract = false, analytics, questions, answers
               <p className="console-aggregate-subtitle">Synthesized from all answered questions.</p>
 
               <div className="console-aggregate-distribution">
-                {PERSONALITY_LEGEND.map((entry) => (
-                  <div key={entry.id} className={`console-aggregate-distribution-row personality-${entry.id}`}>
+                {legend.map((entry) => (
+                  <div key={entry.id} className="console-aggregate-distribution-row">
                     <span className="console-aggregate-distribution-label">{entry.label}</span>
                     <div className="console-aggregate-distribution-track">
                       <div
                         className="console-aggregate-distribution-fill"
-                        style={{ width: `${Math.round((aggregateStats.distribution[entry.id] || 0) * 100)}%` }}
+                        style={{
+                          width: `${Math.round((aggregateStats.distribution[entry.id] || 0) * 100)}%`,
+                          background: personalityColors[entry.id] || '#ffffff',
+                        }}
                       />
                     </div>
                     <span className="console-aggregate-distribution-value">
@@ -386,9 +409,9 @@ export default function Console({ attract = false, analytics, questions, answers
               </div>
 
               <div className="console-aggregate-metrics">
-                <AggregateBarChart label="Signal Confidence" value={aggregateStats.avgConfidence} tone="catalyst" />
-                <AggregateBarChart label="Decision Momentum" value={aggregateStats.avgSpeed} tone="pioneer" />
-                <AggregateRingChart label="Hesitation Signature" value={aggregateStats.avgHesitation} tone="strategist" />
+                <AggregateBarChart label="Signal Confidence" value={aggregateStats.avgConfidence} color={personalityColors[legend[0]?.id] || '#d66bba'} />
+                <AggregateBarChart label="Decision Momentum" value={aggregateStats.avgSpeed} color={personalityColors[legend[1]?.id] || '#4c78ff'} />
+                <AggregateRingChart label="Hesitation Signature" value={aggregateStats.avgHesitation} color={personalityColors[legend[2]?.id] || '#4dbb89'} />
               </div>
             </>
           ) : (

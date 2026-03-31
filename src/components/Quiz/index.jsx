@@ -29,7 +29,7 @@ async function submitAnswersToBackend(payload) {
   return response.json()
 }
 
-export default function Quiz({ attract, quizId, questions, personalities, answers, setAnswers, analytics, setAnalytics, onActiveQuestionChange = () => {}, onExit = () => {}, onAnalysisCompleteChange = () => {} }) {
+export default function Quiz({ brand, attract, quizId, questions, personalities, answers, setAnswers, analytics, setAnalytics, onActiveQuestionChange = () => {}, onExit = () => {}, onAnalysisCompleteChange = () => {} }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [sessionKey, setSessionKey] = useState(0)
   const [submissionResult, setSubmissionResult] = useState(null)
@@ -280,9 +280,11 @@ export default function Quiz({ attract, quizId, questions, personalities, answer
         id={`step-${resultsStepIndex}`}
       >
         <Results
+          brand={brand}
           result={submissionResult}
           analytics={analytics}
           questions={questions}
+          personalities={personalities}
           answers={answers}
           sessionKey={sessionKey}
           onPrevious={goToPrevious}

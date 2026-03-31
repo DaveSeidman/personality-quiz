@@ -1,0 +1,34 @@
+{
+  "id": "lightbox",
+  "displayName": "Lightbox",
+  "accentColor": "#f3efe6",
+  "theme": {
+    "fontFamily": "Montserrat",
+    "fontUrl": "/brands/lightbox/fonts/Montserrat.ttf",
+    "fontFallback": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "colors": {
+      "appBg": "#040404",
+      "text": "#f3efe6",
+      "accent": "#f3efe6",
+      "accentContrast": "#050505"
+    }
+  },
+  "assets": {
+    "logo": "/brands/lightbox/images/logo-white.png",
+    "attractVideo": "/brands/lightbox/videos/logospin.webm",
+    "loadingVideo": "/brands/lightbox/videos/logospin.webm"
+  },
+  "copy": {
+    "attractTitle": "AI Cocktail Quiz",
+    "attractSubtitle": "Discover your personality type by answering {questionCount} questions.",
+    "resultsTitle": "Start AI analysis of your answers and behavioral signals...",
+    "resultsInstruction": "You can review before submitting.",
+    "loadingTitle": "Translating your signals...",
+    "loadingBody": "Syncing with the cocktail oracle. This usually takes a beat.",
+    "reviewLabel": "Review",
+    "submitLabel": "Submit",
+    "submittingLabel": "Submitting...",
+    "startOverLabel": "Start Over"
+  },
+  "quizUrl": "/brands/lightbox/quiz.json"
+}

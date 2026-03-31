@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import { getCanvasFontFamily } from '../../branding'
 
 const FACE_OVAL = [10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109, 10]
 const LEFT_BROW = [70, 63, 105, 66, 107]
@@ -54,7 +55,7 @@ function drawIdleFrame(ctx, width, height, label) {
   ctx.lineWidth = 1
   ctx.strokeRect(10, 10, width - 20, height - 20)
   ctx.fillStyle = 'rgba(255, 255, 255, 0.64)'
-  ctx.font = '600 16px Montserrat, sans-serif'
+  ctx.font = `600 16px ${getCanvasFontFamily()}`
   ctx.textAlign = 'center'
   ctx.fillText(label, width / 2, height / 2)
 }

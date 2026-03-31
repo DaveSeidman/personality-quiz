@@ -1,0 +1,101 @@
+{
+  "quizId": "sandp-capital-iq-pro-v1",
+  "useadvancedTelemetry": false,
+  "personalities": [
+    {
+      "id": "market-signal-mule",
+      "name": "Market Signal Maven",
+      "color": "#c65c4a",
+      "description": "You thrive on data and analytics, using them to power your decisions and drive market success. Like the Market Signal Mule, you turn S&P Capital IQ Pro data into timely signals with crisp precision.",
+      "drinkRecommendation": "Market Signal Mule"
+    },
+    {
+      "id": "blackberry-analytics-smash",
+      "name": "Analytics Trailblazer",
+      "color": "#5e4aa8",
+      "description": "With a knack for strategic foresight, you navigate the complexities of the market with confidence. Like the Blackberry Analytics Smash, you use S&P Capital IQ Pro analytics for bold insight with a fresh finish.",
+      "drinkRecommendation": "Blackberry Analytics Smash"
+    },
+    {
+      "id": "analytical-mojito",
+      "name": "Strategy Sage",
+      "color": "#49b883",
+      "description": "You blend intuition with analytics, crafting innovative solutions that propel you forward. The Analytical Mojito mirrors your fresh perspective and commitment to leveraging S&P Capital IQ Pro's cutting-edge platform.",
+      "drinkRecommendation": "Analytical Mojito"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "label": "Market Analysis",
+      "text": "What's your approach to market analysis?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Dive deep into data",
+          "personalityId": "market-signal-mule"
+        },
+        {
+          "id": "B",
+          "content": "Focus on strategic insights",
+          "personalityId": "blackberry-analytics-smash"
+        },
+        {
+          "id": "C",
+          "content": "Blend intuition with analytics",
+          "personalityId": "analytical-mojito"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "Decision Style",
+      "text": "When faced with a decision, you:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Analyze all available data",
+          "personalityId": "market-signal-mule"
+        },
+        {
+          "id": "B",
+          "content": "Seek expert opinions",
+          "personalityId": "blackberry-analytics-smash"
+        },
+        {
+          "id": "C",
+          "content": "Trust your instincts",
+          "personalityId": "analytical-mojito"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "Staying Ahead",
+      "text": "Your secret to staying ahead in the market is:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Leveraging comprehensive data",
+          "personalityId": "market-signal-mule"
+        },
+        {
+          "id": "B",
+          "content": "Strategic foresight",
+          "personalityId": "blackberry-analytics-smash"
+        },
+        {
+          "id": "C",
+          "content": "Building strong relationships",
+          "personalityId": "analytical-mojito"
+        }
+      ]
+    }
+  ]
+}

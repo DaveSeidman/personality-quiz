@@ -4,6 +4,12 @@ $green: #040404;
 
 :root {
   font-size: clamp(.9vh, 1.3vh, 1.5vh);
+  --app-bg: #040404;
+  --app-text: #f3efe6;
+  --accent: #f3efe6;
+  --accent-contrast: #050505;
+  --app-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --app-font-family-canvas: "Brand Experience Font";
   --ui-transition: 0.16s ease;
   --panel-black: rgba(7, 7, 7, 0.84);
   --panel-deep: rgba(10, 10, 10, 0.94);
@@ -48,8 +54,8 @@ $green: #040404;
 @mixin ui-pill-button-primary {
   @include ui-pill-button-base;
   border: none;
-  background: $orange;
-  color: #050505;
+  background: var(--accent);
+  color: var(--accent-contrast);
   box-shadow: 0 .5vh 1vh rgba(0, 0, 0, 0.28);
   transition: opacity .3s linear, box-shadow .3s linear;
 }
@@ -66,14 +72,6 @@ img {
   -webkit-touch-callout: none;
 }
 
-@font-face {
-  font-family: 'Montserrat';
-  src: url('./assets/fonts/Montserrat.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 html,
 body,
 #root {
@@ -81,9 +79,9 @@ body,
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: $green;
-  color: $orange;
-  font-family: 'Montserrat', sans-serif;
+  background: var(--app-bg);
+  color: var(--app-text);
+  font-family: var(--app-font-family);
 }
 
 .app {
@@ -112,6 +110,43 @@ body,
     display: flex;
     flex-direction: column;
     min-height: 0;
+  }
+}
+
+.app--loading {
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.05), transparent 38%),
+    var(--app-bg);
+}
+
+.app-loading-panel {
+  width: min(48vh, 72vw);
+  padding: 3vh;
+  border-radius: var(--radius-sm);
+  border: var(--line-hair) solid rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 30%),
+    rgba(8, 8, 8, 0.88);
+  text-align: center;
+  box-shadow: 0 1vh 2.2vh rgba(0, 0, 0, 0.42);
+
+  p,
+  span {
+    margin: 0;
+  }
+
+  p {
+    font-size: 1.8vh;
+    color: #fff;
+  }
+
+  span {
+    display: block;
+    margin-top: 1vh;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
   }
 }
 
