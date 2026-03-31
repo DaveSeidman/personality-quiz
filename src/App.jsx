@@ -143,7 +143,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <Background />
+      <Background brand={brand} />
 
       <div className="app-layout">
         <Quiz

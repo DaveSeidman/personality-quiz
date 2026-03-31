@@ -218,10 +218,13 @@ $layout-padding: 2vh;
     }
 
     &-confidence {
-      font-size: 0.8vh;
+      display: inline-block;
+      margin-top: 0.24vh;
+      font-size: 1.04vh;
       font-weight: 700;
       @include src.ui-label(.14em);
       color: rgba(255, 255, 255, 0.5);
+      line-height: 1.2;
     }
 
     &-statement {
@@ -234,15 +237,15 @@ $layout-padding: 2vh;
 
       &-highlight {
         display: inline;
-        font-size: 1.25em;
+        font-size: 1.15em;
         font-weight: 800;
-        font-style: italic;
+        font-style: normal;
         color: #fff;
-        letter-spacing: 0.01em;
+        letter-spacing: inherit;
         line-height: 1.2;
         white-space: nowrap;
-        text-transform: uppercase;
-        font-family: serif;
+        text-transform: none;
+        font-family: inherit;
       }
     }
 

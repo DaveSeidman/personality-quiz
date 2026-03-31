@@ -2,6 +2,7 @@ const DEFAULT_BRAND_ID = 'lightbox'
 const BRAND_FONT_STYLE_ID = 'brand-font-face'
 const DEFAULT_FONT_STACK = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
 const BRAND_FONT_ALIAS = '"Brand Experience Font"'
+const BRAND_CONFIG_FILENAMES = ['manifest.json', 'brand.json']
 const BASE_URL = import.meta.env.BASE_URL || '/'
 
 function isObject(value) {
@@ -77,6 +78,22 @@ async function assetExists(url) {
   }
 }
 
+async function fetchBrandConfig(brandId) {
+  let lastError = null
+
+  for (const filename of BRAND_CONFIG_FILENAMES) {
+    const url = `/brands/${brandId}/${filename}`
+
+    try {
+      return await fetchJson(url)
+    } catch (error) {
+      lastError = error
+    }
+  }
+
+  throw lastError || new Error(`Failed to load brand config for ${brandId}`)
+}
+
 async function resolveAssetUrl(primaryUrl, fallbackUrl) {
   if (primaryUrl && await assetExists(primaryUrl)) {
     return resolvePublicUrl(primaryUrl)
@@ -92,12 +109,12 @@ export function getRequestedBrandId() {
 
 export async function loadBrandExperience() {
   const requestedBrandId = getRequestedBrandId()
-  const defaultBrand = await fetchJson(`/brands/${DEFAULT_BRAND_ID}/brand.json`)
+  const defaultBrand = await fetchBrandConfig(DEFAULT_BRAND_ID)
 
   let overrideBrand = {}
   if (requestedBrandId !== DEFAULT_BRAND_ID) {
     try {
-      overrideBrand = await fetchJson(`/brands/${requestedBrandId}/brand.json`)
+      overrideBrand = await fetchBrandConfig(requestedBrandId)
     } catch (error) {
       overrideBrand = {}
     }
@@ -105,9 +122,16 @@ export async function loadBrandExperience() {
 
   const mergedBrand = deepMerge(defaultBrand, overrideBrand)
   const resolvedAssets = {}
+  const assetKeys = new Set([
+    ...Object.keys(defaultBrand.assets || {}),
+    ...Object.keys(mergedBrand.assets || {}),
+  ])
 
-  for (const [assetKey, fallbackUrl] of Object.entries(defaultBrand.assets || {})) {
-    resolvedAssets[assetKey] = await resolveAssetUrl(mergedBrand.assets?.[assetKey], fallbackUrl)
+  for (const assetKey of assetKeys) {
+    resolvedAssets[assetKey] = await resolveAssetUrl(
+      mergedBrand.assets?.[assetKey],
+      defaultBrand.assets?.[assetKey],
+    )
   }
 
   const resolvedFontUrl = await resolveAssetUrl(

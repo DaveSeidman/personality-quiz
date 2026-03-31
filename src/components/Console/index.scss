@@ -7,9 +7,9 @@
   width: 100%;
   box-sizing: border-box;
   padding: 1.4vh;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 32%),
-    rgba(4, 4, 4, 0.8);
+  // background:
+  //   linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 32%),
+  //   rgba(4, 4, 4, 0.8);
   border-top: 0.09vh solid rgba(255, 255, 255, 0.14);
   backdrop-filter: blur(.4vh);
   display: flex;
@@ -879,20 +879,6 @@
     }
   }
 }
-
-@media (max-width: 900px) {
-  .console {
-    &-body {
-      flex-direction: column;
-    }
-
-    &-live-panel {
-      width: 100%;
-      min-width: 0;
-    }
-  }
-}
-
 
 .confidence-horizontal {
   width: 100%;

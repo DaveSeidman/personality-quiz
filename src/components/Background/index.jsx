@@ -184,7 +184,7 @@ function computeRippleInfluence(cellX, cellY, ripples, now) {
   return clamp(rippleValue, 0, 1.4)
 }
 
-export default function Background() {
+export default function Background({ brand }) {
   const canvasRef = useRef(null)
   const gridRef = useRef(createGrid())
   const ripplesRef = useRef([])
@@ -433,6 +433,14 @@ export default function Background() {
   return (
     <div className="background-matrix">
       <canvas ref={canvasRef} className="background-matrix-canvas" />
+      {brand?.assets?.backgroundImage ? (
+        <img
+          className="background-matrix-image"
+          src={brand.assets.backgroundImage}
+          alt=""
+          aria-hidden="true"
+        />
+      ) : null}
     </div>
   )
 }
