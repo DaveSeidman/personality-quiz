@@ -27,37 +27,6 @@ const formatSeconds = (ms) => {
   return `${(ms / 1000).toFixed(1)}s`
 }
 
-const describeAnswer = (question, answerId) => {
-  if (!question?.answers) return null
-  return question.answers.find((option) => option.id === answerId) ?? null
-}
-
-const buildSummary = ({ entry, personality }) => {
-  const hasSignals = Array.isArray(entry?.data?.events) && entry.data.events.some((event) => !PASSIVE_EVENTS.has(event.type))
-
-  if (!hasSignals) {
-    return 'Awaiting signals…'
-  }
-
-  const data = entry?.data ?? {}
-  const latencyMs = data.answerCommittedAt && data.firstInteractionAt
-    ? data.answerCommittedAt - data.firstInteractionAt
-    : null
-  const revisitCount = getRevisitCount(data)
-
-  const parts = []
-  parts.push(`Spent ${formatSeconds(latencyMs)} reflecting`)
-
-  if (revisitCount > 0) {
-    parts.push(`revisited ${revisitCount}× before locking it in`)
-  }
-
-  const personaDescriptor = personality ? personality.name : 'their preferred signal'
-  parts.push(`aligned with ${personaDescriptor}`)
-
-  return parts.join(' · ')
-}
-
 const buildMetrics = (entry, confidenceOverride = null, eventCount = 0) => {
   if (!entry) return []
 
@@ -131,15 +100,9 @@ function AggregateRingChart({ label, value, color = '#4c78ff' }) {
   )
 }
 
-export default function Console({ attract = false, analytics, questions, answers, personalities, activeQuestionId, analysisComplete = false, faceAnalysis = null }) {
+export default function Console({ attract = false, analytics, questions, answers, personalities, activeQuestionId, analysisComplete = false, faceAnalysisEnabled = true, faceAnalysis = null }) {
   const legend = useMemo(() => getPersonalityLegend(personalities), [personalities])
   const personalityColors = useMemo(() => buildPersonalityColorMap(personalities, 1), [personalities])
-  const personalityMap = useMemo(() => (
-    personalities?.reduce((acc, persona) => {
-      acc[persona.id] = persona
-      return acc
-    }, {}) ?? {}
-  ), [personalities])
 
   const rowRefs = useRef({})
   const lockedConfidenceRef = useRef({})
@@ -159,18 +122,17 @@ export default function Console({ attract = false, analytics, questions, answers
   }, [activeQuestionId])
 
   const faceConfidence = useMemo(() => {
+    if (!faceAnalysisEnabled) return FACE_CONFIDENCE_FALLBACK
     if (!faceAnalysis?.hasFace || !faceAnalysis?.metrics) return FACE_CONFIDENCE_FALLBACK
     const { focus = 0.5, energy = 0.5, smile = 0.5, jawOpen = 0, gazeAlignment = 0.5 } = faceAnalysis.metrics
     return clamp((focus * 0.42) + (gazeAlignment * 0.33) + (energy * 0.13) + (smile * 0.08) + ((1 - jawOpen) * 0.04))
-  }, [faceAnalysis])
+  }, [faceAnalysis, faceAnalysisEnabled])
 
   const rows = useMemo(() => (
     questions.map((question) => {
       const questionId = String(question.id)
       const entry = analytics[questionId]
-      const committedAnswerId = answers[question.id]
-      const answerMeta = describeAnswer(question, committedAnswerId)
-      const personality = answerMeta ? personalityMap[answerMeta.personalityId] : null
+      const selectedAnswer = answers[question.id]
       const isActive = questionId === activeQuestionId
 
       const entryEvents = Array.isArray(entry?.data?.events) ? entry.data.events : []
@@ -178,9 +140,8 @@ export default function Console({ attract = false, analytics, questions, answers
       const eventCount = entryEvents.filter((event) => event.type === 'pointer_down').length
       const answerCommittedAt = entry?.data?.answerCommittedAt ?? null
       const revisitCount = getRevisitCount(entry?.data)
-      const hasCommittedAnswer = committedAnswerId !== undefined && committedAnswerId !== null
-        ? true
-        : Boolean(answerCommittedAt)
+      const hasSelectedAnswer = selectedAnswer !== undefined && selectedAnswer !== null
+      const hasCommittedAnswer = Boolean(answerCommittedAt)
       const hasMeaningfulSignals = eventCount > 0 || revisitCount > 0 || Boolean(answerCommittedAt)
 
       let liveConfidence = null
@@ -194,16 +155,16 @@ export default function Console({ attract = false, analytics, questions, answers
         ? liveConfidence
         : (typeof baseConfidence === 'number' ? baseConfidence : 0.5)
       const blendedConfidence = clamp((confidenceValue * 0.7) + (faceConfidence * 0.3))
-      const hasPostCommitInteraction = Boolean(answerCommittedAt) && activityEvents.some((event) => (
+      const hasPostCommitInteraction = hasCommittedAnswer && activityEvents.some((event) => (
         event.timestamp > answerCommittedAt && (
           event.type.startsWith('pointer_') || event.type === 'answer_changed'
         )
       ))
       const isUnlocked = isActive && hasCommittedAnswer && hasPostCommitInteraction
 
-      if (!hasCommittedAnswer) {
+      if (!hasSelectedAnswer) {
         delete lockedConfidenceRef.current[questionId]
-      } else if (!isUnlocked && typeof lockedConfidenceRef.current[questionId] !== 'number') {
+      } else if (hasCommittedAnswer && !isUnlocked && typeof lockedConfidenceRef.current[questionId] !== 'number') {
         lockedConfidenceRef.current[questionId] = blendedConfidence
       } else if (isUnlocked) {
         lockedConfidenceRef.current[questionId] = blendedConfidence
@@ -216,14 +177,13 @@ export default function Console({ attract = false, analytics, questions, answers
       return {
         id: questionId,
         label: question.label ?? `Question ${question.id}`,
-        summary: buildSummary({ entry, personality }),
         metrics: buildMetrics(entry, displayConfidence, eventCount),
         confidence: displayConfidence,
         interactions: eventCount,
         isActive,
       }
     })
-  ), [activeQuestionId, analytics, answers, faceConfidence, personalityMap, questions])
+  ), [activeQuestionId, analytics, answers, faceConfidence, questions])
 
   const aggregateStats = useMemo(() => {
     const baseDistribution = legend.reduce((acc, persona) => {
@@ -308,9 +268,11 @@ export default function Console({ attract = false, analytics, questions, answers
       </div>
 
       <div className="console-body">
-        <div className={`console-live-panel ${showAggregate ? 'hidden' : ''}`}>
-          <FaceDiagnostics faceAnalysis={faceAnalysis} />
-        </div>
+        {faceAnalysisEnabled ? (
+          <div className={`console-live-panel ${showAggregate ? 'hidden' : ''}`}>
+            <FaceDiagnostics faceAnalysis={faceAnalysis} />
+          </div>
+        ) : null}
 
         <div className={`console-feed ${showFeed ? '' : 'hidden'}`}>
           {rows.map((row) => (
@@ -322,9 +284,6 @@ export default function Console({ attract = false, analytics, questions, answers
               <div className="console-feed-row-label">
                 <span>{row.label}</span>
                 {row.isActive ? <span className="console-feed-row-live">Current</span> : null}
-              </div>
-              <div className={`console-feed-row-summary ${!row.summary.trim() ? 'blank' : ''}`}>
-                {row.summary.trim() ? row.summary : ' '}
               </div>
 
               {row.metrics && row.metrics.length ? (

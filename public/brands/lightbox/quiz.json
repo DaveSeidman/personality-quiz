@@ -1,6 +1,9 @@
 {
   "quizId": "tr-event-intelligence-v1",
   "useadvancedTelemetry": false,
+  "features": {
+    "faceAnalysis": true
+  },
   "personalities": [
     {
       "id": "strategist",

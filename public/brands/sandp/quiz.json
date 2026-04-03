@@ -1,6 +1,9 @@
 {
   "quizId": "sandp-capital-iq-pro-v1",
   "useadvancedTelemetry": false,
+  "features": {
+    "faceAnalysis": false
+  },
   "personalities": [
     {
       "id": "market-signal-mule",

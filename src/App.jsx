@@ -44,7 +44,10 @@ export default function App() {
   const [cameraEnabled, setCameraEnabled] = useState(false)
   const activityTimeoutRef = useRef(null)
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
-  const { videoRef: faceVideoRef, faceAnalysis } = useFaceAnalysis({ active: !attract && cameraEnabled })
+  const faceAnalysisEnabled = experienceState.quizData?.features?.faceAnalysis !== false
+  const { videoRef: faceVideoRef, faceAnalysis } = useFaceAnalysis({
+    active: experienceState.status === 'ready' && faceAnalysisEnabled && !attract && cameraEnabled,
+  })
   const INACTIVITY_TIMEOUT = 60000
 
   useEffect(() => {
@@ -124,6 +127,12 @@ export default function App() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!faceAnalysisEnabled) {
+      setCameraEnabled(false)
+    }
+  }, [faceAnalysisEnabled])
+
   if (experienceState.status !== 'ready') {
     return (
       <div className="app app--loading">
@@ -150,6 +159,7 @@ export default function App() {
           brand={brand}
           attract={attract}
           quizId={quizData.quizId}
+          features={quizData.features || {}}
           questions={quizData.questions}
           personalities={quizData.personalities}
           answers={answers}
@@ -169,6 +179,7 @@ export default function App() {
           personalities={quizData.personalities}
           activeQuestionId={activeQuestionId}
           analysisComplete={analysisComplete}
+          faceAnalysisEnabled={faceAnalysisEnabled}
           faceAnalysis={faceAnalysis}
         />
       </div>
@@ -183,13 +194,15 @@ export default function App() {
         <img src={brand.assets.logo} alt={`${brand.displayName || 'Quiz'} logo`} />
       </div>
 
-      <button
-        className={`app-camera-btn${cameraEnabled ? ' is-active hidden' : ''}`}
-        onClick={() => setCameraEnabled((enabled) => !enabled)}
-        data-exit-button="true"
-      >
-        {cameraEnabled ? 'Cam On' : 'Cam Off'}
-      </button>
+      {faceAnalysisEnabled ? (
+        <button
+          className={`app-camera-btn${cameraEnabled ? ' is-active hidden' : ''}`}
+          onClick={() => setCameraEnabled((enabled) => !enabled)}
+          data-exit-button="true"
+        >
+          {cameraEnabled ? 'Cam On' : 'Cam Off'}
+        </button>
+      ) : null}
 
       <button
         className={`app-fullscreen-btn${isFullscreen ? ' hidden' : ''}`}
@@ -202,13 +215,15 @@ export default function App() {
         </svg>
       </button>
 
-      <video
-        ref={faceVideoRef}
-        className="app-camera-proxy"
-        autoPlay
-        muted
-        playsInline
-      />
+      {faceAnalysisEnabled ? (
+        <video
+          ref={faceVideoRef}
+          className="app-camera-proxy"
+          autoPlay
+          muted
+          playsInline
+        />
+      ) : null}
     </div>
   )
 }

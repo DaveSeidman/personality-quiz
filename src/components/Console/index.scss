@@ -320,19 +320,6 @@
         color: rgba(243, 239, 230, 0.92);
       }
 
-      &-summary {
-        font-size: 1.02vh;
-        color: rgba(255, 255, 255, 0.9);
-        line-height: 1.35;
-        // min-height: 4.44vh;
-
-        &.blank {
-          min-height: 1.78vh;
-          background: rgba(255, 255, 255, 0.04);
-          border-radius: 0.37vh;
-        }
-      }
-
       &-metrics {
         display: flex;
         flex-wrap: wrap;
@@ -914,6 +901,8 @@
     border-radius: 999vh;
     opacity: 0.95;
     box-shadow: 0 0 0.74vh rgba(255, 255, 255, 0.34);
+    transition: left 220ms ease-out, background-color 180ms linear, box-shadow 180ms linear;
+    will-change: left;
   }
 }
 

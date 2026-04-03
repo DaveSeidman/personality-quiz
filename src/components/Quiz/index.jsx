@@ -10,6 +10,11 @@ const countRevisitsFromEvents = (events = []) => (
   events.filter((event) => event?.type === 'question_revisited').length
 )
 
+const createSessionId = () => (
+  globalThis.crypto?.randomUUID?.()
+    || `quiz-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+)
+
 async function submitAnswersToBackend(payload) {
   const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   const baseUrl = isLocalhost
@@ -29,9 +34,10 @@ async function submitAnswersToBackend(payload) {
   return response.json()
 }
 
-export default function Quiz({ brand, attract, quizId, questions, personalities, answers, setAnswers, analytics, setAnalytics, onActiveQuestionChange = () => {}, onExit = () => {}, onAnalysisCompleteChange = () => {} }) {
+export default function Quiz({ brand, attract, quizId, features = {}, questions, personalities, answers, setAnswers, analytics, setAnalytics, onActiveQuestionChange = () => {}, onExit = () => {}, onAnalysisCompleteChange = () => {} }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [sessionKey, setSessionKey] = useState(0)
+  const [sessionId, setSessionId] = useState(() => createSessionId())
   const [submissionResult, setSubmissionResult] = useState(null)
   const [visitedQuestions, setVisitedQuestions] = useState({})
   const [quizTransition, setQuizTransition] = useState('')
@@ -104,6 +110,7 @@ export default function Quiz({ brand, attract, quizId, questions, personalities,
       setTimeout(() => {
         setCurrentStep(0)
         setSessionKey(prev => prev + 1)
+        setSessionId(createSessionId())
         seenQuestionIdsRef.current = new Set()
         setAnalytics({})
         setSubmissionResult(null)
@@ -214,7 +221,11 @@ export default function Quiz({ brand, attract, quizId, questions, personalities,
     setAnalytics(finalizedAnalytics)
 
     const payload = {
+      sessionId,
+      brandId: brand?.id || null,
+      brandName: brand?.displayName || null,
       quizId,
+      features,
       personalities,
       questions,
       answers,
@@ -238,6 +249,7 @@ export default function Quiz({ brand, attract, quizId, questions, personalities,
       setSubmissionResult(null)
       onAnalysisCompleteChange(false)
       setSessionKey(prev => prev + 1)
+      setSessionId(createSessionId())
       seenQuestionIdsRef.current = new Set()
       setVisitedQuestions({})
       setCurrentStep(0)
