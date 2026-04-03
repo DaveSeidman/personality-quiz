@@ -100,7 +100,7 @@ function AggregateRingChart({ label, value, color = '#4c78ff' }) {
   )
 }
 
-export default function Console({ attract = false, analytics, questions, answers, personalities, activeQuestionId, analysisComplete = false, faceAnalysisEnabled = true, faceAnalysis = null }) {
+export default function Console({ attract = false, analytics, questions, answers, personalities, activeQuestionId, analysisComplete = false, faceAnalysisEnabled = true, signalsEnabled = true, faceAnalysis = null }) {
   const legend = useMemo(() => getPersonalityLegend(personalities), [personalities])
   const personalityColors = useMemo(() => buildPersonalityColorMap(personalities, 1), [personalities])
 
@@ -108,8 +108,8 @@ export default function Console({ attract = false, analytics, questions, answers
   const lockedConfidenceRef = useRef({})
   const questionCards = useMemo(() => buildQuestionCards(analytics, questions, answers), [analytics, questions, answers])
 
-  const showAggregate = analysisComplete && !attract
-  const showFeed = !analysisComplete && !attract
+  const showAggregate = signalsEnabled && analysisComplete && !attract
+  const showFeed = signalsEnabled && !analysisComplete && !attract
   const indicatorState = attract ? 'waiting' : analysisComplete ? 'complete' : 'analyzing'
   const indicatorLabel = indicatorState === 'waiting' ? 'Waiting' : indicatorState === 'complete' ? 'Complete' : 'Analyzing'
 
@@ -269,118 +269,122 @@ export default function Console({ attract = false, analytics, questions, answers
 
       <div className="console-body">
         {faceAnalysisEnabled ? (
-          <div className={`console-live-panel ${showAggregate ? 'hidden' : ''}`}>
+          <div className={`console-live-panel ${signalsEnabled && showAggregate ? 'hidden' : ''}`}>
             <FaceDiagnostics faceAnalysis={faceAnalysis} />
           </div>
         ) : null}
 
-        <div className={`console-feed ${showFeed ? '' : 'hidden'}`}>
-          {rows.map((row) => (
-            <div
-              key={row.id}
-              ref={(node) => setRowRef(row.id, node)}
-              className={`console-feed-row ${row.isActive ? 'active' : ''}`}
-            >
-              <div className="console-feed-row-label">
-                <span>{row.label}</span>
-                {row.isActive ? <span className="console-feed-row-live">Current</span> : null}
-              </div>
+        {signalsEnabled ? (
+          <>
+            <div className={`console-feed ${showFeed ? '' : 'hidden'}`}>
+              {rows.map((row) => (
+                <div
+                  key={row.id}
+                  ref={(node) => setRowRef(row.id, node)}
+                  className={`console-feed-row ${row.isActive ? 'active' : ''}`}
+                >
+                  <div className="console-feed-row-label">
+                    <span>{row.label}</span>
+                    {row.isActive ? <span className="console-feed-row-live">Current</span> : null}
+                  </div>
 
-              {row.metrics && row.metrics.length ? (
-                <div className="console-feed-row-metrics">
-                  {row.metrics.map((metric, idx) => (
-                    <div key={`${row.id}-metric-${idx}`} className="console-feed-row-metric">
-                      <span className="console-feed-row-metric-label">{metric.label}</span>
-                      <span className="console-feed-row-metric-value">{metric.value}</span>
+                  {row.metrics && row.metrics.length ? (
+                    <div className="console-feed-row-metrics">
+                      {row.metrics.map((metric, idx) => (
+                        <div key={`${row.id}-metric-${idx}`} className="console-feed-row-metric">
+                          <span className="console-feed-row-metric-label">{metric.label}</span>
+                          <span className="console-feed-row-metric-value">{metric.value}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              ) : null}
+                  ) : null}
 
-              <div className="console-feed-row-graphs">
-                <div className="console-feed-row-graph confidence">
-                  <span>Confidence</span>
-                  {(() => {
-                    const confidenceValue = typeof row.confidence === 'number' ? row.confidence : 0.5
-                    const delta = (confidenceValue - 0.5) * 100
-                    return (
-                      <div className="confidence-horizontal">
-                        <div className="confidence-horizontal-track">
-                          <div className="confidence-horizontal-baseline" />
+                  <div className="console-feed-row-graphs">
+                    <div className="console-feed-row-graph confidence">
+                      <span>Confidence</span>
+                      {(() => {
+                        const confidenceValue = typeof row.confidence === 'number' ? row.confidence : 0.5
+                        const delta = (confidenceValue - 0.5) * 100
+                        return (
+                          <div className="confidence-horizontal">
+                            <div className="confidence-horizontal-track">
+                              <div className="confidence-horizontal-baseline" />
+                              <div
+                                className="confidence-horizontal-indicator"
+                                style={{ left: `calc(50% + ${delta}%)` }}
+                              />
+                            </div>
+                            <div className="confidence-label">{typeof row.confidence === 'number' ? `${Math.round(row.confidence * 100)}%` : '—'}</div>
+                          </div>
+                        )
+                      })()}
+                    </div>
+
+                    <div className="console-feed-row-graph interactions">
+                      <span>Interactions</span>
+                      {(() => {
+                        const dotsPerRow = 30
+                        const rowCount = Math.max(3, Math.ceil(row.interactions / dotsPerRow))
+                        const totalDots = rowCount * dotsPerRow
+                        return (
+                          <div className="interaction-dot-grid" style={{ '--rows': rowCount }}>
+                            {Array.from({ length: totalDots }).map((_, idx) => (
+                              <span
+                                key={`${row.id}-dot-${idx}`}
+                                className={`interaction-dot ${idx < row.interactions ? 'active' : ''}`}
+                              />
+                            ))}
+                          </div>
+                        )
+                      })()}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className={`console-aggregate ${showAggregate ? 'visible' : ''}`}>
+              {aggregateStats.total ? (
+                <>
+                  <p className="console-aggregate-title">Aggregate behavioral signals</p>
+                  <p className="console-aggregate-subtitle">Synthesized from all answered questions.</p>
+
+                  <div className="console-aggregate-distribution">
+                    {legend.map((entry) => (
+                      <div key={entry.id} className="console-aggregate-distribution-row">
+                        <span className="console-aggregate-distribution-label">{entry.label}</span>
+                        <div className="console-aggregate-distribution-track">
                           <div
-                            className="confidence-horizontal-indicator"
-                            style={{ left: `calc(50% + ${delta}%)` }}
+                            className="console-aggregate-distribution-fill"
+                            style={{
+                              width: `${Math.round((aggregateStats.distribution[entry.id] || 0) * 100)}%`,
+                              background: personalityColors[entry.id] || '#ffffff',
+                            }}
                           />
                         </div>
-                        <div className="confidence-label">{typeof row.confidence === 'number' ? `${Math.round(row.confidence * 100)}%` : '—'}</div>
+                        <span className="console-aggregate-distribution-value">
+                          {Math.round((aggregateStats.distribution[entry.id] || 0) * 100)}%
+                        </span>
                       </div>
-                    )
-                  })()}
-                </div>
-
-                <div className="console-feed-row-graph interactions">
-                  <span>Interactions</span>
-                  {(() => {
-                    const dotsPerRow = 30
-                    const rowCount = Math.max(3, Math.ceil(row.interactions / dotsPerRow))
-                    const totalDots = rowCount * dotsPerRow
-                    return (
-                      <div className="interaction-dot-grid" style={{ '--rows': rowCount }}>
-                        {Array.from({ length: totalDots }).map((_, idx) => (
-                          <span
-                            key={`${row.id}-dot-${idx}`}
-                            className={`interaction-dot ${idx < row.interactions ? 'active' : ''}`}
-                          />
-                        ))}
-                      </div>
-                    )
-                  })()}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className={`console-aggregate ${showAggregate ? 'visible' : ''}`}>
-          {aggregateStats.total ? (
-            <>
-              <p className="console-aggregate-title">Aggregate behavioral signals</p>
-              <p className="console-aggregate-subtitle">Synthesized from all answered questions.</p>
-
-              <div className="console-aggregate-distribution">
-                {legend.map((entry) => (
-                  <div key={entry.id} className="console-aggregate-distribution-row">
-                    <span className="console-aggregate-distribution-label">{entry.label}</span>
-                    <div className="console-aggregate-distribution-track">
-                      <div
-                        className="console-aggregate-distribution-fill"
-                        style={{
-                          width: `${Math.round((aggregateStats.distribution[entry.id] || 0) * 100)}%`,
-                          background: personalityColors[entry.id] || '#ffffff',
-                        }}
-                      />
-                    </div>
-                    <span className="console-aggregate-distribution-value">
-                      {Math.round((aggregateStats.distribution[entry.id] || 0) * 100)}%
-                    </span>
+                    ))}
                   </div>
-                ))}
-              </div>
 
-              <div className="console-aggregate-metrics">
-                <AggregateBarChart label="Signal Confidence" value={aggregateStats.avgConfidence} color={personalityColors[legend[0]?.id] || '#d66bba'} />
-                <AggregateBarChart label="Decision Momentum" value={aggregateStats.avgSpeed} color={personalityColors[legend[1]?.id] || '#4c78ff'} />
-                <AggregateRingChart label="Hesitation Signature" value={aggregateStats.avgHesitation} color={personalityColors[legend[2]?.id] || '#4dbb89'} />
-              </div>
-            </>
-          ) : (
-            <p className="console-aggregate-empty">Signals will populate here once responses have been recorded.</p>
-          )}
-        </div>
+                  <div className="console-aggregate-metrics">
+                    <AggregateBarChart label="Signal Confidence" value={aggregateStats.avgConfidence} color={personalityColors[legend[0]?.id] || '#d66bba'} />
+                    <AggregateBarChart label="Decision Momentum" value={aggregateStats.avgSpeed} color={personalityColors[legend[1]?.id] || '#4c78ff'} />
+                    <AggregateRingChart label="Hesitation Signature" value={aggregateStats.avgHesitation} color={personalityColors[legend[2]?.id] || '#4dbb89'} />
+                  </div>
+                </>
+              ) : (
+                <p className="console-aggregate-empty">Signals will populate here once responses have been recorded.</p>
+              )}
+            </div>
 
-        <div className={`console-attract-message ${attract ? 'visible' : ''}`}>
-          <p>Attention: your pace, pressure, hesitation, revisits, gaze, and expression are being measured to sharpen the analysis. These signals reset after each session.</p>
-        </div>
+            <div className={`console-attract-message ${attract ? 'visible' : ''}`}>
+              <p>Attention: your pace, pressure, hesitation, revisits, gaze, and expression are being measured to sharpen the analysis. These signals reset after each session.</p>
+            </div>
+          </>
+        ) : null}
       </div>
     </div>
   )

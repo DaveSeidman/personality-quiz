@@ -4,6 +4,10 @@
   "features": {
     "faceAnalysis": true
   },
+  "console": {
+    "face": true,
+    "signals": true
+  },
   "personalities": [
     {
       "id": "strategist",

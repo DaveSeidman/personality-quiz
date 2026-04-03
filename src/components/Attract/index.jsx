@@ -2,7 +2,7 @@ import React from "react"
 import { formatBrandCopy } from '../../branding'
 import './index.scss'
 
-export default function Attract({ attract, quizData, brand }) {
+export default function Attract({ attract, quizData, brand, consoleEnabled = true }) {
   const attractTitle = brand?.copy?.attractTitle || 'AI Cocktail Quiz'
   const attractSubtitle = formatBrandCopy(
     brand?.copy?.attractSubtitle || 'Discover your personality type by answering {questionCount} questions.',
@@ -10,7 +10,7 @@ export default function Attract({ attract, quizData, brand }) {
   )
 
   return (
-    <div className={`attract ${attract ? '' : 'hidden'}`}>
+    <div className={`attract ${consoleEnabled ? '' : 'attract--full-height'} ${attract ? '' : 'hidden'}`}>
       <video
         className="attract-blob"
         src={brand?.assets?.attractVideo}

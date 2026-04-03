@@ -34,7 +34,7 @@ async function submitAnswersToBackend(payload) {
   return response.json()
 }
 
-export default function Quiz({ brand, attract, quizId, features = {}, questions, personalities, answers, setAnswers, analytics, setAnalytics, onActiveQuestionChange = () => {}, onExit = () => {}, onAnalysisCompleteChange = () => {} }) {
+export default function Quiz({ brand, attract, quizId, features = {}, consoleConfig = null, consoleEnabled = true, questions, personalities, answers, setAnswers, analytics, setAnalytics, onActiveQuestionChange = () => {}, onExit = () => {}, onAnalysisCompleteChange = () => {} }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [sessionKey, setSessionKey] = useState(0)
   const [sessionId, setSessionId] = useState(() => createSessionId())
@@ -226,6 +226,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, questions,
       brandName: brand?.displayName || null,
       quizId,
       features,
+      console: consoleConfig,
       personalities,
       questions,
       answers,
@@ -263,7 +264,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, questions,
   }
 
   return (
-    <div className={`quiz ${quizTransition} ${isResetting ? 'quiz--hidden' : ''}`}>
+    <div className={`quiz ${consoleEnabled ? '' : 'quiz--full-height'} ${quizTransition} ${isResetting ? 'quiz--hidden' : ''}`}>
       {questions.map((question, index) => (
         <div
           className="quiz-step"

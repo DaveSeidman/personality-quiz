@@ -17,6 +17,10 @@
   opacity: 1;
   transition: opacity 300ms ease, visibility 300ms ease;
 
+  &--full-height {
+    height: 100%;
+  }
+
   &-copy {
     text-align: center;
     display: flex;

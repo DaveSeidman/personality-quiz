@@ -7,6 +7,26 @@ import useFaceAnalysis from './components/useFaceAnalysis'
 import { applyBrandTheme, loadBrandExperience } from './branding'
 import './index.scss'
 
+function getConsoleSettings(quizData) {
+  const config = quizData?.console
+  if (!config || typeof config !== 'object') {
+    return {
+      enabled: false,
+      faceEnabled: false,
+      signalsEnabled: false,
+    }
+  }
+
+  const faceEnabled = config.face === true
+  const signalsEnabled = config.signals === true
+
+  return {
+    enabled: faceEnabled || signalsEnabled,
+    faceEnabled,
+    signalsEnabled,
+  }
+}
+
 function useFullscreen() {
   const [isFullscreen, setIsFullscreen] = useState(false)
 
@@ -44,7 +64,8 @@ export default function App() {
   const [cameraEnabled, setCameraEnabled] = useState(false)
   const activityTimeoutRef = useRef(null)
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
-  const faceAnalysisEnabled = experienceState.quizData?.features?.faceAnalysis !== false
+  const consoleSettings = getConsoleSettings(experienceState.quizData)
+  const faceAnalysisEnabled = consoleSettings.faceEnabled
   const { videoRef: faceVideoRef, faceAnalysis } = useFaceAnalysis({
     active: experienceState.status === 'ready' && faceAnalysisEnabled && !attract && cameraEnabled,
   })
@@ -160,6 +181,8 @@ export default function App() {
           attract={attract}
           quizId={quizData.quizId}
           features={quizData.features || {}}
+          consoleConfig={quizData.console ?? null}
+          consoleEnabled={consoleSettings.enabled}
           questions={quizData.questions}
           personalities={quizData.personalities}
           answers={answers}
@@ -171,23 +194,27 @@ export default function App() {
           onAnalysisCompleteChange={setAnalysisComplete}
         />
 
-        <Console
-          attract={attract}
-          analytics={analytics}
-          questions={quizData.questions}
-          answers={answers}
-          personalities={quizData.personalities}
-          activeQuestionId={activeQuestionId}
-          analysisComplete={analysisComplete}
-          faceAnalysisEnabled={faceAnalysisEnabled}
-          faceAnalysis={faceAnalysis}
-        />
+        {consoleSettings.enabled ? (
+          <Console
+            attract={attract}
+            analytics={analytics}
+            questions={quizData.questions}
+            answers={answers}
+            personalities={quizData.personalities}
+            activeQuestionId={activeQuestionId}
+            analysisComplete={analysisComplete}
+            faceAnalysisEnabled={consoleSettings.faceEnabled}
+            signalsEnabled={consoleSettings.signalsEnabled}
+            faceAnalysis={faceAnalysis}
+          />
+        ) : null}
       </div>
 
       <Attract
         attract={attract}
         quizData={quizData}
         brand={brand}
+        consoleEnabled={consoleSettings.enabled}
       />
 
       <div className="app-logo">

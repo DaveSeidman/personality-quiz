@@ -4,6 +4,7 @@
   "features": {
     "faceAnalysis": false
   },
+  "console": null,
   "personalities": [
     {
       "id": "market-signal-mule",
