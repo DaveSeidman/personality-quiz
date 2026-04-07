@@ -261,7 +261,7 @@ export default function Results({ brand, result, analytics, questions, personali
                   <>
                     <p className="results-status-match">
                       Top match: <strong>{result.result.personalityName}</strong>
-                      <span className="results-status-confidence">{Math.round((result.result.confidence || 0) * 100)}% Confidence</span>
+                      <span className="results-status-confidence">{Math.round((result.result.confidence || 0) * 100)}% Match</span>
                     </p>
                     <p className="results-status-statement">
                       {renderStatement(
