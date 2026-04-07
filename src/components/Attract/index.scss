@@ -46,8 +46,8 @@
 
   &-blob {
     position: absolute;
-    width: 70vw;
-    aspect-ratio: 1 / 1;
+    width: 100vw;
+    // aspect-ratio: 1 / 1;
     opacity: 0.5;
     object-fit: cover;
     border-radius: 0.9vh;
