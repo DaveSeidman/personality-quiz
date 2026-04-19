@@ -43,6 +43,20 @@ function resolvePublicUrl(value = '') {
   return `${normalizedBase}${normalizedValue}`
 }
 
+function buildFontFaceCss(fontFaces = []) {
+  return fontFaces.map((fontFace) => {
+    const declarations = [
+      `font-family: ${BRAND_FONT_ALIAS}`,
+      `src: url("${fontFace.url}")`,
+      'font-display: swap',
+      fontFace.weight ? `font-weight: ${fontFace.weight}` : '',
+      fontFace.style ? `font-style: ${fontFace.style}` : '',
+    ].filter(Boolean)
+
+    return `@font-face { ${declarations.join('; ')}; }`
+  }).join('\n')
+}
+
 function getReadableTextColor(backgroundColor) {
   const rgb = parseColorToRgb(backgroundColor)
   if (!rgb) return '#050505'
@@ -102,6 +116,30 @@ async function resolveAssetUrl(primaryUrl, fallbackUrl) {
   return fallbackUrl ? resolvePublicUrl(fallbackUrl) : ''
 }
 
+async function resolveFontFaces(fontFaces = [], fallbackUrl = '') {
+  const resolvedFaces = await Promise.all(
+    (Array.isArray(fontFaces) ? fontFaces : []).map(async (fontFace) => {
+      const resolvedUrl = await resolveAssetUrl(fontFace?.url, '')
+      if (!resolvedUrl) return null
+
+      return {
+        ...fontFace,
+        url: resolvedUrl,
+      }
+    }),
+  )
+
+  const validFaces = resolvedFaces.filter(Boolean)
+  if (validFaces.length) return validFaces
+  if (!fallbackUrl) return []
+
+  return [{
+    url: fallbackUrl,
+    weight: 400,
+    style: 'normal',
+  }]
+}
+
 export function getRequestedBrandId() {
   const params = new URLSearchParams(window.location.search)
   return sanitizeBrandId(params.get('brand') || DEFAULT_BRAND_ID)
@@ -138,6 +176,10 @@ export async function loadBrandExperience() {
     mergedBrand.theme?.fontUrl,
     defaultBrand.theme?.fontUrl,
   )
+  const resolvedFontFaces = await resolveFontFaces(
+    mergedBrand.theme?.fontFaces,
+    resolvedFontUrl,
+  )
 
   const resolvedQuizUrl = await resolveAssetUrl(
     mergedBrand.quizUrl,
@@ -156,6 +198,7 @@ export async function loadBrandExperience() {
       theme: {
         ...(mergedBrand.theme || {}),
         fontUrl: resolvedFontUrl,
+        fontFaces: resolvedFontFaces,
       },
     },
     quizData,
@@ -169,9 +212,10 @@ export function applyBrandTheme(brand) {
   const accentColor = brand?.accentColor || theme.accentColor || colors.accent || '#f3efe6'
   const accentContrast = brand?.accentContrast || theme.accentContrast || colors.accentContrast || getReadableTextColor(accentColor)
   const fontFallback = theme.fontFallback || DEFAULT_FONT_STACK
-  const hasFontUrl = Boolean(theme.fontUrl)
-  const canvasFontFamily = hasFontUrl ? BRAND_FONT_ALIAS : (theme.fontFamily ? `"${theme.fontFamily}"` : 'sans-serif')
-  const fontFamily = hasFontUrl
+  const fontFaces = Array.isArray(theme.fontFaces) ? theme.fontFaces.filter((fontFace) => Boolean(fontFace?.url)) : []
+  const hasCustomFont = fontFaces.length > 0 || Boolean(theme.fontUrl)
+  const canvasFontFamily = hasCustomFont ? BRAND_FONT_ALIAS : (theme.fontFamily ? `"${theme.fontFamily}"` : 'sans-serif')
+  const fontFamily = hasCustomFont
     ? `${BRAND_FONT_ALIAS}, ${fontFallback}`
     : `${theme.fontFamily ? `"${theme.fontFamily}"` : ''}${theme.fontFamily ? ', ' : ''}${fontFallback}`
 
@@ -189,8 +233,8 @@ export function applyBrandTheme(brand) {
     document.head.appendChild(styleTag)
   }
 
-  styleTag.textContent = hasFontUrl
-    ? `@font-face { font-family: ${BRAND_FONT_ALIAS}; src: url("${theme.fontUrl}"); font-display: swap; }`
+  styleTag.textContent = hasCustomFont
+    ? buildFontFaceCss(fontFaces.length ? fontFaces : [{ url: theme.fontUrl }])
     : ''
 }
 

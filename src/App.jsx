@@ -204,6 +204,7 @@ export default function App() {
             activeQuestionId={activeQuestionId}
             analysisComplete={analysisComplete}
             faceAnalysisEnabled={consoleSettings.faceEnabled}
+            cameraEnabled={cameraEnabled}
             signalsEnabled={consoleSettings.signalsEnabled}
             faceAnalysis={faceAnalysis}
           />

@@ -100,7 +100,19 @@ function AggregateRingChart({ label, value, color = '#4c78ff' }) {
   )
 }
 
-export default function Console({ attract = false, analytics, questions, answers, personalities, activeQuestionId, analysisComplete = false, faceAnalysisEnabled = true, signalsEnabled = true, faceAnalysis = null }) {
+function getAttentionMessage({ faceAnalysisEnabled = true, cameraEnabled = false }) {
+  if (faceAnalysisEnabled && cameraEnabled) {
+    return 'Attention: your pace, pressure, hesitation, revisits, gaze, and expression are being measured to sharpen the analysis. These signals reset after each session.'
+  }
+
+  if (faceAnalysisEnabled) {
+    return 'Attention: your pace, pressure, hesitation, and revisits are being measured to sharpen the analysis. Turn the camera on to add gaze and expression. These signals reset after each session.'
+  }
+
+  return 'Attention: your pace, pressure, hesitation, and revisits are being measured to sharpen the analysis. These signals reset after each session.'
+}
+
+export default function Console({ attract = false, analytics, questions, answers, personalities, activeQuestionId, analysisComplete = false, faceAnalysisEnabled = true, cameraEnabled = false, signalsEnabled = true, faceAnalysis = null }) {
   const legend = useMemo(() => getPersonalityLegend(personalities), [personalities])
   const personalityColors = useMemo(() => buildPersonalityColorMap(personalities, 1), [personalities])
 
@@ -112,6 +124,10 @@ export default function Console({ attract = false, analytics, questions, answers
   const showFeed = signalsEnabled && !analysisComplete && !attract
   const indicatorState = attract ? 'waiting' : analysisComplete ? 'complete' : 'analyzing'
   const indicatorLabel = indicatorState === 'waiting' ? 'Waiting' : indicatorState === 'complete' ? 'Complete' : 'Analyzing'
+  const attentionMessage = useMemo(
+    () => getAttentionMessage({ faceAnalysisEnabled, cameraEnabled }),
+    [cameraEnabled, faceAnalysisEnabled],
+  )
 
   useEffect(() => {
     if (!activeQuestionId) return
@@ -381,7 +397,7 @@ export default function Console({ attract = false, analytics, questions, answers
             </div>
 
             <div className={`console-attract-message ${attract ? 'visible' : ''}`}>
-              <p>Attention: your pace, pressure, hesitation, revisits, gaze, and expression are being measured to sharpen the analysis. These signals reset after each session.</p>
+              <p>{attentionMessage}</p>
             </div>
           </>
         ) : null}

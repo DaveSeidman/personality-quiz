@@ -1,0 +1,10 @@
+question_id,question_label,question_text,answer_id,answer_text,response_count,response_percent,mapped_personality_id
+1,Market Analysis,What's your approach to market analysis?,A,Dive deep into data,6,30.0,market-signal-mule
+1,Market Analysis,What's your approach to market analysis?,B,Focus on strategic insights,2,10.0,blackberry-analytics-smash
+1,Market Analysis,What's your approach to market analysis?,C,Blend intuition with analytics,12,60.0,analytical-mojito
+2,Decision Style,"When faced with a decision, you:",A,Analyze all available data,4,20.0,market-signal-mule
+2,Decision Style,"When faced with a decision, you:",B,Seek expert opinions,7,35.0,blackberry-analytics-smash
+2,Decision Style,"When faced with a decision, you:",C,Trust your instincts,9,45.0,analytical-mojito
+3,Staying Ahead,Your secret to staying ahead in the market is:,A,Leveraging comprehensive data,8,40.0,market-signal-mule
+3,Staying Ahead,Your secret to staying ahead in the market is:,B,Strategic foresight,3,15.0,blackberry-analytics-smash
+3,Staying Ahead,Your secret to staying ahead in the market is:,C,Building strong relationships,9,45.0,analytical-mojito

@@ -15,6 +15,8 @@ const createSessionId = () => (
     || `quiz-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
 )
 
+const ATTRACT_SPACER_ID = 'step-attract-spacer'
+
 async function submitAnswersToBackend(payload) {
   const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   const baseUrl = isLocalhost
@@ -39,6 +41,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
   const [sessionKey, setSessionKey] = useState(0)
   const [sessionId, setSessionId] = useState(() => createSessionId())
   const [submissionResult, setSubmissionResult] = useState(null)
+  const [submissionStatus, setSubmissionStatus] = useState('idle')
   const [visitedQuestions, setVisitedQuestions] = useState({})
   const [quizTransition, setQuizTransition] = useState('')
   const [isResetting, setIsResetting] = useState(false)
@@ -47,7 +50,18 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
   const resultsStepIndex = questions.length
   const seenQuestionIdsRef = useRef(new Set())
   const isResettingRef = useRef(false)
+  const pendingSubmitTimeoutRef = useRef(null)
+  const latestAnswersRef = useRef(answers)
+  const latestAnalyticsRef = useRef(analytics)
   const questionTypeById = useRef(Object.fromEntries(questions.map(question => [String(question.id), question.type])))
+
+  useEffect(() => {
+    latestAnswersRef.current = answers
+  }, [answers])
+
+  useEffect(() => {
+    latestAnalyticsRef.current = analytics
+  }, [analytics])
 
   const ensureQuestionAnalytics = useCallback((questionId, patch = {}) => {
     setAnalytics((prev) => {
@@ -106,6 +120,10 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
 
   useEffect(() => {
     if (attract) {
+      if (pendingSubmitTimeoutRef.current) {
+        clearTimeout(pendingSubmitTimeoutRef.current)
+        pendingSubmitTimeoutRef.current = null
+      }
       setQuizTransition('fade-out')
       setTimeout(() => {
         setCurrentStep(0)
@@ -114,6 +132,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
         seenQuestionIdsRef.current = new Set()
         setAnalytics({})
         setSubmissionResult(null)
+        setSubmissionStatus('idle')
         setVisitedQuestions({})
         onAnalysisCompleteChange(false)
         setQuizTransition('fade-in')
@@ -121,6 +140,25 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
       }, 500)
     }
   }, [attract, setAnalytics, onAnalysisCompleteChange])
+
+  useEffect(() => () => {
+    if (pendingSubmitTimeoutRef.current) {
+      clearTimeout(pendingSubmitTimeoutRef.current)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!attract) return
+
+    const element = document.getElementById(ATTRACT_SPACER_ID)
+    if (!element) return
+
+    element.scrollIntoView({
+      behavior: 'auto',
+      block: 'start',
+      inline: 'nearest',
+    })
+  }, [attract, sessionKey])
 
   useEffect(() => {
     if (attract) return
@@ -217,8 +255,14 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
   }
 
   const handleSubmit = async () => {
-    const finalizedAnalytics = finalizeAnalytics(analytics, CONFIDENCE_WEIGHTS)
+    if (submissionStatus === 'submitting') return
+
+    setSubmissionStatus('submitting')
+    setSubmissionResult(null)
+
+    const finalizedAnalytics = finalizeAnalytics(latestAnalyticsRef.current, CONFIDENCE_WEIGHTS)
     setAnalytics(finalizedAnalytics)
+    latestAnalyticsRef.current = finalizedAnalytics
 
     const payload = {
       sessionId,
@@ -229,18 +273,39 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
       console: consoleConfig,
       personalities,
       questions,
-      answers,
+      answers: latestAnswersRef.current,
       analytics: finalizedAnalytics,
       confidenceWeights: CONFIDENCE_WEIGHTS,
       submittedAt: Date.now(),
     }
 
-    const result = await submitAnswersToBackend(payload)
-    setSubmissionResult(result)
-    console.log('Backend analysis result:', result)
+    try {
+      const result = await submitAnswersToBackend(payload)
+      setSubmissionResult(result)
+      setSubmissionStatus('submitted')
+      console.log('Backend analysis result:', result)
+    } catch (error) {
+      setSubmissionStatus('error')
+      console.error(error)
+    }
+  }
+
+  const handleLastQuestionSubmit = () => {
+    setCurrentStep(resultsStepIndex)
+    if (pendingSubmitTimeoutRef.current) {
+      clearTimeout(pendingSubmitTimeoutRef.current)
+    }
+    pendingSubmitTimeoutRef.current = setTimeout(() => {
+      pendingSubmitTimeoutRef.current = null
+      void handleSubmit()
+    }, 0)
   }
 
   const handleStartOver = () => {
+    if (pendingSubmitTimeoutRef.current) {
+      clearTimeout(pendingSubmitTimeoutRef.current)
+      pendingSubmitTimeoutRef.current = null
+    }
     setQuizTransition('fade-out')
     isResettingRef.current = true
     setIsResetting(true)
@@ -248,6 +313,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
       setAnswers({})
       setAnalytics({})
       setSubmissionResult(null)
+      setSubmissionStatus('idle')
       onAnalysisCompleteChange(false)
       setSessionKey(prev => prev + 1)
       setSessionId(createSessionId())
@@ -265,6 +331,12 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
 
   return (
     <div className={`quiz ${consoleEnabled ? '' : 'quiz--full-height'} ${quizTransition} ${isResetting ? 'quiz--hidden' : ''}`}>
+      <div
+        className="quiz-step quiz-step--attract-spacer"
+        id={ATTRACT_SPACER_ID}
+        aria-hidden="true"
+      />
+
       {questions.map((question, index) => (
         <div
           className="quiz-step"
@@ -276,7 +348,8 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
             answers={answers}
             setAnswers={setAnswers}
             onPrevious={goToPrevious}
-            onNext={goToNext}
+            onNext={index === questions.length - 1 ? handleLastQuestionSubmit : goToNext}
+            nextLabel={index === questions.length - 1 ? (brand?.copy?.submitLabel || 'Submit') : 'Next'}
             onAnalyticsEvent={trackQuestionEvent}
             onAnalyticsPatch={ensureQuestionAnalytics}
             isFirst={index === 0}
@@ -295,12 +368,11 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
         <Results
           brand={brand}
           result={submissionResult}
+          status={submissionStatus}
           analytics={analytics}
           questions={questions}
           personalities={personalities}
           answers={answers}
-          sessionKey={sessionKey}
-          onPrevious={goToPrevious}
           onSubmit={handleSubmit}
           onStartOver={handleStartOver}
         />
