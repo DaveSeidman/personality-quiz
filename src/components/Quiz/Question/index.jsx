@@ -12,6 +12,7 @@ export default function Question({
   setAnswers,
   onPrevious,
   onNext,
+  nextLabel = 'Next',
   onAnalyticsEvent,
   onAnalyticsPatch,
   isFirst,
@@ -180,7 +181,7 @@ export default function Question({
             onClick={handleNext}
             onPointerDown={triggerActivePress}
           >
-            Next
+            {nextLabel}
           </button>
         </div>
       </div>}

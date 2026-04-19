@@ -1,0 +1,193 @@
+{
+  "quizId": "deshaw-karaoke-v1",
+  "useadvancedTelemetry": false,
+  "features": {
+    "faceAnalysis": false
+  },
+  "console": {
+    "face": false,
+    "signals": true
+  },
+  "personalities": [
+    {
+      "id": "power-ballad",
+      "name": "The Power Ballad",
+      "color": "#90a9bb",
+      "description": "\"Don't Stop Believin',\" \"Total Eclipse of the Heart,\" or \"Bohemian Rhapsody.\" You go big or you go home.",
+      "drinkRecommendation": "Don't Stop Believin'"
+    },
+    {
+      "id": "crowd-pleaser",
+      "name": "The Crowd Pleaser",
+      "color": "#d9875c",
+      "description": "\"Backstreet Boys,\" \"Spice Girls,\" or anything that gets everyone dancing. You're here for the group energy.",
+      "drinkRecommendation": "Backstreet Boys"
+    },
+    {
+      "id": "hype-machine",
+      "name": "The Hype Machine",
+      "color": "#76a48d",
+      "description": "You pick songs that make people move. Think Lizzo, Beyonce, or anything with a beat.",
+      "drinkRecommendation": "Lizzo"
+    },
+    {
+      "id": "wildcard",
+      "name": "The Wildcard",
+      "color": "#c56d78",
+      "description": "Nobody saw your song choice coming, and that's exactly how you like it.",
+      "drinkRecommendation": "surprise pick"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "label": "The Mic Check",
+      "text": "How do you feel about karaoke?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "I'm the reluctant closer - I need warming up",
+          "personalityId": "power-ballad"
+        },
+        {
+          "id": "B",
+          "content": "First to sign up, last to sit down",
+          "personalityId": "crowd-pleaser"
+        },
+        {
+          "id": "C",
+          "content": "I'm here to cheer everyone else on",
+          "personalityId": "hype-machine"
+        },
+        {
+          "id": "D",
+          "content": "I don't sing, but I'll rap",
+          "personalityId": "wildcard"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "The Playlist",
+      "text": "Pick a decade of music:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "70s or 80s classics",
+          "personalityId": "power-ballad"
+        },
+        {
+          "id": "B",
+          "content": "90s nostalgia",
+          "personalityId": "crowd-pleaser"
+        },
+        {
+          "id": "C",
+          "content": "2000s hits",
+          "personalityId": "hype-machine"
+        },
+        {
+          "id": "D",
+          "content": "Whatever's on the charts now",
+          "personalityId": "wildcard"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "The Performance",
+      "text": "Your singing style is:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Big ballad energy",
+          "personalityId": "power-ballad"
+        },
+        {
+          "id": "B",
+          "content": "Fun and silly",
+          "personalityId": "crowd-pleaser"
+        },
+        {
+          "id": "C",
+          "content": "A duet or group song",
+          "personalityId": "hype-machine"
+        },
+        {
+          "id": "D",
+          "content": "Something unexpected",
+          "personalityId": "wildcard"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "label": "The Crowd",
+      "text": "The crowd is quiet. You:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Feel awkward, sing quieter",
+          "personalityId": "power-ballad"
+        },
+        {
+          "id": "B",
+          "content": "Get louder to bring them in",
+          "personalityId": "crowd-pleaser"
+        },
+        {
+          "id": "C",
+          "content": "Start pointing at people to sing along",
+          "personalityId": "hype-machine"
+        },
+        {
+          "id": "D",
+          "content": "Make it a performance they can't ignore",
+          "personalityId": "wildcard"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "label": "The Exit Strategy",
+      "text": "After karaoke, you're most likely to:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Quietly sneak out (Irish exit)",
+          "personalityId": "power-ballad"
+        },
+        {
+          "id": "B",
+          "content": "Recap everyone's performances",
+          "personalityId": "crowd-pleaser"
+        },
+        {
+          "id": "C",
+          "content": "Organize what's next",
+          "personalityId": "hype-machine"
+        },
+        {
+          "id": "D",
+          "content": "Already planning next week's song",
+          "personalityId": "wildcard"
+        }
+      ]
+    }
+  ]
+}

@@ -22,7 +22,7 @@
     "attractTitle": "AI Cocktail Quiz",
     "attractSubtitle": "Discover your personality type by answering {questionCount} questions.",
     "resultsTitle": "Start AI analysis of your answers and behavioral signals...",
-    "resultsInstruction": "You can review before submitting.",
+    "resultsInstruction": "Hang tight while we analyze your responses.",
     "loadingTitle": "Translating your signals...",
     "loadingBody": "Syncing with the cocktail oracle. This usually takes a beat.",
     "reviewLabel": "Review",

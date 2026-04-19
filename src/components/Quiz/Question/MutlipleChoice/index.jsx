@@ -2,14 +2,19 @@ import React, { useEffect, useMemo, useState } from "react"
 import { getSelectRule, getSelectionInstruction, normalizeSelections, shuffle, triggerActivePress } from '../../../utils'
 import './index.scss'
 
+function getOrderedAnswers(question) {
+  if (question?.shuffleAnswers === false) return [...(question.answers || [])]
+  return shuffle(question.answers || [])
+}
+
 export default function MultipleChoice({ question, answer, setAnswers, sessionKey, onAnalyticsEvent, onAnalyticsPatch, animateAnswers = false }) {
-  const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
+  const [orderedOptions, setOrderedOptions] = useState(() => getOrderedAnswers(question))
   const selectRule = useMemo(() => getSelectRule(question.select), [question.select])
   const selections = normalizeSelections(answer)
   const isPhotoQuestion = question.type === 'multiple-choice-image'
 
   useEffect(() => {
-    const nextOrder = shuffle(question.answers)
+    const nextOrder = getOrderedAnswers(question)
     setOrderedOptions(nextOrder)
     const order = nextOrder.map(option => option.id)
     onAnalyticsEvent(String(question.id), 'answers_presented_order', {
@@ -18,7 +23,7 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
     onAnalyticsPatch && onAnalyticsPatch(String(question.id), {
       presentation: { answerOrder: order, firstAnswerId: order[0] ?? null },
     })
-  }, [question.id, question.answers, sessionKey, onAnalyticsEvent, onAnalyticsPatch])
+  }, [question, sessionKey, onAnalyticsEvent, onAnalyticsPatch])
 
   const isSelected = (optionId) => selections.includes(optionId)
   const isVideoAsset = (content) => /\.(mp4|webm|ogg)$/i.test(content)

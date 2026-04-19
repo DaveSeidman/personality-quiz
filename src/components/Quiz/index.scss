@@ -22,6 +22,20 @@
   height: 100%;
   min-height: 100%;
 }
+
+.quiz-step--attract-spacer {
+  height: 66vh;
+  min-height: 66vh;
+  pointer-events: none;
+}
+
+.quiz--full-height {
+  .quiz-step--attract-spacer {
+    height: 100vh;
+    min-height: 100vh;
+  }
+}
+
 .quiz.quiz--hidden {
   opacity: 0;
   pointer-events: none;

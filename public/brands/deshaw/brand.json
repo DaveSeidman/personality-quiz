@@ -1,0 +1,66 @@
+{
+  "id": "deshaw",
+  "displayName": "D. E. Shaw",
+  "accentColor": "#dbe4ed",
+  "theme": {
+    "fontFamily": "Apercu",
+    "fontUrl": "/brands/deshaw/fonts/apercu_regular_pro.otf",
+    "fontFaces": [
+      {
+        "url": "/brands/deshaw/fonts/apercu_regular_pro.otf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "url": "/brands/deshaw/fonts/apercu_regular_italic_pro.otf",
+        "weight": 400,
+        "style": "italic"
+      },
+      {
+        "url": "/brands/deshaw/fonts/apercu_medium_pro.otf",
+        "weight": 500,
+        "style": "normal"
+      },
+      {
+        "url": "/brands/deshaw/fonts/apercu_medium_italic_pro.otf",
+        "weight": 500,
+        "style": "italic"
+      },
+      {
+        "url": "/brands/deshaw/fonts/apercu_bold_pro.otf",
+        "weight": 700,
+        "style": "normal"
+      },
+      {
+        "url": "/brands/deshaw/fonts/apercu_bold_italic_pro.otf",
+        "weight": 700,
+        "style": "italic"
+      }
+    ],
+    "fontFallback": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "colors": {
+      "appBg": "#0a0d11",
+      "text": "#f6f4ee",
+      "accent": "#dbe4ed",
+      "accentContrast": "#0a0d11"
+    }
+  },
+  "assets": {
+    "logo": "/brands/deshaw/logo.svg",
+    "attractVideo": "/brands/deshaw/videos/ambient.webm",
+    "loadingVideo": "/brands/deshaw/videos/ambient.webm"
+  },
+  "copy": {
+    "attractTitle": "Karaoke Personality Quiz",
+    "attractSubtitle": "Answer {questionCount} karaoke questions to find your karaoke type.",
+    "resultsTitle": "Analyzing your karaoke type...",
+    "resultsInstruction": "Hang tight while we match your answers.",
+    "loadingTitle": "Reading the room...",
+    "loadingBody": "Matching your answers to the karaoke archetype that fits you best.",
+    "reviewLabel": "Review",
+    "submitLabel": "Submit",
+    "submittingLabel": "Matching...",
+    "startOverLabel": "Start Over"
+  },
+  "quizUrl": "/brands/deshaw/quiz.json"
+}

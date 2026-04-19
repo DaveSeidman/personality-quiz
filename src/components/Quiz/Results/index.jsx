@@ -197,37 +197,15 @@ function renderStatement(text, highlights) {
   })
 }
 
-export default function Results({ brand, result, analytics, questions, personalities, answers, sessionKey, onPrevious, onSubmit, onStartOver }) {
-  const [status, setStatus] = useState('idle')
+export default function Results({ brand, result, status = 'idle', analytics, questions, personalities, answers, onSubmit, onStartOver }) {
   const cards = useMemo(() => buildQuestionCards(analytics, questions, answers), [analytics, questions, answers])
   const legend = useMemo(() => getPersonalityLegend(personalities || []), [personalities])
   const colorMap = useMemo(() => buildPersonalityColorMap(personalities || [], 1), [personalities])
   const radarData = useMemo(() => buildRadarData(cards, personalities || []), [cards, personalities])
   const copy = brand?.copy || {}
-
-  useEffect(() => {
-    setStatus('idle')
-  }, [sessionKey])
-
-  useEffect(() => {
-    if (!result) {
-      setStatus('idle')
-    }
-  }, [result])
-
-  const handleSubmit = async () => {
-    try {
-      setStatus('submitting')
-      await onSubmit()
-      setStatus('submitted')
-    } catch (error) {
-      setStatus('error')
-      console.error(error)
-    }
-  }
-
   const isSubmitted = status === 'submitted'
   const isSubmitting = status === 'submitting'
+  const isError = status === 'error'
 
   return (
     <div className="results">
@@ -238,8 +216,8 @@ export default function Results({ brand, result, analytics, questions, personali
 
           {/* Screen A: idle + submitting */}
           <div className={`results-screen ${!isSubmitted ? 'in' : 'out'}`}>
-            <h2 className="results-title">{copy.resultsTitle || 'Start AI analysis of your answers and behavioral signals...'}</h2>
-            <p className="results-instruction">{copy.resultsInstruction || 'You can review before submitting.'}</p>
+            <h2 className="results-title">{copy.resultsTitle || 'Analyzing your answers...'}</h2>
+            <p className="results-instruction">{copy.resultsInstruction || 'Hang tight while we process your responses.'}</p>
             <div className="results-blob-placeholder">
               <video
                 className={`results-blob-video ${isSubmitting ? 'blob-active' : 'blob-idle'}`}
@@ -287,22 +265,22 @@ export default function Results({ brand, result, analytics, questions, personali
         </div>
 
         {/* ── Nav (always visible) ── */}
-        {status === 'error' && <p className="results-error">Submit failed. Try again.</p>}
+        {isError && <p className="results-error">Submit failed. Try again.</p>}
         <div className="results-content-nav">
-          {!isSubmitted ? (
-            <>
-              <button className="question-navigation-prev-button" onClick={onPrevious} onPointerDown={triggerActivePress}>
-                {copy.reviewLabel || 'Review'}
-              </button>
-              <button className="question-navigation-next-button" onClick={handleSubmit} onPointerDown={triggerActivePress} disabled={isSubmitting}>
-                {isSubmitting ? (copy.submittingLabel || 'Submitting...') : (copy.submitLabel || 'Submit')}
-              </button>
-            </>
-          ) : (
+          {isSubmitted ? (
             <button className="question-navigation-prev-button" onClick={onStartOver} onPointerDown={triggerActivePress}>
               {copy.startOverLabel || 'Start Over'}
             </button>
-          )}
+          ) : isError ? (
+            <>
+              <button className="question-navigation-prev-button" onClick={onStartOver} onPointerDown={triggerActivePress}>
+                {copy.startOverLabel || 'Start Over'}
+              </button>
+              <button className="question-navigation-next-button" onClick={onSubmit} onPointerDown={triggerActivePress} disabled={isSubmitting}>
+                Retry
+              </button>
+            </>
+          ) : null}
         </div>
 
       </div>
