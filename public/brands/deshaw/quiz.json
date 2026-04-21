@@ -12,28 +12,28 @@
     {
       "id": "power-ballad",
       "name": "The Power Ballad",
-      "color": "#90a9bb",
+      "color": "#ff3b30",
       "description": "\"Don't Stop Believin',\" \"Total Eclipse of the Heart,\" or \"Bohemian Rhapsody.\" You go big or you go home.",
       "drinkRecommendation": "Don't Stop Believin'"
     },
     {
       "id": "crowd-pleaser",
       "name": "The Crowd Pleaser",
-      "color": "#d9875c",
+      "color": "#34c759",
       "description": "\"Backstreet Boys,\" \"Spice Girls,\" or anything that gets everyone dancing. You're here for the group energy.",
       "drinkRecommendation": "Backstreet Boys"
     },
     {
       "id": "hype-machine",
       "name": "The Hype Machine",
-      "color": "#76a48d",
+      "color": "#2050e0",
       "description": "You pick songs that make people move. Think Lizzo, Beyonce, or anything with a beat.",
       "drinkRecommendation": "Lizzo"
     },
     {
       "id": "wildcard",
       "name": "The Wildcard",
-      "color": "#c56d78",
+      "color": "#ffd60a",
       "description": "Nobody saw your song choice coming, and that's exactly how you like it.",
       "drinkRecommendation": "surprise pick"
     }
