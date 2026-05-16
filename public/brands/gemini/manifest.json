@@ -66,9 +66,9 @@
   },
   "assets": {
     "logo": "/brands/gemini/images/gemini.png",
-    "backgroundVideo": "/brands/gemini/videos/ambient.mov",
-    "attractVideo": "/brands/gemini/videos/ambient.mov",
-    "loadingVideo": "/brands/gemini/videos/ambient.mov"
+    "backgroundVideo": "/brands/gemini/videos/ambient.mp4",
+    "attractVideo": "/brands/gemini/videos/ambient.mp4",
+    "loadingVideo": "/brands/gemini/videos/ambient.mp4"
   },
   "copy": {
     "attractTitle": "GEMINI NEAR ME®",
@@ -82,5 +82,5 @@
     "submittingLabel": "Revealing...",
     "startOverLabel": "Start Over"
   },
-  "quizUrl": "/brands/gemeni/quiz.json"
+  "quizUrl": "/brands/gemini/quiz.json"
 }
