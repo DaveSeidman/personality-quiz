@@ -7,15 +7,16 @@
   width: 100%;
   box-sizing: border-box;
   padding: 1.4vh;
+  background: rgba(255, 255, 255, 0.03);
   // background:
   //   linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 32%),
   //   rgba(4, 4, 4, 0.8);
-  border-top: 0.09vh solid rgba(255, 255, 255, 0.14);
+  border-top: 0.09vh solid var(--console-border);
   backdrop-filter: blur(.4vh);
   display: flex;
   flex-direction: column;
   gap: 1.48vh;
-  color: rgba(243, 239, 230, 0.94);
+  color: var(--console-text);
   box-shadow: 0 -1vh 2.2vh rgba(0, 0, 0, 0.48);
 
   &-header {
@@ -29,13 +30,13 @@
       font-size: 0.91vh;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.58);
+      color: var(--console-muted-text);
     }
 
     &-sub {
       margin: 0.37vh 0 0;
       font-size: 1.02vh;
-      color: rgba(255, 255, 255, 0.58);
+      color: var(--console-muted-text);
     }
 
     &-actions {
@@ -47,9 +48,9 @@
     &-breakdown {
       padding: 0.59vh 1.33vh;
       border-radius: 999vh;
-      border: 0.09vh solid rgba(255, 255, 255, 0.25);
-      background: rgba(10, 15, 12, 0.6);
-      color: rgba(255, 255, 255, 0.86);
+      border: 0.09vh solid var(--console-border-strong);
+      background: var(--console-surface);
+      color: var(--console-text);
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-size: 0.75vh;
@@ -69,7 +70,7 @@
       font-size: 0.91vh;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.8);
+      color: var(--console-text);
 
       .pulse {
         width: 0.93vh;
@@ -81,19 +82,19 @@
       }
 
       &.waiting .pulse {
-        background: rgba(255, 255, 255, 0.6);
-        box-shadow: 0 0 1.11vh rgba(255, 255, 255, 0.35);
+        background: var(--console-muted-text);
+        box-shadow: 0 0 1.11vh color-mix(in srgb, var(--console-muted-text), transparent 45%);
         animation-duration: 2.6s;
       }
 
       &.complete .pulse {
-        background: #fff;
-        box-shadow: 0 0 1.3vh rgba(255, 255, 255, 0.6);
+        background: var(--console-strong-text);
+        box-shadow: 0 0 1.3vh color-mix(in srgb, var(--console-strong-text), transparent 45%);
         animation: none;
       }
 
       &.complete span {
-        color: rgba(255, 255, 255, 0.9);
+        color: var(--console-strong-text);
       }
     }
   }
@@ -105,6 +106,16 @@
     display: flex;
     gap: 0.74vh;
     align-items: stretch;
+
+    &--attract {
+      .console-live-panel,
+      .console-feed,
+      .console-aggregate {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+    }
   }
 
   &-live-panel {
@@ -141,8 +152,8 @@
       bottom: .7vh;
       padding: .55vh .7vh;
       border-radius: .5vh;
-      background: rgba(8, 8, 8, 0.72);
-      border: .09vh solid rgba(255, 255, 255, 0.08);
+      background: color-mix(in srgb, var(--console-surface), transparent 68%);
+      border: .09vh solid var(--console-border);
       backdrop-filter: blur(.25vh);
       pointer-events: none;
 
@@ -150,25 +161,23 @@
         font-size: .68vh;
         letter-spacing: .1em;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.5);
+        color: var(--console-text);
       }
 
       strong {
         font-size: .9vh;
         font-weight: 600;
-        color: rgba(255, 255, 255, 0.9);
+        color: var(--console-strong-text);
       }
     }
 
     &-visual {
       position: relative;
-      border: 0.09vh solid rgba(255, 255, 255, 0.12);
+      border: 0.09vh solid var(--console-border);
       border-radius: 0.74vh;
       overflow: hidden;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 44%),
-        rgba(8, 8, 8, 0.92);
-      box-shadow: inset 0 0 0 0.09vh rgba(255, 255, 255, 0.04);
+      background: var(--console-surface);
+      box-shadow: inset 0 0 0 0.09vh var(--console-border);
       flex: 0 0 auto;
       display: flex;
       align-items: center;
@@ -182,7 +191,7 @@
       display: block;
       aspect-ratio: 7 / 6;
       min-height: 0;
-      background: #000;
+      background: var(--console-surface);
     }
 
     &-readout {
@@ -205,20 +214,20 @@
       gap: 0.22vh;
       padding: 0.74vh 0.89vh;
       border-radius: 0.63vh;
-      border: 0.09vh solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.035);
+      border: 0.09vh solid var(--console-border);
+      background: var(--console-surface-soft);
 
       span {
         font-size: 0.68vh;
         letter-spacing: 0.1em;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.5);
+        color: var(--console-muted-text);
       }
 
       strong {
         font-size: 0.84vh;
         font-weight: 600;
-        color: rgba(255, 255, 255, 0.9);
+        color: var(--console-strong-text);
       }
     }
 
@@ -228,8 +237,8 @@
       gap: 0.44vh;
       padding: 0.67vh;
       border-radius: 0.63vh;
-      border: 0.09vh solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.03);
+      border: 0.09vh solid var(--console-border);
+      background: var(--console-surface-soft);
     }
 
     &-scale {
@@ -240,11 +249,11 @@
       font-size: 0.63vh;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: rgba(255, 255, 255, 0.66);
+      color: var(--console-muted-text);
 
       strong {
         text-align: right;
-        color: rgba(255, 255, 255, 0.88);
+        color: var(--console-strong-text);
       }
     }
 
@@ -252,7 +261,7 @@
       height: 0.48vh;
       border-radius: 999vh;
       overflow: hidden;
-      background: rgba(255, 255, 255, 0.07);
+      background: var(--console-track);
     }
 
     &-scale-fill {
@@ -283,28 +292,31 @@
     }
 
     &-row {
-      border: 0.09vh solid rgba(255, 255, 255, 0.12);
+      border: 0.09vh solid var(--console-border);
       border-radius: 0.74vh;
       padding: 1.04vh 1.26vh;
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 36%),
-        rgba(8, 8, 8, 0.82);
-      box-shadow: inset 0 0 0 0.09vh rgba(255, 255, 255, 0.04);
+        linear-gradient(180deg, var(--console-surface-soft), transparent 36%),
+        var(--console-surface);
+      box-shadow: inset 0 0 0 0.09vh var(--console-border);
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
 
       &.active {
-        border-color: rgba(255, 255, 255, 0.3);
-        box-shadow: 0 0.9vh 1.8vh rgba(0, 0, 0, 0.34);
+        border-color: var(--console-border-strong);
+        background:
+          linear-gradient(180deg, color-mix(in srgb, var(--console-surface-soft), transparent 35%), transparent 36%),
+          var(--console-surface-active);
+        box-shadow: 0 0.45vh 1vh rgba(0, 0, 0, 0.14);
       }
 
       &-label {
         font-size: 0.84vh;
         letter-spacing: 0.1em;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.58);
+        color: var(--console-muted-text);
         margin: 0 0 0.52vh;
         display: flex;
         justify-content: space-between;
@@ -316,8 +328,9 @@
         letter-spacing: 0.12em;
         padding: 0.15vh 0.74vh;
         border-radius: 999vh;
-        background: rgba(255, 255, 255, 0.12);
-        color: rgba(243, 239, 230, 0.92);
+        background: color-mix(in srgb, var(--console-surface-soft), transparent 72%);
+        border: 0.09vh solid color-mix(in srgb, var(--console-border), var(--console-strong-text) 18%);
+        color: var(--console-strong-text);
       }
 
       &-metrics {
@@ -330,8 +343,8 @@
       &-metric {
         flex: 0 0 calc(50% - 0.22vh);
         box-sizing: border-box;
-        background: rgba(255, 255, 255, 0.04);
-        border: 0.09vh solid rgba(255, 255, 255, 0.08);
+        background: color-mix(in srgb, var(--console-surface-soft), transparent 70%);
+        border: 0.09vh solid color-mix(in srgb, var(--console-border), var(--console-strong-text) 18%);
         border-radius: 0.52vh;
         padding: 0.33vh 0.67vh;
         display: flex;
@@ -343,13 +356,13 @@
           font-size: 0.62vh;
           letter-spacing: 0.08em;
           text-transform: uppercase;
-          color: rgba(255, 255, 255, 0.55);
+          color: var(--console-muted-text);
         }
 
         &-value {
           font-size: 0.82vh;
           font-weight: 600;
-          color: rgba(255, 255, 255, 0.92);
+          color: var(--console-strong-text);
         }
       }
 
@@ -367,7 +380,7 @@
         font-size: 0.75vh;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--console-muted-text);
 
         &.confidence {
           align-items: flex-start;
@@ -389,12 +402,12 @@
     justify-content: center;
     text-align: center;
     padding: 2.96vh;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--console-text);
     font-size: 1.06vh;
     line-height: 1.6;
     letter-spacing: 0.01em;
-    background: rgba(7, 7, 7, 0.84);
-    border: 0.09vh dashed rgba(255, 255, 255, 0.18);
+    background: var(--console-surface-strong);
+    border: 0.09vh dashed var(--console-border);
     border-radius: 0.74vh;
     box-shadow: inset 0 0 3.24vh rgba(0, 0, 0, 0.25);
     opacity: 0;
@@ -420,9 +433,9 @@
     margin-top: 1.85vh;
     padding: 2.22vh;
     border-radius: 0.74vh;
-    border: 0.09vh solid rgba(255, 255, 255, 0.12);
-    background: rgba(6, 10, 8, 0.9);
-    box-shadow: inset 0 0 0 0.09vh rgba(255, 255, 255, 0.03);
+    border: 0.09vh solid var(--console-border);
+    background: var(--console-surface-strong);
+    box-shadow: inset 0 0 0 0.09vh var(--console-border);
     overflow: hidden;
     max-height: 0;
     opacity: 0;
@@ -444,20 +457,20 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-size: 0.84vh;
-      color: rgba(255, 255, 255, 0.8);
+      color: var(--console-text);
     }
 
     &-subtitle {
       margin: 0 0 1.48vh;
       text-align: center;
       font-size: 0.87vh;
-      color: rgba(255, 255, 255, 0.65);
+      color: var(--console-muted-text);
     }
 
     &-empty {
       margin: 0;
       text-align: center;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--console-muted-text);
     }
 
     &-grid {
@@ -471,14 +484,14 @@
       min-width: 22.22vh;
       padding: 1.04vh;
       border-radius: 0.63vh;
-      border: 0.09vh solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.03);
+      border: 0.09vh solid var(--console-border);
+      background: var(--console-surface-soft);
 
       &-title {
         margin: 0 0 0.74vh;
         font-size: 0.84vh;
         font-weight: 600;
-        color: rgba(255, 255, 255, 0.85);
+        color: var(--console-text);
         text-transform: uppercase;
         letter-spacing: 0.05em;
 
@@ -486,7 +499,7 @@
           display: block;
           margin-top: 0.22vh;
           font-size: 0.73vh;
-          color: rgba(255, 255, 255, 0.55);
+          color: var(--console-muted-text);
           letter-spacing: 0.04em;
         }
       }
@@ -495,7 +508,8 @@
         position: relative;
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        background: #fff;
+        background: color-mix(in srgb, var(--console-surface-soft), #ffffff 18%);
+        border: 0.09vh solid var(--console-border);
         border-radius: 0.93vh;
         overflow: hidden;
 
@@ -533,26 +547,26 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      color: #1b2440;
+      color: var(--console-text);
 
       &-label {
         margin: 0 0 0.37vh;
         font-size: 0.73vh;
         text-transform: uppercase;
         letter-spacing: 0.04em;
-        color: #41537a;
+        color: var(--console-muted-text);
       }
 
       &-value {
         margin: 0.37vh 0 0;
         font-size: 0.77vh;
-        color: #1f2b4b;
+        color: var(--console-strong-text);
       }
 
       &-track {
         height: 0.42vh;
         border-radius: 999vh;
-        background: #e8eefb;
+        background: var(--console-track);
         overflow: hidden;
       }
 
@@ -629,14 +643,14 @@
         width: 1.9vh;
         height: 1.9vh;
         border-radius: 50%;
-        background: #fff;
+        background: color-mix(in srgb, var(--app-bg), #ffffff 72%);
       }
 
       span {
         position: absolute;
         font-size: 0.75vh;
         font-weight: 700;
-        color: #1f2b4b;
+        color: var(--console-strong-text);
       }
     }
 
@@ -693,20 +707,20 @@
       font-size: 0.91vh;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.82);
+      color: var(--console-text);
     }
 
     &-subtitle {
       margin: 0;
       text-align: center;
       font-size: 0.85vh;
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--console-muted-text);
     }
 
     &-empty {
       margin: auto;
       text-align: center;
-      color: rgba(255, 255, 255, 0.55);
+      color: var(--console-muted-text);
     }
 
     &-distribution {
@@ -715,15 +729,15 @@
       gap: 0.74vh;
       padding: 1.48vh;
       border-radius: 1.48vh;
-      border: 0.09vh solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.03);
+      border: 0.09vh solid color-mix(in srgb, var(--console-border), var(--console-strong-text) 22%);
+      background: color-mix(in srgb, var(--console-surface-soft), transparent 68%);
 
       &-row {
         display: flex;
         align-items: center;
         gap: 0.89vh;
         font-size: 0.85vh;
-        color: rgba(255, 255, 255, 0.85);
+        color: var(--console-text);
 
         &.personality-strategist .console-aggregate-distribution-fill {
           background: #4dbb89;
@@ -747,28 +761,28 @@
         text-transform: uppercase;
         letter-spacing: 0.08em;
         font-size: 0.73vh;
-        color: rgba(255, 255, 255, 0.65);
+        color: var(--console-muted-text);
       }
 
       &-track {
         flex: 1;
         height: 0.67vh;
         border-radius: 999vh;
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(0, 0, 0, 0.28);
         overflow: hidden;
       }
 
       &-fill {
         height: 100%;
         border-radius: 999vh;
-        background: rgba(255, 255, 255, 0.7);
+        background: var(--console-strong-text);
       }
 
       &-value {
         width: 4.44vh;
         text-align: right;
         font-size: 0.8vh;
-        color: rgba(255, 255, 255, 0.8);
+        color: var(--console-text);
       }
     }
 
@@ -783,32 +797,32 @@
       --tone-soft: #dfe7fb;
       padding: 1.04vh;
       border-radius: 1.3vh;
-      border: 0.09vh solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.04);
+      border: 0.09vh solid color-mix(in srgb, var(--console-border), var(--console-strong-text) 22%);
+      background: color-mix(in srgb, var(--console-surface-soft), transparent 68%);
       display: flex;
       flex-direction: column;
       justify-content: center;
-      color: #1b2440;
+      color: var(--console-text);
 
       &-label {
         margin: 0 0 0.37vh;
         font-size: 0.73vh;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        color: #41537a;
+        color: var(--console-muted-text);
       }
 
       &-value {
         margin: 0.52vh 0 0;
         font-size: 0.8vh;
         font-weight: 600;
-        color: #1f2b4b;
+        color: var(--console-strong-text);
       }
 
       &-track {
         height: 0.67vh;
         border-radius: 999vh;
-        background: var(--tone-soft);
+        background: rgba(0, 0, 0, 0.28);
         overflow: hidden;
       }
 
@@ -854,14 +868,14 @@
         width: 2.1vh;
         height: 2.1vh;
         border-radius: 50%;
-        background: #fff;
+        background: color-mix(in srgb, var(--app-bg), #ffffff 72%);
       }
 
       span {
         position: absolute;
         font-size: 0.79vh;
         font-weight: 700;
-        color: #1f2b4b;
+        color: var(--console-strong-text);
       }
     }
   }
@@ -878,7 +892,7 @@
     width: 100%;
     height: 1.11vh;
     border-radius: 999vh;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--console-track);
     overflow: visible;
   }
 
@@ -888,7 +902,7 @@
     top: 0;
     bottom: 0;
     width: 0.09vh;
-    background: rgba(255, 255, 255, 0.45);
+    background: var(--console-muted-text);
   }
 
   &-indicator {
@@ -924,11 +938,11 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--console-track);
   transition: background-color 160ms linear;
 
   &.active {
-    background: rgba(255, 255, 255, 0.82);
+    background: var(--console-strong-text);
   }
 }
 

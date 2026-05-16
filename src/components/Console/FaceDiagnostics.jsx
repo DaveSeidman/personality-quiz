@@ -39,6 +39,26 @@ const IMPORTANT_POINTS = new Set([
   ...OUTER_MOUTH,
 ])
 
+function getFaceCanvasPalette(canvas) {
+  const computedStyle = getComputedStyle(canvas)
+  const isLightMode = computedStyle.getPropertyValue('--quiz-mode').trim() === 'light'
+  const surface = computedStyle.getPropertyValue('--console-surface').trim()
+
+  return isLightMode
+    ? {
+      background: surface || 'rgba(255, 255, 255, 0.035)',
+      border: 'rgba(255, 255, 255, 0.12)',
+      text: 'rgba(255, 255, 255, 0.64)',
+      particleRgb: '243, 239, 230',
+    }
+    : {
+      background: '#050505',
+      border: 'rgba(255, 255, 255, 0.14)',
+      text: 'rgba(255, 255, 255, 0.64)',
+      particleRgb: '243, 239, 230',
+    }
+}
+
 function toCanvasPoint(point, width, height) {
   const mirroredX = 1 - point.x
   return {
@@ -47,14 +67,14 @@ function toCanvasPoint(point, width, height) {
   }
 }
 
-function drawIdleFrame(ctx, width, height, label) {
+function drawIdleFrame(ctx, width, height, label, palette) {
   ctx.clearRect(0, 0, width, height)
-  ctx.fillStyle = '#050505'
+  ctx.fillStyle = palette.background
   ctx.fillRect(0, 0, width, height)
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)'
+  ctx.strokeStyle = palette.border
   ctx.lineWidth = 1
   ctx.strokeRect(10, 10, width - 20, height - 20)
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.64)'
+  ctx.fillStyle = palette.text
   ctx.font = `600 16px ${getCanvasFontFamily()}`
   ctx.textAlign = 'center'
   ctx.fillText(label, width / 2, height / 2)
@@ -345,7 +365,7 @@ function updateFaceParticles(now, width, height, landmarks, faceParticlesRef) {
     .filter(Boolean)
 }
 
-function drawParticleField(ctx, now, particles) {
+function drawParticleField(ctx, now, particles, palette) {
   const faceAmbientLinks = getFaceAmbientLinks(particles, 3)
 
   faceAmbientLinks.forEach(({ faceParticle, ambientParticle, distance }) => {
@@ -354,7 +374,7 @@ function drawParticleField(ctx, now, particles) {
     ctx.beginPath()
     ctx.moveTo(faceParticle.x, faceParticle.y)
     ctx.lineTo(ambientParticle.x, ambientParticle.y)
-    ctx.strokeStyle = `rgba(243, 239, 230, ${alpha})`
+    ctx.strokeStyle = `rgba(${palette.particleRgb}, ${alpha})`
     ctx.lineWidth = 0.88
     ctx.stroke()
   })
@@ -379,7 +399,7 @@ function drawParticleField(ctx, now, particles) {
       ctx.beginPath()
       ctx.moveTo(a.x, a.y)
       ctx.lineTo(b.x, b.y)
-      ctx.strokeStyle = `rgba(243, 239, 230, ${alpha})`
+      ctx.strokeStyle = `rgba(${palette.particleRgb}, ${alpha})`
       ctx.lineWidth = isFaceAmbient ? 0.34 : 0.52
       ctx.stroke()
     }
@@ -388,12 +408,12 @@ function drawParticleField(ctx, now, particles) {
   particles.forEach((point) => {
     ctx.beginPath()
     ctx.arc(point.x, point.y, point.radius, 0, Math.PI * 2)
-    ctx.fillStyle = `rgba(243, 239, 230, ${point.opacity})`
+    ctx.fillStyle = `rgba(${palette.particleRgb}, ${point.opacity})`
     ctx.fill()
   })
 }
 
-function drawFaceParticleDebug(ctx, particles) {
+function drawFaceParticleDebug(ctx, particles, palette) {
   const faceParticles = particles.filter((particle) => particle.type === 'face')
   const faceAmbientLinks = getFaceAmbientLinks(particles, 3)
 
@@ -403,7 +423,7 @@ function drawFaceParticleDebug(ctx, particles) {
     ctx.beginPath()
     ctx.moveTo(faceParticle.x, faceParticle.y)
     ctx.lineTo(ambientParticle.x, ambientParticle.y)
-    ctx.strokeStyle = `rgba(243, 239, 230, ${alpha})`
+    ctx.strokeStyle = `rgba(${palette.particleRgb}, ${alpha})`
     ctx.lineWidth = 1.1
     ctx.stroke()
   })
@@ -411,7 +431,7 @@ function drawFaceParticleDebug(ctx, particles) {
   faceParticles.forEach((point) => {
     ctx.beginPath()
     ctx.arc(point.x, point.y, Math.max(2.2, point.radius * 1.8), 0, Math.PI * 2)
-    ctx.fillStyle = `rgba(243, 239, 230, ${Math.min(1, point.opacity + 0.28)})`
+    ctx.fillStyle = `rgba(${palette.particleRgb}, ${Math.min(1, point.opacity + 0.28)})`
     ctx.fill()
   })
 }
@@ -444,6 +464,7 @@ export default function FaceDiagnostics({ faceAnalysis }) {
     sourceCanvas.height = RENDER_HEIGHT
     const sourceCtx = sourceCanvas.getContext('2d')
     if (!sourceCtx) return undefined
+    const palette = getFaceCanvasPalette(canvas)
 
     let animationFrameId = null
 
@@ -490,10 +511,10 @@ export default function FaceDiagnostics({ faceAnalysis }) {
           : faceAnalysis?.status === 'requesting'
             ? 'Requesting camera access'
             : 'Awaiting face'
-        drawIdleFrame(sourceCtx, sourceCanvas.width, sourceCanvas.height, label)
+        drawIdleFrame(sourceCtx, sourceCanvas.width, sourceCanvas.height, label, palette)
         updateAmbientPoints(now, ambientPointsRef.current)
         const ambientParticles = buildAmbientParticles(now, sourceCanvas.width, sourceCanvas.height, ambientPointsRef.current)
-        drawParticleField(sourceCtx, now, ambientParticles)
+        drawParticleField(sourceCtx, now, ambientParticles, palette)
         presentFrame(sourceCanvas, displayCtx, DISPLAY_WIDTH, DISPLAY_HEIGHT, pulseScale)
         animationFrameId = requestAnimationFrame(tick)
         return
@@ -521,7 +542,7 @@ export default function FaceDiagnostics({ faceAnalysis }) {
 
       updateAmbientPoints(now, ambientPointsRef.current)
       sourceCtx.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height)
-      sourceCtx.fillStyle = '#050505'
+      sourceCtx.fillStyle = palette.background
       sourceCtx.fillRect(0, 0, sourceCanvas.width, sourceCanvas.height)
       const ambientParticles = buildAmbientParticles(now, sourceCanvas.width, sourceCanvas.height, ambientPointsRef.current)
       const faceParticles = updateFaceParticles(
@@ -532,8 +553,8 @@ export default function FaceDiagnostics({ faceAnalysis }) {
         faceParticlesRef,
       )
       const particles = [...ambientParticles, ...faceParticles]
-      drawParticleField(sourceCtx, now, particles)
-      drawFaceParticleDebug(sourceCtx, particles)
+      drawParticleField(sourceCtx, now, particles, palette)
+      drawFaceParticleDebug(sourceCtx, particles, palette)
       presentFrame(sourceCanvas, displayCtx, DISPLAY_WIDTH, DISPLAY_HEIGHT, pulseScale)
       animationFrameId = requestAnimationFrame(tick)
     }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { shuffle } from '../../../utils'
+import { renderSuperscriptMarks, shuffle } from '../../../utils'
 import './index.scss'
 
 export default function RangeSliders({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent, onAnalyticsPatch, animateAnswers = false }) {
@@ -58,7 +58,7 @@ export default function RangeSliders({ question, sessionKey, onDraftChange, onRe
 
   return (
     <div className="range-sliders">
-      <h2 className="range-sliders-title">{question.text}</h2>
+      <h2 className="range-sliders-title">{renderSuperscriptMarks(question.text)}</h2>
       <p className="range-sliders-instruction">Slide each item to score it.</p>
 
       <div className="range-sliders-list">

@@ -6,12 +6,12 @@
 
   &-title {
     margin: 0;
-    color: #fff;
+    color: var(--quiz-strong-text);
   }
 
   &-instruction {
     margin: 0;
-    color: rgba(255, 255, 255, 0.78);
+    color: var(--quiz-muted-text);
     font-size: clamp(0.9vh, 1.02vh, 1.18vh);
   }
 
@@ -27,16 +27,16 @@
     gap: 0.74vh;
     padding: 1.3vh 1.48vh;
     border-radius: 0.93vh;
-    border: 0.09vh solid rgba(255, 255, 255, 0.18);
+    border: 0.09vh solid var(--quiz-border);
     background: var(--question-answer-backing);
     backdrop-filter: var(--question-answer-blur);
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--quiz-text);
     transition: background-color .28s ease, border-color .28s ease, color .28s ease;
 
     &.touched {
       background: rgba(255, 255, 255, 0.14);
-      border-color: rgba(255, 255, 255, 0.35);
-      color: #fff;
+      border-color: var(--quiz-border-strong);
+      color: var(--quiz-strong-text);
     }
   }
 

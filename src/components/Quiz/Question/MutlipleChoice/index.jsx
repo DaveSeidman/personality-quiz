@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { getSelectRule, getSelectionInstruction, normalizeSelections, shuffle, triggerActivePress } from '../../../utils'
+import { getSelectRule, getSelectionInstruction, normalizeSelections, renderSuperscriptMarks, shuffle, triggerActivePress } from '../../../utils'
 import './index.scss'
 
 function getOrderedAnswers(question) {
@@ -77,7 +77,7 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
 
   return (
     <div className={`multiple-choice ${isPhotoQuestion ? 'photo' : ''}`}>
-      <h2>{question.text}</h2>
+      <h2>{renderSuperscriptMarks(question.text)}</h2>
       <p className="multiple-choice-instruction">{getSelectionInstruction(question.select)}</p>
       <div className="multiple-choice-answers">
         {orderedOptions.map((option, index) => {

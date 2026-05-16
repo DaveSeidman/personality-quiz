@@ -328,6 +328,7 @@ function computeRippleInfluence(cellX, cellY, ripples, now, rippleLifetimeMs = R
 
 export default function Background({ brand }) {
   const isDeshawVariant = brand?.id === 'deshaw'
+  const matrixEnabled = brand?.theme?.backgroundMatrix !== false
   const backgroundConfig = useMemo(() => (
     isDeshawVariant
       ? {
@@ -409,6 +410,11 @@ export default function Background({ brand }) {
   }, [gridColumns, gridRows, isDeshawVariant])
 
   useEffect(() => {
+    if (!matrixEnabled) {
+      glyphCanvasRef.current = []
+      return undefined
+    }
+
     glyphCanvasRef.current = glyphSpecs.map((spec) => {
       const canvas = document.createElement('canvas')
       const size = Math.ceil(spec.size * 2.5)
@@ -433,9 +439,11 @@ export default function Background({ brand }) {
       }
       return canvas
     })
-  }, [glyphSpecs, isDeshawVariant])
+  }, [glyphSpecs, isDeshawVariant, matrixEnabled])
 
   useEffect(() => {
+    if (!matrixEnabled) return undefined
+
     const pushRipple = (event, type) => {
       const pointerMoveIntervalMs = isDeshawVariant ? DESHAW_POINTER_MOVE_INTERVAL_MS : POINTER_MOVE_INTERVAL_MS
       if ((type === 'drag' || type === 'hover') && performance.now() - lastPointerMoveAtRef.current < pointerMoveIntervalMs) {
@@ -497,9 +505,11 @@ export default function Background({ brand }) {
       window.removeEventListener('pointerup', handlePointerEnd)
       window.removeEventListener('pointercancel', handlePointerEnd)
     }
-  }, [isDeshawVariant])
+  }, [isDeshawVariant, matrixEnabled])
 
   useEffect(() => {
+    if (!matrixEnabled) return undefined
+
     const canvas = canvasRef.current
     if (!canvas) return undefined
 
@@ -680,16 +690,29 @@ export default function Background({ brand }) {
       window.removeEventListener('resize', resize)
       if (animationFrameId) cancelAnimationFrame(animationFrameId)
     }
-  }, [depthBuckets, gridColumns, gridRows, isDeshawVariant])
+  }, [depthBuckets, gridColumns, gridRows, isDeshawVariant, matrixEnabled])
 
   return (
     <div className={`background-matrix${isDeshawVariant ? ' background-matrix--deshaw' : ''}`}>
-      <canvas ref={canvasRef} className="background-matrix-canvas" />
+      {matrixEnabled ? (
+        <canvas ref={canvasRef} className="background-matrix-canvas" />
+      ) : null}
       {brand?.assets?.backgroundImage ? (
         <img
           className="background-matrix-image"
           src={brand.assets.backgroundImage}
           alt=""
+          aria-hidden="true"
+        />
+      ) : null}
+      {brand?.assets?.backgroundVideo ? (
+        <video
+          className="background-matrix-video"
+          src={brand.assets.backgroundVideo}
+          autoPlay
+          muted
+          loop
+          playsInline
           aria-hidden="true"
         />
       ) : null}

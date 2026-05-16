@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import { shuffle } from '../../../utils'
+import { renderSuperscriptMarks, shuffle } from '../../../utils'
 import './index.scss'
 
 export default function RankedChoice({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent, onAnalyticsPatch }) {
@@ -108,7 +108,7 @@ export default function RankedChoice({ question, sessionKey, onDraftChange, onRe
 
   return (
     <div className="ranked-choice">
-      <h2 className="ranked-choice-title">{question.text}</h2>
+      <h2 className="ranked-choice-title">{renderSuperscriptMarks(question.text)}</h2>
       <p className="ranked-choice-subtitle">rearrange the answers so that your favorite is on top and least favorite is on bottom</p>
 
       <div className="ranked-choice-list">

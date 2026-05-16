@@ -1,3 +1,22 @@
+import React from 'react'
+
+export function renderSuperscriptMarks(text) {
+  if (text === null || text === undefined) return text
+
+  const value = String(text)
+  const parts = value.split(/(®|\(r\))/i)
+
+  if (parts.length === 1) return value
+
+  return parts.map((part, index) => {
+    if (part === '®' || part.toLowerCase() === '(r)') {
+      return React.createElement('sup', { className: 'registered-mark', key: index }, '®')
+    }
+
+    return part
+  })
+}
+
 export function shuffle(items) {
   const array = [...items]
   for (let i = array.length - 1; i > 0; i -= 1) {

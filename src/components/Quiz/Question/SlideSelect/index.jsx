@@ -4,6 +4,7 @@ import {
   getSelectionInstruction,
   isSelectionComplete,
   normalizeSelections,
+  renderSuperscriptMarks,
   shuffle,
 } from '../../../utils'
 import './index.scss'
@@ -203,7 +204,7 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
 
   return (
     <div className="slide-select">
-      <h2 className="slide-select-title">{question.text}</h2>
+      <h2 className="slide-select-title">{renderSuperscriptMarks(question.text)}</h2>
       <p className="slide-select-subtitle">select {question.select} answer{question.select > 1 ? 's' : ''} by sliding</p>
 
       <div className="slide-select-list">

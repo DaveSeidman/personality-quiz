@@ -4,7 +4,7 @@ $layout-margin: 1.2vh;
 $layout-padding: 1.5vh;
 
 .question {
-  --question-answer-backing: rgba(10, 10, 10, 0.58);
+  --question-answer-backing: var(--question-option-bg);
   --question-answer-blur: blur(.14vh);
   width: calc(100% - $layout-padding);
   height: 100%;
@@ -15,6 +15,7 @@ $layout-padding: 1.5vh;
   flex-direction: column;
   overflow: hidden;
   justify-content: center;
+  color: var(--quiz-text);
 
   &-content {
     width: calc(100% - 3vh);
@@ -23,8 +24,8 @@ $layout-padding: 1.5vh;
     justify-content: center;
     padding: $layout-padding;
     border-radius: var(--radius-sm);
-    background: rgba(0, 0, 0, 0.5);
-    border: var(--line-hair) solid rgba(255, 255, 255, 0.18);
+    background: var(--question-panel-bg);
+    border: var(--line-hair) solid var(--question-panel-border);
     box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.32);
     margin: 4vh 0 0;
 
@@ -32,6 +33,7 @@ $layout-padding: 1.5vh;
       // margin: 0 0 1.5vh;
       font-size: clamp(1.3vh, 1.6vh, 2.3vh);
       line-height: 1.25;
+      color: var(--quiz-strong-text);
     }
   }
 
@@ -60,7 +62,7 @@ $layout-padding: 1.5vh;
         right: 10vh;
         margin: 0;
         font-size: 1vh;
-        color: src.$orange;
+        color: var(--accent);
         text-align: right;
         width: auto;
         margin: .75vh 0;

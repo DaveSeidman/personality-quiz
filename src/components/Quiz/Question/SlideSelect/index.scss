@@ -13,7 +13,7 @@
   &-subtitle {
     margin: 0;
     min-height: 1.85vh;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--quiz-muted-text);
     font-size: clamp(.9vh, 1vh, 1.2vh);
   }
 
@@ -28,7 +28,7 @@
     margin: 0;
     padding: 1.3vh 1.5vh;
     border-radius: var(--radius-sm);
-    border: .1vh solid rgba(255, 255, 255, 0.18);
+    border: .1vh solid var(--quiz-border);
     background: var(--question-answer-backing);
     backdrop-filter: var(--question-answer-blur);
     opacity: 0.9;
@@ -42,20 +42,20 @@
     &.selected {
       background: src.$orange;
       color: black;
-      border-color: rgba(255, 255, 255, 0.88);
+      border-color: var(--quiz-border-strong);
       box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.32);
       opacity: 1;
       transform: scale(1.02);
 
       .slide-select-row-fill {
-        background: #000;
+        background: var(--accent-contrast);
       }
     }
 
     &.dragging {
       background: color-mix(in srgb, rgba(0, 0, 0, 0.08) calc(100% - (var(--slide-progress) * 100%)), src.$orange calc(var(--slide-progress) * 100%));
       color: color-mix(in srgb, rgba(255, 255, 255, 0.92) calc(100% - (var(--slide-progress) * 100%)), #050505 calc(var(--slide-progress) * 100%));
-      border-color: color-mix(in srgb, rgba(255, 255, 255, 0.18) calc(100% - (var(--slide-progress) * 100%)), rgba(255, 255, 255, 0.88) calc(var(--slide-progress) * 100%));
+      border-color: color-mix(in srgb, var(--quiz-border) calc(100% - (var(--slide-progress) * 100%)), var(--quiz-border-strong) calc(var(--slide-progress) * 100%));
       opacity: 1;
 
       .slide-select-row-fill {
@@ -99,8 +99,8 @@
       flex: 1;
       height: 1.15vh;
       border-radius: inherit;
-      border: 0.1vh solid rgba(255, 255, 255, 0.2);
-      background: rgba(255, 255, 255, 0.25);
+      border: 0.1vh solid var(--quiz-border);
+      background: color-mix(in srgb, var(--quiz-border), transparent 30%);
       overflow: visible;
     }
 

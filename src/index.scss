@@ -8,7 +8,27 @@ $green: #040404;
   --app-text: #f3efe6;
   --accent: #f3efe6;
   --accent-contrast: #050505;
+  --question-panel-bg: rgba(0, 0, 0, 0.5);
+  --question-panel-border: rgba(255, 255, 255, 0.18);
+  --question-option-bg: rgba(10, 10, 10, 0.58);
+  --quiz-text: rgba(255, 255, 255, 0.88);
+  --quiz-muted-text: rgba(255, 255, 255, 0.7);
+  --quiz-strong-text: #ffffff;
+  --quiz-border: rgba(255, 255, 255, 0.18);
+  --quiz-border-strong: rgba(255, 255, 255, 0.35);
+  --console-text: rgba(243, 239, 230, 0.94);
+  --console-muted-text: rgba(255, 255, 255, 0.58);
+  --console-strong-text: rgba(255, 255, 255, 0.92);
+  --console-surface: rgba(8, 8, 8, 0.68);
+  --console-surface-active: rgba(8, 8, 8, 0.78);
+  --console-surface-strong: rgba(8, 8, 8, 0.92);
+  --console-surface-soft: rgba(255, 255, 255, 0.04);
+  --console-border: rgba(255, 255, 255, 0.12);
+  --console-border-strong: rgba(255, 255, 255, 0.3);
+  --console-track: rgba(255, 255, 255, 0.08);
   --app-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --app-heading-font-family: var(--app-font-family);
+  --app-heading-text-transform: none;
   --app-font-family-canvas: "Brand Experience Font";
   --ui-transition: 0.16s ease;
   --panel-black: rgba(7, 7, 7, 0.84);
@@ -84,6 +104,20 @@ body,
   font-family: var(--app-font-family);
 }
 
+h1,
+h2,
+h3 {
+  font-family: var(--app-heading-font-family);
+  text-transform: var(--app-heading-text-transform);
+}
+
+.registered-mark {
+  font-size: 0.42em;
+  line-height: 0;
+  vertical-align: super;
+  margin-left: 0.04em;
+}
+
 .app {
   position: relative;
   width: 100%;
@@ -140,6 +174,7 @@ body,
   p {
     font-size: 1.8vh;
     color: #fff;
+    font-family: var(--app-heading-font-family);
   }
 
   span {
@@ -152,15 +187,15 @@ body,
 
 .app-logo {
   position: absolute;
-  width: 20vh;
   height: 6vh;
   margin: 1vh 3vh;
   pointer-events: none;
 
   img {
-    width: 100%;
     height: 100%;
+    width: auto;
     object-fit: contain;
+    object-position: left center;
   }
 }
 

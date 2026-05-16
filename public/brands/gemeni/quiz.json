@@ -1,0 +1,216 @@
+{
+  "quizId": "gemeni-cocktail-personality-v1",
+  "useadvancedTelemetry": false,
+  "features": {
+    "faceAnalysis": true
+  },
+  "console": {
+    "face": true,
+    "signals": true
+  },
+  "personalities": [
+    {
+      "id": "true-to-you",
+      "name": "You’re TRUE TO YOU",
+      "color": "#5B52FF",
+      "description": "You lead with clarity and grace. You do not need noise to make an impact. Your presence is enough. Your cocktail is the Lavender Lemon Spritz: True Vodka, lavender, and lemon. Light, intentional, and quietly unforgettable.",
+      "drinkRecommendation": "Lavender Lemon Spritz"
+    },
+    {
+      "id": "inner-glow",
+      "name": "You’re INNER GLOW",
+      "color": "#A259FF",
+      "description": "You move through the world with warmth, color, and emotional electricity. You remind people that joy can be a form of wisdom. Your cocktail is the Hibiscus Limeade: tequila, hibiscus, and lime. Bright, expressive, and made to be felt.",
+      "drinkRecommendation": "Hibiscus Limeade"
+    },
+    {
+      "id": "soul-proof",
+      "name": "You’re SOUL PROOF",
+      "color": "#00B594",
+      "description": "You are grounded, layered, and stronger than the room realizes at first glance. You carry sweetness, spice, and experience in equal measure. Your cocktail is the Frosted Ginger Apple: bourbon or brandy, apple, ginger, lemon, and spices. Deep, steady, and impossible to fake.",
+      "drinkRecommendation": "Frosted Ginger Apple"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "label": "Trust the Process",
+      "text": "\"Trust the Process\" — what does that mean to you tonight?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Letting go and letting things flow",
+          "personalityId": "true-to-you"
+        },
+        {
+          "id": "B",
+          "content": "Following the feeling and lighting up the room",
+          "personalityId": "inner-glow"
+        },
+        {
+          "id": "C",
+          "content": "Standing on what I’ve survived and built",
+          "personalityId": "soul-proof"
+        },
+        {
+          "id": "D",
+          "content": "Still becoming — but ready to choose myself",
+          "personalityId": "true-to-you"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "Learning to Love",
+      "text": "The part of yourself you’re learning to love most is:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "My softness, intuition, and sensitivity",
+          "personalityId": "true-to-you"
+        },
+        {
+          "id": "B",
+          "content": "My radiance, joy, and bold energy",
+          "personalityId": "inner-glow"
+        },
+        {
+          "id": "C",
+          "content": "My depth, resilience, and complexity",
+          "personalityId": "soul-proof"
+        },
+        {
+          "id": "D",
+          "content": "All of it — it’s a process",
+          "personalityId": "soul-proof"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "Room Energy",
+      "text": "When you walk into a room, what do you hope people feel from you?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Calm, clarity, and ease",
+          "personalityId": "true-to-you"
+        },
+        {
+          "id": "B",
+          "content": "Warmth, color, and magnetic energy",
+          "personalityId": "inner-glow"
+        },
+        {
+          "id": "C",
+          "content": "Strength, wisdom, and realness",
+          "personalityId": "soul-proof"
+        },
+        {
+          "id": "D",
+          "content": "Permission to be fully themselves",
+          "personalityId": "inner-glow"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "label": "Guidance",
+      "text": "What kind of guidance do you want from GEMINI NEAR ME® tonight?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "A gentle reflection that helps me breathe",
+          "personalityId": "true-to-you"
+        },
+        {
+          "id": "B",
+          "content": "A spark that lifts my mood and opens my heart",
+          "personalityId": "inner-glow"
+        },
+        {
+          "id": "C",
+          "content": "A grounded truth I can actually carry with me",
+          "personalityId": "soul-proof"
+        },
+        {
+          "id": "D",
+          "content": "The sign I didn’t know I needed",
+          "personalityId": "true-to-you"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "label": "Self Love Language",
+      "text": "Your love language to yourself right now is:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Peace, space, and a softer pace",
+          "personalityId": "true-to-you"
+        },
+        {
+          "id": "B",
+          "content": "Celebration, movement, and saying yes to life",
+          "personalityId": "inner-glow"
+        },
+        {
+          "id": "C",
+          "content": "Loyalty, boundaries, and choosing what’s real",
+          "personalityId": "soul-proof"
+        },
+        {
+          "id": "D",
+          "content": "Patience while I evolve",
+          "personalityId": "soul-proof"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "label": "Stepping Into",
+      "text": "What’s the version of yourself you’re stepping into tonight?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Open, clear, and in full bloom",
+          "personalityId": "true-to-you"
+        },
+        {
+          "id": "B",
+          "content": "Bold, alive, and unstoppable",
+          "personalityId": "inner-glow"
+        },
+        {
+          "id": "C",
+          "content": "Grounded, whole, and truly myself",
+          "personalityId": "soul-proof"
+        },
+        {
+          "id": "D",
+          "content": "Still becoming — and that’s okay",
+          "personalityId": "inner-glow"
+        }
+      ]
+    }
+  ]
+}

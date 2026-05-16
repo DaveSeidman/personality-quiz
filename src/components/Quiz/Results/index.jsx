@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { triggerActivePress } from '../../utils'
+import { renderSuperscriptMarks, triggerActivePress } from '../../utils'
 import './index.scss'
 import {
   clamp,
@@ -216,8 +216,8 @@ export default function Results({ brand, result, status = 'idle', analytics, que
 
           {/* Screen A: idle + submitting */}
           <div className={`results-screen ${!isSubmitted ? 'in' : 'out'}`}>
-            <h2 className="results-title">{copy.resultsTitle || 'Analyzing your answers...'}</h2>
-            <p className="results-instruction">{copy.resultsInstruction || 'Hang tight while we process your responses.'}</p>
+            <h2 className="results-title">{renderSuperscriptMarks(copy.resultsTitle || 'Analyzing your answers...')}</h2>
+            <p className="results-instruction">{renderSuperscriptMarks(copy.resultsInstruction || 'Hang tight while we process your responses.')}</p>
             <div className="results-blob-placeholder">
               <video
                 className={`results-blob-video ${isSubmitting ? 'blob-active' : 'blob-idle'}`}
@@ -225,8 +225,8 @@ export default function Results({ brand, result, status = 'idle', analytics, que
                 autoPlay muted loop playsInline
               />
               <div className={`results-blob-overlay ${isSubmitting ? 'visible' : ''}`}>
-                <p>{copy.loadingTitle || 'Translating your signals...'}</p>
-                <span>{copy.loadingBody || 'Syncing with the cocktail oracle. This usually takes a beat.'}</span>
+                <p>{renderSuperscriptMarks(copy.loadingTitle || 'Translating your signals...')}</p>
+                <span>{renderSuperscriptMarks(copy.loadingBody || 'Syncing with the cocktail oracle. This usually takes a beat.')}</span>
               </div>
             </div>
           </div>
@@ -238,7 +238,7 @@ export default function Results({ brand, result, status = 'idle', analytics, que
                 {result?.result ? (
                   <>
                     <p className="results-status-match">
-                      Top match: <strong>{result.result.personalityName}</strong>
+                      Top match: <strong>{renderSuperscriptMarks(result.result.personalityName)}</strong>
                       <span className="results-status-confidence">{Math.round((result.result.confidence || 0) * 100)}% Match</span>
                     </p>
                     <p className="results-status-statement">

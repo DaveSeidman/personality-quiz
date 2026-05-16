@@ -1,0 +1,86 @@
+{
+  "id": "gemini",
+  "displayName": "GEMINI NEAR ME®",
+  "accentColor": "#36D6B4",
+  "theme": {
+    "fontFamily": "DM Sans",
+    "fontUrl": "/brands/gemini/fonts/DMSans-Regular.ttf",
+    "fontFaces": [
+      {
+        "url": "/brands/gemini/fonts/DMSans-Regular.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "url": "/brands/gemini/fonts/DMSans-Italic.ttf",
+        "weight": 400,
+        "style": "italic"
+      },
+      {
+        "url": "/brands/gemini/fonts/DMSans-Medium.ttf",
+        "weight": 500,
+        "style": "normal"
+      },
+      {
+        "url": "/brands/gemini/fonts/DMSans-MediumItalic.ttf",
+        "weight": 500,
+        "style": "italic"
+      },
+      {
+        "url": "/brands/gemini/fonts/DMSans-Bold.ttf",
+        "weight": 700,
+        "style": "normal"
+      },
+      {
+        "url": "/brands/gemini/fonts/DMSans-BoldItalic.ttf",
+        "weight": 700,
+        "style": "italic"
+      }
+    ],
+    "headingFontFamily": "Zodiak",
+    "headingFontUrl": "/brands/gemini/fonts/Zodiak-Variable.ttf",
+    "headingFontFaces": [
+      {
+        "url": "/brands/gemini/fonts/Zodiak-Variable.ttf",
+        "weight": "300 900",
+        "style": "normal"
+      },
+      {
+        "url": "/brands/gemini/fonts/Zodiak-VariableItalic.ttf",
+        "weight": "300 900",
+        "style": "italic"
+      }
+    ],
+    "backgroundMatrix": false,
+    "quizMode": "light",
+    "fontFallback": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "colors": {
+      "appBg": "#060714",
+      "text": "#EAE8FF",
+      "accent": "#36D6B4",
+      "accentContrast": "#050505",
+      "questionPanel": "rgba(255, 255, 255, 0.1)",
+      "questionPanelBorder": "transparent",
+      "questionOption": "rgba(255, 255, 255, 0.14)"
+    }
+  },
+  "assets": {
+    "logo": "/brands/gemini/images/gemini.png",
+    "backgroundVideo": "/brands/gemini/videos/ambient.mov",
+    "attractVideo": "/brands/gemini/videos/ambient.mov",
+    "loadingVideo": "/brands/gemini/videos/ambient.mov"
+  },
+  "copy": {
+    "attractTitle": "GEMINI NEAR ME®",
+    "attractSubtitle": "Answer {questionCount} questions to discover your cocktail personality.",
+    "resultsTitle": "Finding your cocktail personality...",
+    "resultsInstruction": "Hang tight while we match your answers.",
+    "loadingTitle": "Trusting the process...",
+    "loadingBody": "Matching your choices to the cocktail that fits your energy tonight.",
+    "reviewLabel": "Review",
+    "submitLabel": "Reveal",
+    "submittingLabel": "Revealing...",
+    "startOverLabel": "Start Over"
+  },
+  "quizUrl": "/brands/gemeni/quiz.json"
+}

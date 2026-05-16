@@ -2,8 +2,46 @@ const DEFAULT_BRAND_ID = 'lightbox'
 const BRAND_FONT_STYLE_ID = 'brand-font-face'
 const DEFAULT_FONT_STACK = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
 const BRAND_FONT_ALIAS = '"Brand Experience Font"'
+const BRAND_HEADING_FONT_ALIAS = '"Brand Experience Heading Font"'
 const BRAND_CONFIG_FILENAMES = ['manifest.json', 'brand.json']
 const BASE_URL = import.meta.env.BASE_URL || '/'
+
+const QUIZ_MODE_TOKENS = {
+  dark: {
+    quizText: 'rgba(255, 255, 255, 0.88)',
+    quizMutedText: 'rgba(255, 255, 255, 0.7)',
+    quizStrongText: '#ffffff',
+    quizBorder: 'rgba(255, 255, 255, 0.18)',
+    quizBorderStrong: 'rgba(255, 255, 255, 0.35)',
+    consoleText: 'rgba(243, 239, 230, 0.94)',
+    consoleMutedText: 'rgba(255, 255, 255, 0.58)',
+    consoleStrongText: 'rgba(255, 255, 255, 0.92)',
+    consoleSurface: 'rgba(8, 8, 8, 0.68)',
+    consoleSurfaceActive: 'rgba(8, 8, 8, 0.78)',
+    consoleSurfaceStrong: 'rgba(8, 8, 8, 0.92)',
+    consoleSurfaceSoft: 'rgba(255, 255, 255, 0.04)',
+    consoleBorder: 'rgba(255, 255, 255, 0.12)',
+    consoleBorderStrong: 'rgba(255, 255, 255, 0.3)',
+    consoleTrack: 'rgba(255, 255, 255, 0.08)',
+  },
+  light: {
+    quizText: 'rgba(255, 255, 255, 0.88)',
+    quizMutedText: 'rgba(255, 255, 255, 0.72)',
+    quizStrongText: '#ffffff',
+    quizBorder: 'rgba(255, 255, 255, 0.18)',
+    quizBorderStrong: 'rgba(255, 255, 255, 0.35)',
+    consoleText: 'rgba(255, 255, 255, 0.9)',
+    consoleMutedText: 'rgba(255, 255, 255, 0.64)',
+    consoleStrongText: '#ffffff',
+    consoleSurface: 'rgba(255, 255, 255, 0.035)',
+    consoleSurfaceActive: 'rgba(255, 255, 255, 0.08)',
+    consoleSurfaceStrong: 'rgba(255, 255, 255, 0.12)',
+    consoleSurfaceSoft: 'rgba(255, 255, 255, 0.05)',
+    consoleBorder: 'rgba(255, 255, 255, 0.16)',
+    consoleBorderStrong: 'rgba(255, 255, 255, 0.28)',
+    consoleTrack: 'rgba(255, 255, 255, 0.1)',
+  },
+}
 
 function isObject(value) {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value)
@@ -43,10 +81,10 @@ function resolvePublicUrl(value = '') {
   return `${normalizedBase}${normalizedValue}`
 }
 
-function buildFontFaceCss(fontFaces = []) {
+function buildFontFaceCss(fontFaces = [], fontAlias = BRAND_FONT_ALIAS) {
   return fontFaces.map((fontFace) => {
     const declarations = [
-      `font-family: ${BRAND_FONT_ALIAS}`,
+      `font-family: ${fontAlias}`,
       `src: url("${fontFace.url}")`,
       'font-display: swap',
       fontFace.weight ? `font-weight: ${fontFace.weight}` : '',
@@ -180,6 +218,14 @@ export async function loadBrandExperience() {
     mergedBrand.theme?.fontFaces,
     resolvedFontUrl,
   )
+  const resolvedHeadingFontUrl = await resolveAssetUrl(
+    mergedBrand.theme?.headingFontUrl,
+    '',
+  )
+  const resolvedHeadingFontFaces = await resolveFontFaces(
+    mergedBrand.theme?.headingFontFaces,
+    resolvedHeadingFontUrl,
+  )
 
   const resolvedQuizUrl = await resolveAssetUrl(
     mergedBrand.quizUrl,
@@ -199,6 +245,8 @@ export async function loadBrandExperience() {
         ...(mergedBrand.theme || {}),
         fontUrl: resolvedFontUrl,
         fontFaces: resolvedFontFaces,
+        headingFontUrl: resolvedHeadingFontUrl,
+        headingFontFaces: resolvedHeadingFontFaces,
       },
     },
     quizData,
@@ -209,21 +257,39 @@ export function applyBrandTheme(brand) {
   const root = document.documentElement
   const theme = brand?.theme || {}
   const colors = theme.colors || {}
+  const quizMode = theme.quizMode === 'light' ? 'light' : 'dark'
+  const modeTokens = QUIZ_MODE_TOKENS[quizMode]
   const accentColor = brand?.accentColor || theme.accentColor || colors.accent || '#f3efe6'
   const accentContrast = brand?.accentContrast || theme.accentContrast || colors.accentContrast || getReadableTextColor(accentColor)
   const fontFallback = theme.fontFallback || DEFAULT_FONT_STACK
+  const headingFontFallback = theme.headingFontFallback || fontFallback
   const fontFaces = Array.isArray(theme.fontFaces) ? theme.fontFaces.filter((fontFace) => Boolean(fontFace?.url)) : []
+  const headingFontFaces = Array.isArray(theme.headingFontFaces) ? theme.headingFontFaces.filter((fontFace) => Boolean(fontFace?.url)) : []
   const hasCustomFont = fontFaces.length > 0 || Boolean(theme.fontUrl)
+  const hasCustomHeadingFont = headingFontFaces.length > 0 || Boolean(theme.headingFontUrl)
   const canvasFontFamily = hasCustomFont ? BRAND_FONT_ALIAS : (theme.fontFamily ? `"${theme.fontFamily}"` : 'sans-serif')
   const fontFamily = hasCustomFont
     ? `${BRAND_FONT_ALIAS}, ${fontFallback}`
     : `${theme.fontFamily ? `"${theme.fontFamily}"` : ''}${theme.fontFamily ? ', ' : ''}${fontFallback}`
+  const headingFontFamily = hasCustomHeadingFont
+    ? `${BRAND_HEADING_FONT_ALIAS}, ${headingFontFallback}`
+    : `${theme.headingFontFamily ? `"${theme.headingFontFamily}"` : ''}${theme.headingFontFamily ? ', ' : ''}${fontFamily}`
 
   root.style.setProperty('--app-bg', colors.appBg || '#040404')
   root.style.setProperty('--app-text', colors.text || '#f3efe6')
   root.style.setProperty('--accent', accentColor)
   root.style.setProperty('--accent-contrast', accentContrast)
+  root.style.setProperty('--quiz-mode', quizMode)
+  Object.entries(modeTokens).forEach(([key, value]) => {
+    const cssName = key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)
+    root.style.setProperty(`--${cssName}`, value)
+  })
+  root.style.setProperty('--question-panel-bg', colors.questionPanel || 'rgba(0, 0, 0, 0.5)')
+  root.style.setProperty('--question-panel-border', colors.questionPanelBorder || 'rgba(255, 255, 255, 0.18)')
+  root.style.setProperty('--question-option-bg', colors.questionOption || 'rgba(10, 10, 10, 0.58)')
   root.style.setProperty('--app-font-family', fontFamily)
+  root.style.setProperty('--app-heading-font-family', headingFontFamily)
+  root.style.setProperty('--app-heading-text-transform', theme.headingTextTransform || 'none')
   root.style.setProperty('--app-font-family-canvas', canvasFontFamily)
 
   let styleTag = document.getElementById(BRAND_FONT_STYLE_ID)
@@ -233,9 +299,10 @@ export function applyBrandTheme(brand) {
     document.head.appendChild(styleTag)
   }
 
-  styleTag.textContent = hasCustomFont
-    ? buildFontFaceCss(fontFaces.length ? fontFaces : [{ url: theme.fontUrl }])
-    : ''
+  styleTag.textContent = [
+    hasCustomFont ? buildFontFaceCss(fontFaces.length ? fontFaces : [{ url: theme.fontUrl }], BRAND_FONT_ALIAS) : '',
+    hasCustomHeadingFont ? buildFontFaceCss(headingFontFaces.length ? headingFontFaces : [{ url: theme.headingFontUrl }], BRAND_HEADING_FONT_ALIAS) : '',
+  ].filter(Boolean).join('\n')
 }
 
 export function formatBrandCopy(template, replacements = {}) {

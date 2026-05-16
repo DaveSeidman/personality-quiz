@@ -1,5 +1,6 @@
 import React from "react"
 import { formatBrandCopy } from '../../branding'
+import { renderSuperscriptMarks } from '../utils'
 import './index.scss'
 
 export default function Attract({ attract, quizData, brand, consoleEnabled = true }) {
@@ -20,8 +21,8 @@ export default function Attract({ attract, quizData, brand, consoleEnabled = tru
         playsInline
       />
       <div className="attract-copy">
-        <h1>{attractTitle}</h1>
-        <p>{attractSubtitle}</p>
+        <h1>{renderSuperscriptMarks(attractTitle)}</h1>
+        <p>{renderSuperscriptMarks(attractSubtitle)}</p>
       </div>
     </div>
   )

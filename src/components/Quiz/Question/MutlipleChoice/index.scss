@@ -5,7 +5,7 @@
   &-instruction {
     margin: 0;
     min-height: 1.85vh;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--quiz-muted-text);
     font-size: clamp(0.9vh, 1.02vh, 1.14vh);
   }
 
@@ -18,10 +18,10 @@
       margin: 0;
       padding: 1.63vh 2.22vh;
       border-radius: 0.74vh;
-      border: 0.09vh solid rgba(255, 255, 255, 0.18);
+      border: 0.09vh solid var(--quiz-border);
       background: var(--question-answer-backing);
       backdrop-filter: var(--question-answer-blur);
-      color: rgba(255, 255, 255, 0.88);
+      color: var(--quiz-text);
       cursor: pointer;
       text-align: left;
       opacity: 0.9;
@@ -31,15 +31,15 @@
       text-wrap: pretty;
 
       &:hover {
-        border-color: rgba(255, 255, 255, 0.32);
-        color: #fff;
+        border-color: var(--quiz-border-strong);
+        color: var(--quiz-strong-text);
         opacity: 1;
       }
 
       &.selected {
-        background: src.$orange;
-        border-color: rgba(255, 255, 255, 0.88);
-        color: #070707;
+        background: var(--accent);
+        border-color: var(--quiz-border-strong);
+        color: var(--accent-contrast);
         box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.34);
         opacity: 1;
         // transform: scale(1.05);
@@ -59,7 +59,7 @@
         aspect-ratio: 1;
         overflow: hidden;
         border-radius: 0.74vh;
-        border: 0.19vh solid rgba(255, 255, 255, 0.18);
+        border: 0.19vh solid var(--quiz-border);
         background: var(--question-answer-backing);
         backdrop-filter: var(--question-answer-blur);
         opacity: 0.9;
@@ -67,14 +67,14 @@
 
         &:hover {
           transform: translateY(-0.19vh);
-          border-color: rgba(255, 255, 255, 0.32);
+          border-color: var(--quiz-border-strong);
           opacity: 1;
         }
 
         &.selected {
           transform: translateY(-0.19vh);
-          border-color: rgba(255, 255, 255, 0.88);
-          box-shadow: 0 0 0 0.18vh rgba(255, 255, 255, 0.2);
+          border-color: var(--quiz-border-strong);
+          box-shadow: 0 0 0 0.18vh var(--quiz-border);
           opacity: 1;
         }
 

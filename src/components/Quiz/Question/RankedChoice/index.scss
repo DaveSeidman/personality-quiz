@@ -8,12 +8,12 @@
 
   &-title {
     margin: 0;
-    color: #fff;
+    color: var(--quiz-strong-text);
   }
 
   &-subtitle {
     margin: 0;
-    color: rgba(255, 255, 255, 0.78);
+    color: var(--quiz-muted-text);
     font-size: clamp(0.9vh, 1.02vh, 1.18vh);
   }
 
@@ -31,10 +31,10 @@
     gap: 1.48vh;
     background: var(--question-answer-backing);
     backdrop-filter: var(--question-answer-blur);
-    border: 0.09vh solid rgba(255, 255, 255, 0.18);
+    border: 0.09vh solid var(--quiz-border);
     border-radius: 0.74vh;
     padding: 1.63vh 2.0vh;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--quiz-text);
     cursor: grab;
     opacity: 0.9;
     font-size: clamp(1.0vh, 1.34vh, 1.52vh);
@@ -44,8 +44,8 @@
     will-change: transform;
 
     &.touched {
-      border-color: rgba(255, 255, 255, 0.36);
-      color: #fff;
+      border-color: var(--quiz-border-strong);
+      color: var(--quiz-strong-text);
       opacity: 1;
     }
 
@@ -78,8 +78,8 @@
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: rgba(0, 0, 0, 0.9);
-    color: #fff;
+    background: var(--accent);
+    color: var(--accent-contrast);
     font-weight: 700;
   }
 

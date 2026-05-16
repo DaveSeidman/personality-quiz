@@ -283,7 +283,7 @@ export default function Console({ attract = false, analytics, questions, answers
         </div>
       </div>
 
-      <div className="console-body">
+      <div className={`console-body ${attract ? 'console-body--attract' : ''}`}>
         {faceAnalysisEnabled ? (
           <div className={`console-live-panel ${signalsEnabled && showAggregate ? 'hidden' : ''}`}>
             <FaceDiagnostics faceAnalysis={faceAnalysis} />
