@@ -56,6 +56,12 @@
     pointer-events: none;
   }
 
+  &-graphic {
+    position: absolute;
+    display: block;
+    pointer-events: none;
+  }
+
   &-cta {
     @include src.ui-pill-button-primary;
     display: none;
@@ -77,29 +83,7 @@
 
   &::before,
   &::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-  }
-
-  &::before {
-    width: 60vh;
-    height: 60vh;
-    left: -10vh;
-    bottom: -10vh;
-    border-radius: 50%;
-    background: #b96f25;
-    z-index: -2;
-  }
-
-  &::after {
-    width: 78vh;
-    height: 34vh;
-    right: -13vh;
-    bottom: 10.5vh;
-    border-radius: 50%;
-    background: #ffffff;
-    z-index: -3;
+    content: none;
   }
 
   .attract-copy {
@@ -112,30 +96,17 @@
     z-index: 2;
   }
 
+  .attract-graphic {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    z-index: 1;
+  }
+
   .attract-copy::before,
   .attract-copy::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-    border-radius: 50%;
-  }
-
-  .attract-copy::before {
-    width: 53vh;
-    height: 32vh;
-    left: 0;
-    top: 34vh;
-    background: #d787d4;
-    z-index: -1;
-  }
-
-  .attract-copy::after {
-    width: 31vh;
-    height: 31vh;
-    left: -8vh;
-    top: 45vh;
-    background: #bd51b8;
-    z-index: -1;
+    content: none;
   }
 
   h1 {

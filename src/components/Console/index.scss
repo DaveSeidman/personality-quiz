@@ -174,10 +174,9 @@
     &-visual {
       position: relative;
       border: 0.09vh solid var(--console-border);
-      border-radius: 0.74vh;
+      border-radius: 0.63vh;
       overflow: hidden;
-      background: var(--console-surface);
-      box-shadow: inset 0 0 0 0.09vh var(--console-border);
+      background: var(--console-surface-soft);
       flex: 0 0 auto;
       display: flex;
       align-items: center;
@@ -191,7 +190,7 @@
       display: block;
       aspect-ratio: 7 / 6;
       min-height: 0;
-      background: var(--console-surface);
+      background: var(--console-surface-soft);
     }
 
     &-readout {
@@ -293,12 +292,9 @@
 
     &-row {
       border: 0.09vh solid var(--console-border);
-      border-radius: 0.74vh;
+      border-radius: 0.63vh;
       padding: 1.04vh 1.26vh;
-      background:
-        linear-gradient(180deg, var(--console-surface-soft), transparent 36%),
-        var(--console-surface);
-      box-shadow: inset 0 0 0 0.09vh var(--console-border);
+      background: var(--console-surface-soft);
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -306,10 +302,7 @@
 
       &.active {
         border-color: var(--console-border-strong);
-        background:
-          linear-gradient(180deg, color-mix(in srgb, var(--console-surface-soft), transparent 35%), transparent 36%),
-          var(--console-surface-active);
-        box-shadow: 0 0.45vh 1vh rgba(0, 0, 0, 0.14);
+        background: var(--console-surface-soft);
       }
 
       &-label {

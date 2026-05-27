@@ -24,9 +24,9 @@ $layout-padding: 1.5vh;
     justify-content: center;
     padding: $layout-padding;
     border-radius: var(--radius-sm);
-    background: var(--question-panel-bg);
-    border: var(--line-hair) solid var(--question-panel-border);
-    box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.32);
+    background: transparent;
+    border: 0.35vh solid var(--question-panel-border);
+    box-shadow: none;
     margin: 4vh 0 0;
 
     h2 {

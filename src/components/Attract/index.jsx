@@ -23,6 +23,14 @@ export default function Attract({ attract, quizData, brand, consoleEnabled = tru
           playsInline
         />
       ) : null}
+      {brand?.assets?.attractImage ? (
+        <img
+          className="attract-graphic"
+          src={brand.assets.attractImage}
+          alt=""
+          aria-hidden="true"
+        />
+      ) : null}
       <div className="attract-copy">
         <h1>{renderSuperscriptMarks(attractTitle)}</h1>
         <p>{renderSuperscriptMarks(attractSubtitle)}</p>

@@ -42,18 +42,20 @@ const IMPORTANT_POINTS = new Set([
 function getFaceCanvasPalette(canvas) {
   const computedStyle = getComputedStyle(canvas)
   const isLightMode = computedStyle.getPropertyValue('--quiz-mode').trim() === 'light'
-  const surface = computedStyle.getPropertyValue('--console-surface').trim()
+  const surface = computedStyle.getPropertyValue('--console-surface-soft').trim()
+  const border = computedStyle.getPropertyValue('--console-border').trim()
+  const mutedText = computedStyle.getPropertyValue('--console-muted-text').trim()
 
   return isLightMode
     ? {
       background: surface || 'rgba(255, 255, 255, 0.035)',
-      border: 'rgba(255, 255, 255, 0.12)',
-      text: 'rgba(255, 255, 255, 0.64)',
-      particleRgb: '243, 239, 230',
+      border: border || 'rgba(10, 10, 10, 0.1)',
+      text: mutedText || 'rgba(10, 10, 10, 0.56)',
+      particleRgb: '10, 10, 10',
     }
     : {
-      background: '#050505',
-      border: 'rgba(255, 255, 255, 0.14)',
+      background: surface || 'rgba(255, 255, 255, 0.04)',
+      border: border || 'rgba(255, 255, 255, 0.14)',
       text: 'rgba(255, 255, 255, 0.64)',
       particleRgb: '243, 239, 230',
     }

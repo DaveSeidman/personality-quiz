@@ -21,9 +21,9 @@
     "headingTextTransform": "none",
     "backgroundMatrix": false,
     "backgroundVideoOpacity": 1,
-    "logoHeight": "6.8vh",
+    "logoHeight": "4.35vh",
     "logoMargin": "0",
-    "logoTop": "5vh",
+    "logoTop": "calc(5vh - 45px)",
     "logoLeft": "50%",
     "logoTransform": "translateX(-50%)",
     "quizMode": "light",
@@ -42,9 +42,10 @@
   },
   "assets": {
     "logo": "/brands/ideally/images/Ideally_Wordmark_Black.png",
+    "attractImage": "/brands/ideally/images/eye.png",
     "attractVideo": false,
     "loadingVideo": false,
-    "backgroundVideo": "/brands/ideally/videos/eye-animation.mp4"
+    "backgroundVideo": "/brands/ideally/videos/eye-animation-2.mp4"
   },
   "copy": {
     "attractTitle": "On the menu,\ndistinctiveness.",
