@@ -261,6 +261,33 @@ h3 {
 }
 
 .app--brand-ideally {
+  --ideally-black: #050505;
+  --ideally-yellow: #d7c406;
+  --ideally-pink: #ef94e1;
+  --ideally-orange: #c96b00;
+  --ideally-blue: #0b95bd;
+  --ideally-green: #00470d;
+  --quiz-text: rgba(5, 5, 5, 0.9);
+  --quiz-muted-text: rgba(5, 5, 5, 0.66);
+  --quiz-strong-text: #050505;
+  --quiz-border: rgba(5, 5, 5, 0.58);
+  --quiz-border-strong: rgba(5, 5, 5, 0.92);
+  --question-panel-border: rgba(5, 5, 5, 0.78);
+  --question-option-bg: rgba(239, 148, 225, 0.86);
+  --question-selected-bg: rgba(215, 196, 6, 0.92);
+  --question-selected-text: #050505;
+  --question-selected-border: rgba(5, 5, 5, 0.92);
+  --console-text: rgba(5, 5, 5, 0.84);
+  --console-muted-text: rgba(5, 5, 5, 0.58);
+  --console-strong-text: #050505;
+  --console-surface: rgba(239, 148, 225, 0.76);
+  --console-surface-active: rgba(215, 196, 6, 0.84);
+  --console-surface-strong: rgba(255, 255, 255, 0.88);
+  --console-surface-soft: rgba(239, 148, 225, 0.58);
+  --console-border: rgba(5, 5, 5, 0.36);
+  --console-border-strong: rgba(5, 5, 5, 0.72);
+  --console-track: rgba(5, 5, 5, 0.18);
+
   .app-logo {
     z-index: 55;
 
@@ -271,7 +298,7 @@ h3 {
 
   .intro {
     height: 100%;
-    background: #EF94E1;
+    background: #ef94e1;
     z-index: 35;
     justify-content: center;
     gap: 14vh;
@@ -297,7 +324,7 @@ h3 {
     min-height: 8.4vh;
     padding: 1.2vh 4.8vh;
     border-radius: 1.1vh;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.94);
     color: #050505;
     box-shadow: none;
     font-size: clamp(3.2vh, 8vw, 5vh);
@@ -308,14 +335,14 @@ h3 {
 
   .question-navigation-prev-button,
   .question-navigation-next-button {
-    border: .1vh solid rgba(5, 5, 5, 0.18);
-    background: rgba(255, 255, 255, 0.94);
+    border: .22vh solid rgba(5, 5, 5, 0.86);
+    background: rgba(255, 255, 255, 0.9);
     color: #050505;
-    box-shadow: 0 .55vh 1.5vh rgba(0, 0, 0, 0.24);
-    backdrop-filter: blur(.45vh);
+    box-shadow: none;
+    backdrop-filter: none;
 
     &:hover {
-      border-color: rgba(5, 5, 5, 0.34);
+      border-color: #050505;
       color: #050505;
     }
 

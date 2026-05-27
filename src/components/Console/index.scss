@@ -956,3 +956,79 @@
     transform: scale(0.8);
   }
 }
+
+.app--brand-ideally {
+  .console {
+    background: rgba(255, 255, 255, 0.1);
+    border-top-color: rgba(5, 5, 5, 0.42);
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .console-face-chip,
+  .console-face-scales,
+  .console-feed-row,
+  .console-breakdown-card,
+  .console-aggregate-metric-card {
+    border-width: 0.14vh;
+    background: rgba(239, 148, 225, 0.58);
+  }
+
+  .console-feed-row:nth-child(2n),
+  .console-breakdown-card:nth-child(2n) {
+    background: rgba(239, 148, 225, 0.58);
+  }
+
+  .console-feed-row.active {
+    background: rgba(255, 255, 255, 0.74);
+    border-color: rgba(5, 5, 5, 0.7);
+  }
+
+  .console-face-visual {
+    border-width: 0.14vh;
+    background: rgba(255, 255, 255, 0.58);
+  }
+
+  .console-face-mood,
+  .console-feed-row-metric,
+  .console-feed-row-live {
+    background: rgba(255, 255, 255, 0.54);
+    border-color: rgba(5, 5, 5, 0.28);
+  }
+
+  .console-aggregate-distribution {
+    background: rgba(255, 255, 255, 0.42);
+    border: 0.24vh solid rgba(5, 5, 5, 0.8);
+    box-shadow: 0.55vh 0.55vh 0 rgba(239, 148, 225, 0.58);
+  }
+
+  .console-aggregate-chart,
+  .console-aggregate-chart-bar {
+    background: rgba(255, 255, 255, 0.42);
+    border: 0.24vh solid rgba(5, 5, 5, 0.8);
+    box-shadow: 0.55vh 0.55vh 0 rgba(239, 148, 225, 0.58);
+    color: var(--ideally-black);
+  }
+
+  .console-aggregate-chart-label,
+  .console-aggregate-chart-value {
+    color: var(--ideally-black);
+  }
+
+  .console-aggregate-distribution-row {
+    color: var(--ideally-black);
+  }
+
+  .console-aggregate-distribution-label,
+  .console-aggregate-distribution-value {
+    color: var(--ideally-black);
+  }
+
+  .console-aggregate-distribution-track {
+    background: rgba(5, 5, 5, 0.18);
+  }
+
+  .console-aggregate-chart-track {
+    background: rgba(5, 5, 5, 0.18);
+  }
+}

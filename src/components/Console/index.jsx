@@ -339,11 +339,9 @@ export default function Console({ attract = false, analytics, questions, answers
                     <div className="console-feed-row-graph interactions">
                       <span>Interactions</span>
                       {(() => {
-                        const dotsPerRow = 30
-                        const rowCount = Math.max(3, Math.ceil(row.interactions / dotsPerRow))
-                        const totalDots = rowCount * dotsPerRow
+                        const totalDots = 30
                         return (
-                          <div className="interaction-dot-grid" style={{ '--rows': rowCount }}>
+                          <div className="interaction-dot-grid">
                             {Array.from({ length: totalDots }).map((_, idx) => (
                               <span
                                 key={`${row.id}-dot-${idx}`}

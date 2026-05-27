@@ -89,3 +89,29 @@ $layout-padding: 1.5vh;
 .question.build-on {}
 
 .question-content.before-visited {}
+
+.app--brand-ideally {
+  .question {
+    --question-answer-blur: none;
+  }
+
+  .question-content {
+    border: 0.48vh solid var(--question-panel-border);
+    background: transparent;
+    box-shadow: none;
+
+    h2 {
+      font-weight: 700;
+      text-shadow:
+        0.08vh 0.08vh 0 rgba(255, 255, 255, 0.6),
+        -0.08vh -0.08vh 0 rgba(255, 255, 255, 0.42);
+    }
+  }
+
+  .question-navigation-next-message {
+    padding: 0.35vh 0.7vh;
+    border-radius: 0.45vh;
+    background: rgba(239, 148, 225, 0.9);
+    color: var(--ideally-black);
+  }
+}

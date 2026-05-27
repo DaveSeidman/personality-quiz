@@ -32,12 +32,12 @@
       "text": "#080808",
       "accent": "#0c0c0c",
       "accentContrast": "#ffffff",
-      "questionPanel": "rgba(255, 255, 255, 0.68)",
-      "questionPanelBorder": "rgba(8, 8, 8, 0.12)",
-      "questionOption": "rgba(8, 8, 8, 0.1)",
-      "questionSelected": "#ffffff",
+      "questionPanel": "transparent",
+      "questionPanelBorder": "rgba(5, 5, 5, 0.78)",
+      "questionOption": "rgba(239, 148, 225, 0.86)",
+      "questionSelected": "rgba(215, 196, 6, 0.92)",
       "questionSelectedText": "#050505",
-      "questionSelectedBorder": "rgba(8, 8, 8, 0.28)"
+      "questionSelectedBorder": "rgba(5, 5, 5, 0.9)"
     }
   },
   "assets": {

@@ -18,10 +18,10 @@ function getDominantColor(vector = {}, colorMap = {}, alpha = 0.92) {
 }
 
 const QUESTION_POLYGON_STYLES = [
-  { dash: [], fillAlpha: 0.08, strokeAlpha: 0.82 },
-  { dash: [8, 5], fillAlpha: 0.06, strokeAlpha: 0.7 },
-  { dash: [3, 5], fillAlpha: 0.05, strokeAlpha: 0.62 },
-  { dash: [14, 5, 3, 5], fillAlpha: 0.04, strokeAlpha: 0.54 },
+  { dash: [], fillAlpha: 0.18, strokeAlpha: 0.9 },
+  { dash: [8, 5], fillAlpha: 0.15, strokeAlpha: 0.82 },
+  { dash: [3, 5], fillAlpha: 0.13, strokeAlpha: 0.76 },
+  { dash: [14, 5, 3, 5], fillAlpha: 0.11, strokeAlpha: 0.7 },
 ]
 
 function RadarCanvas({ composite, byQuestion, legend, colorMap }) {
@@ -40,6 +40,8 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap }) {
     const cx = width / 2
     const cy = height / 2
     const radius = Math.min(width, height) * 0.36
+    const isLightMode = getComputedStyle(canvas).getPropertyValue('--quiz-mode').trim() === 'light'
+    const radarInk = isLightMode ? '5,5,5' : '255,255,255'
 
     const axes = legend.map((entry, index) => ({
       ...entry,
@@ -80,14 +82,14 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap }) {
       for (let y = cy - radius - tile; y < cy + radius + tile; y += tile) {
         for (let x = cx - radius - tile; x < cx + radius + tile; x += tile) {
           const isEven = ((Math.floor((x - (cx - radius)) / tile) + Math.floor((y - (cy - radius)) / tile)) % 2) === 0
-          ctx.fillStyle = isEven ? 'rgba(255,255,255,0.025)' : 'rgba(255,255,255,0.05)'
+          ctx.fillStyle = isEven ? `rgba(${radarInk},0.055)` : `rgba(${radarInk},0.09)`
           ctx.fillRect(x, y, tile, tile)
         }
       }
       ctx.restore()
 
       // concentric grid polygons
-      ctx.strokeStyle = 'rgba(255,255,255,0.1)'
+      ctx.strokeStyle = `rgba(${radarInk},0.24)`
       ctx.lineWidth = 1
       for (let level = 1; level <= 4; level++) {
         const r = (radius * level) / 4
@@ -101,7 +103,7 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap }) {
         ctx.beginPath()
         ctx.moveTo(cx, cy)
         ctx.lineTo(cx + Math.cos(axis.angle) * radius, cy + Math.sin(axis.angle) * radius)
-        ctx.strokeStyle = 'rgba(255,255,255,0.18)'
+        ctx.strokeStyle = `rgba(${radarInk},0.32)`
         ctx.lineWidth = 1
         ctx.stroke()
 
@@ -120,18 +122,18 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap }) {
           ctx.beginPath()
           pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
           ctx.closePath()
-          ctx.fillStyle = `rgba(255,255,255,${style.fillAlpha})`
+          ctx.fillStyle = `rgba(${radarInk},${style.fillAlpha})`
           ctx.fill()
           ctx.setLineDash(style.dash)
-          ctx.strokeStyle = `rgba(255,255,255,${style.strokeAlpha})`
-          ctx.lineWidth = 1.35
+          ctx.strokeStyle = `rgba(${radarInk},${style.strokeAlpha})`
+          ctx.lineWidth = 1.8
           ctx.stroke()
           ctx.setLineDash([])
 
           pts.forEach((p) => {
             ctx.beginPath()
             ctx.arc(p.x, p.y, 2.4, 0, Math.PI * 2)
-            ctx.fillStyle = 'rgba(255,255,255,0.78)'
+            ctx.fillStyle = `rgba(${radarInk},0.88)`
             ctx.fill()
           })
         })
@@ -146,17 +148,17 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap }) {
         ctx.moveTo(cx, cy)
         ctx.lineTo(p.x, p.y)
         ctx.strokeStyle = colorMap[p.axis.id] || 'rgba(255,255,255,0.8)'
-        ctx.lineWidth = 1.5
+        ctx.lineWidth = 2.2
         ctx.stroke()
       })
 
       ctx.beginPath()
       compPts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
       ctx.closePath()
-      ctx.fillStyle = getDominantColor(composite, colorMap, 0.22)
+      ctx.fillStyle = getDominantColor(composite, colorMap, 0.42)
       ctx.fill()
       ctx.strokeStyle = getDominantColor(composite, colorMap, 0.96)
-      ctx.lineWidth = 2
+      ctx.lineWidth = 2.8
       ctx.stroke()
 
       compPts.forEach((p) => {

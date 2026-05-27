@@ -40,10 +40,11 @@ $layout-padding-compact: 1.45vh;
 
   &-screens {
     position: relative;
-    flex: 1;
+    flex: 0 1 calc(100% - 100px);
     // min-height: 0;
-    height: 100%;
+    height: calc(100% - 100px);
     width: 100%;
+    overflow: hidden;
   }
 
   &-screen {
@@ -185,7 +186,10 @@ $layout-padding-compact: 1.45vh;
     gap: 0.75vh;
 
     &-summary {
-      flex-shrink: 0;
+      flex: 1 1 auto;
+      min-height: 0;
+      max-height: none;
+      overflow-y: auto;
       background: color-mix(in srgb, var(--console-surface-soft), transparent 55%);
       border: var(--line-hair) solid color-mix(in srgb, var(--console-border), var(--console-strong-text) 20%);
       border-radius: var(--radius-xs);
@@ -318,18 +322,18 @@ $layout-padding-compact: 1.45vh;
                 transparent .85vh 1.2vh,
                 rgba(255, 255, 255, 0.76) 1.2vh 1.45vh,
                 transparent 1.45vh 1.9vh);
-          }
-        }
       }
     }
+  }
+}
 
     &-legend {
-      flex-shrink: 0;
+      flex: 0 0 auto;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 1.2vh 2.4vh;
-      margin: 1vh 0;
+      margin: 0.35vh 0 0;
 
       &-item {
         display: inline-flex;
@@ -631,4 +635,42 @@ $layout-padding-compact: 1.45vh;
   }
 
 
+}
+
+.app--brand-ideally {
+  .results-content {
+    background: rgba(255, 255, 255, 0.84);
+    border: 0.24vh solid rgba(5, 5, 5, 0.8);
+    box-shadow: 0.55vh 0.55vh 0 rgba(239, 148, 225, 0.58);
+    color: var(--ideally-black);
+  }
+
+  .results-blob-placeholder,
+  .results-status-summary,
+  .results-status-question {
+    border-width: 0.16vh;
+    border-color: rgba(5, 5, 5, 0.46);
+    background: rgba(239, 148, 225, 0.42);
+  }
+
+  .results-blob-overlay {
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: none;
+  }
+
+  .results-status-drink {
+    color: var(--ideally-black);
+    font-weight: 700;
+  }
+
+  .results-status-analytics-toggle {
+    border-width: 0.16vh;
+    border-color: rgba(5, 5, 5, 0.76);
+    background: rgba(215, 196, 6, 0.8);
+    color: var(--ideally-black);
+  }
+
+  .results-status-question:nth-child(2n) {
+    background: rgba(239, 148, 225, 0.42);
+  }
 }

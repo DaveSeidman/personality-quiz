@@ -88,3 +88,33 @@
     line-height: 1.35;
   }
 }
+
+.app--brand-ideally {
+  .ranked-choice-subtitle {
+    color: var(--quiz-muted-text);
+    font-weight: 700;
+  }
+
+  .ranked-choice-row {
+    border: 0.22vh solid var(--quiz-border);
+    background: var(--question-option-bg);
+    color: var(--ideally-black);
+    opacity: 1;
+    backdrop-filter: none;
+    box-shadow: none;
+
+    &.touched,
+    &.dragging,
+    &.locked {
+      border-color: var(--quiz-border-strong);
+      background: var(--question-selected-bg);
+      color: var(--ideally-black);
+      box-shadow: 0.45vh 0.45vh 0 rgba(5, 5, 5, 0.22);
+    }
+  }
+
+  .ranked-choice-rank {
+    background: var(--ideally-black);
+    color: #ffffff;
+  }
+}

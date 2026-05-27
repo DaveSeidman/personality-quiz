@@ -64,3 +64,27 @@
     transform: translateY(0);
   }
 }
+
+.app--brand-ideally {
+  .range-sliders-instruction {
+    color: var(--quiz-muted-text);
+    font-weight: 700;
+  }
+
+  .range-sliders-row {
+    border: 0.22vh solid var(--quiz-border);
+    background: var(--question-option-bg);
+    color: var(--ideally-black);
+    backdrop-filter: none;
+
+    &.touched {
+      background: var(--question-selected-bg);
+      border-color: var(--quiz-border-strong);
+      color: var(--ideally-black);
+    }
+  }
+
+  .range-sliders-control input {
+    accent-color: var(--ideally-black);
+  }
+}
