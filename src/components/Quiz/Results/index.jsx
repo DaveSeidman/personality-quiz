@@ -219,11 +219,13 @@ export default function Results({ brand, result, status = 'idle', analytics, que
             <h2 className="results-title">{renderSuperscriptMarks(copy.resultsTitle || 'Analyzing your answers...')}</h2>
             <p className="results-instruction">{renderSuperscriptMarks(copy.resultsInstruction || 'Hang tight while we process your responses.')}</p>
             <div className="results-blob-placeholder">
-              <video
-                className={`results-blob-video ${isSubmitting ? 'blob-active' : 'blob-idle'}`}
-                src={brand?.assets?.loadingVideo}
-                autoPlay muted loop playsInline
-              />
+              {brand?.assets?.loadingVideo ? (
+                <video
+                  className={`results-blob-video ${isSubmitting ? 'blob-active' : 'blob-idle'}`}
+                  src={brand.assets.loadingVideo}
+                  autoPlay muted loop playsInline
+                />
+              ) : null}
               <div className={`results-blob-overlay ${isSubmitting ? 'visible' : ''}`}>
                 <p>{renderSuperscriptMarks(copy.loadingTitle || 'Translating your signals...')}</p>
                 <span>{renderSuperscriptMarks(copy.loadingBody || 'Syncing with the cocktail oracle. This usually takes a beat.')}</span>

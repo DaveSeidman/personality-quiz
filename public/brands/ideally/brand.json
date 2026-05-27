@@ -1,0 +1,72 @@
+{
+  "id": "ideally",
+  "displayName": "Ideally",
+  "accentColor": "#0c0c0c",
+  "theme": {
+    "fontFamily": "Sohne",
+    "fontUrl": "/brands/ideally/fonts/So\u0308hne-Buch.otf",
+    "fontFaces": [
+      {
+        "url": "/brands/ideally/fonts/So\u0308hne-Buch.otf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "url": "/brands/ideally/fonts/So\u0308hne-Halbfett.otf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ],
+    "fontFallback": "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "headingTextTransform": "none",
+    "backgroundMatrix": false,
+    "backgroundVideoOpacity": 1,
+    "logoHeight": "6.8vh",
+    "logoMargin": "0",
+    "logoTop": "5vh",
+    "logoLeft": "50%",
+    "logoTransform": "translateX(-50%)",
+    "quizMode": "light",
+    "colors": {
+      "appBg": "#f3f0e7",
+      "text": "#080808",
+      "accent": "#0c0c0c",
+      "accentContrast": "#ffffff",
+      "questionPanel": "rgba(255, 255, 255, 0.68)",
+      "questionPanelBorder": "rgba(8, 8, 8, 0.12)",
+      "questionOption": "rgba(8, 8, 8, 0.1)",
+      "questionSelected": "#ffffff",
+      "questionSelectedText": "#050505",
+      "questionSelectedBorder": "rgba(8, 8, 8, 0.28)"
+    }
+  },
+  "assets": {
+    "logo": "/brands/ideally/images/Ideally_Wordmark_Black.png",
+    "attractVideo": false,
+    "loadingVideo": false,
+    "backgroundVideo": "/brands/ideally/videos/eye-animation.mp4"
+  },
+  "copy": {
+    "attractTitle": "On the menu,\ndistinctiveness.",
+    "attractSubtitle": "Neat, measured, or mixed -\nwhich one are you?",
+    "attractCtaLabel": "Find out ->",
+    "intro": {
+      "enabled": true,
+      "title": "",
+      "body": [
+        "The best ideas don't ship because someone won an argument. They ship because someone took a calculated risk.",
+        "Answer five questions and find out where you sit, and which cocktail you're drinking tonight."
+      ],
+      "buttonLabel": "Play ->"
+    },
+    "resultsTitle": "Finding your pour...",
+    "resultsInstruction": "Hang tight while we match your answers.",
+    "loadingTitle": "Reading the room...",
+    "loadingBody": "Balancing instinct, evidence, and distinctiveness.",
+    "reviewLabel": "Review",
+    "submitLabel": "Submit",
+    "submittingLabel": "Mixing...",
+    "startOverLabel": "Start Over"
+  },
+  "quizUrl": "/brands/ideally/quiz.json"
+}

@@ -31,7 +31,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    opacity: 0.42;
+    opacity: var(--background-image-opacity, 0.42);
     filter: saturate(1.04) contrast(1.02);
     z-index: 2;
   }
@@ -41,7 +41,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    opacity: 0.44;
+    opacity: var(--background-video-opacity, 0.44);
     filter: saturate(1.06) contrast(1.04);
     z-index: 2;
   }

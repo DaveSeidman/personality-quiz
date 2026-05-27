@@ -5,6 +5,7 @@ import Console from './components/Console'
 import Background from './components/Background'
 import useFaceAnalysis from './components/useFaceAnalysis'
 import { applyBrandTheme, loadBrandExperience } from './branding'
+import { renderSuperscriptMarks, triggerActivePress } from './components/utils'
 import './index.scss'
 
 function getConsoleSettings(quizData) {
@@ -56,7 +57,7 @@ export default function App() {
     quizData: null,
     error: null,
   })
-  const [attract, setAttract] = useState(true)
+  const [experienceMode, setExperienceMode] = useState('attract')
   const [answers, setAnswers] = useState({})
   const [analytics, setAnalytics] = useState({})
   const [activeQuestionId, setActiveQuestionId] = useState(null)
@@ -66,8 +67,11 @@ export default function App() {
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   const consoleSettings = getConsoleSettings(experienceState.quizData)
   const faceAnalysisEnabled = consoleSettings.faceEnabled
+  const attract = experienceMode === 'attract'
+  const introActive = experienceMode === 'intro'
+  const quizInactive = experienceMode !== 'quiz'
   const { videoRef: faceVideoRef, faceAnalysis } = useFaceAnalysis({
-    active: experienceState.status === 'ready' && faceAnalysisEnabled && !attract && cameraEnabled,
+    active: experienceState.status === 'ready' && faceAnalysisEnabled && experienceMode === 'quiz' && cameraEnabled,
   })
   const INACTIVITY_TIMEOUT = 60000
 
@@ -107,16 +111,26 @@ export default function App() {
   }, [])
 
   const activityTimeout = () => {
-    setAttract(true)
+    setExperienceMode('attract')
     setAnswers({})
     setAnalytics({})
     setAnalysisComplete(false)
   }
 
   const resetInactivityTimeout = () => {
-    setAttract(false)
     if (activityTimeoutRef.current) clearTimeout(activityTimeoutRef.current)
     activityTimeoutRef.current = setTimeout(activityTimeout, INACTIVITY_TIMEOUT)
+  }
+
+  const startExperience = () => {
+    const introEnabled = experienceState.brand?.copy?.intro?.enabled === true
+    setExperienceMode(introEnabled ? 'intro' : 'quiz')
+    resetInactivityTimeout()
+  }
+
+  const startQuiz = () => {
+    setExperienceMode('quiz')
+    resetInactivityTimeout()
   }
 
   const handleExitToAttract = () => {
@@ -134,6 +148,10 @@ export default function App() {
       if (event.target.closest('[data-exit-button="true"]')) {
         return
       }
+      if (experienceMode === 'attract') {
+        startExperience()
+        return
+      }
       resetInactivityTimeout()
     }
 
@@ -146,7 +164,7 @@ export default function App() {
       window.removeEventListener('contextmenu', handleContextMenu)
       if (activityTimeoutRef.current) clearTimeout(activityTimeoutRef.current)
     }
-  }, [])
+  }, [experienceMode, experienceState.brand])
 
   useEffect(() => {
     if (!faceAnalysisEnabled) {
@@ -172,13 +190,13 @@ export default function App() {
   const { brand, quizData } = experienceState
 
   return (
-    <div className="app">
+    <div className={`app app--brand-${brand.id}`}>
       <Background brand={brand} />
 
       <div className="app-layout">
         <Quiz
           brand={brand}
-          attract={attract}
+          attract={quizInactive}
           quizId={quizData.quizId}
           features={quizData.features || {}}
           consoleConfig={quizData.console ?? null}
@@ -218,6 +236,13 @@ export default function App() {
         consoleEnabled={consoleSettings.enabled}
       />
 
+      <Intro
+        active={introActive}
+        brand={brand}
+        onPlay={startQuiz}
+        consoleEnabled={consoleSettings.enabled}
+      />
+
       <div className="app-logo">
         <img src={brand.assets.logo} alt={`${brand.displayName || 'Quiz'} logo`} />
       </div>
@@ -252,6 +277,36 @@ export default function App() {
           playsInline
         />
       ) : null}
+    </div>
+  )
+}
+
+function Intro({ active, brand, onPlay, consoleEnabled = true }) {
+  const intro = brand?.copy?.intro || {}
+  const title = intro.title || 'Before the first pour'
+  const body = Array.isArray(intro.body)
+    ? intro.body
+    : String(intro.body || '').split('\n').filter(Boolean)
+
+  return (
+    <div className={`intro intro--brand-${brand?.id || 'default'} ${consoleEnabled ? '' : 'intro--full-height'} ${active ? '' : 'hidden'}`}>
+      <div className="intro-copy">
+        {title ? <h1>{renderSuperscriptMarks(title)}</h1> : null}
+        {body.map((paragraph, index) => (
+          <p key={index}>{renderSuperscriptMarks(paragraph)}</p>
+        ))}
+      </div>
+      <button
+        className="intro-play-button"
+        onClick={(event) => {
+          event.stopPropagation()
+          onPlay()
+        }}
+        onPointerDown={triggerActivePress}
+        data-exit-button="true"
+      >
+        {intro.buttonLabel || 'Play'}
+      </button>
     </div>
   )
 }

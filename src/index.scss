@@ -187,9 +187,13 @@ h3 {
 
 .app-logo {
   position: absolute;
-  height: 6vh;
-  margin: 1vh 3vh;
+  top: var(--app-logo-top, 0);
+  left: var(--app-logo-left, 0);
+  height: var(--app-logo-height, 6vh);
+  margin: var(--app-logo-margin, 1vh 3vh);
+  transform: var(--app-logo-transform, none);
   pointer-events: none;
+  z-index: 45;
 
   img {
     height: 100%;
@@ -203,6 +207,123 @@ h3 {
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
+}
+
+.intro {
+  position: absolute;
+  width: 100%;
+  height: 62%;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3vh;
+  color: var(--app-text);
+  text-align: center;
+  opacity: 1;
+  transition: opacity 300ms ease, visibility 300ms ease;
+
+  &--full-height {
+    height: 100%;
+  }
+
+  &-copy {
+    width: min(64vh, calc(100% - 8vh));
+    display: flex;
+    flex-direction: column;
+    gap: 1.45vh;
+    text-shadow: 0 .22vh .6vh rgba(0, 0, 0, 0.18);
+  }
+
+  h1,
+  p {
+    margin: 0;
+  }
+
+  h1 {
+    font-size: clamp(2.2vh, 4vw, 3.9vh);
+    line-height: 1.08;
+    letter-spacing: 0;
+  }
+
+  p {
+    font-size: clamp(1.25vh, 2.2vw, 1.82vh);
+    line-height: 1.42;
+    color: var(--quiz-text);
+  }
+
+  &-play-button {
+    @include ui-pill-button-primary;
+    min-width: 11vh;
+    font-size: 1vh;
+  }
+}
+
+.app--brand-ideally {
+  .app-logo {
+    z-index: 55;
+
+    img {
+      object-position: center;
+    }
+  }
+
+  .intro {
+    height: 100%;
+    background: #EF94E1;
+    z-index: 35;
+    justify-content: center;
+    gap: 14vh;
+    color: #050505;
+  }
+
+  .intro-copy {
+    width: min(56vh, calc(100% - 7vh));
+    margin-top: 8vh;
+    gap: 5.4vh;
+    text-shadow: none;
+  }
+
+  .intro p {
+    color: #050505;
+    font-size: clamp(2.65vh, 6.2vw, 4vh);
+    line-height: 1.12;
+    letter-spacing: 0;
+  }
+
+  .intro-play-button {
+    min-width: min(44vh, calc(100% - 18vh));
+    min-height: 8.4vh;
+    padding: 1.2vh 4.8vh;
+    border-radius: 1.1vh;
+    background: #ffffff;
+    color: #050505;
+    box-shadow: none;
+    font-size: clamp(3.2vh, 8vw, 5vh);
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .question-navigation-prev-button,
+  .question-navigation-next-button {
+    border: .1vh solid rgba(5, 5, 5, 0.18);
+    background: rgba(255, 255, 255, 0.94);
+    color: #050505;
+    box-shadow: 0 .55vh 1.5vh rgba(0, 0, 0, 0.24);
+    backdrop-filter: blur(.45vh);
+
+    &:hover {
+      border-color: rgba(5, 5, 5, 0.34);
+      color: #050505;
+    }
+
+    &.disabled {
+      opacity: 0.58;
+      color: rgba(5, 5, 5, 0.58);
+    }
+  }
 }
 
 .app-fullscreen-btn {

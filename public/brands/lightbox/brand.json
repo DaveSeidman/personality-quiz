@@ -21,6 +21,14 @@
   "copy": {
     "attractTitle": "AI Cocktail Quiz",
     "attractSubtitle": "Discover your personality type by answering {questionCount} questions.",
+    "intro": {
+      "enabled": true,
+      "title": "Before we mix",
+      "body": [
+        "Every event starts with a set of instincts: what the room should feel, what the brand should signal, and what people should carry with them afterward. Answer a few questions and we'll match your style to a cocktail personality."
+      ],
+      "buttonLabel": "Play"
+    },
     "resultsTitle": "Start AI analysis of your answers and behavioral signals...",
     "resultsInstruction": "Hang tight while we analyze your responses.",
     "loadingTitle": "Translating your signals...",

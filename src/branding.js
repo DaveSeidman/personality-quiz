@@ -3,7 +3,7 @@ const BRAND_FONT_STYLE_ID = 'brand-font-face'
 const DEFAULT_FONT_STACK = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
 const BRAND_FONT_ALIAS = '"Brand Experience Font"'
 const BRAND_HEADING_FONT_ALIAS = '"Brand Experience Heading Font"'
-const BRAND_CONFIG_FILENAMES = ['manifest.json', 'brand.json']
+const BRAND_CONFIG_FILENAMES = ['brand.json', 'manifest.json']
 const BASE_URL = import.meta.env.BASE_URL || '/'
 
 const QUIZ_MODE_TOKENS = {
@@ -25,21 +25,21 @@ const QUIZ_MODE_TOKENS = {
     consoleTrack: 'rgba(255, 255, 255, 0.08)',
   },
   light: {
-    quizText: 'rgba(255, 255, 255, 0.88)',
-    quizMutedText: 'rgba(255, 255, 255, 0.72)',
-    quizStrongText: '#ffffff',
-    quizBorder: 'rgba(255, 255, 255, 0.18)',
-    quizBorderStrong: 'rgba(255, 255, 255, 0.35)',
-    consoleText: 'rgba(255, 255, 255, 0.9)',
-    consoleMutedText: 'rgba(255, 255, 255, 0.64)',
-    consoleStrongText: '#ffffff',
-    consoleSurface: 'rgba(255, 255, 255, 0.035)',
-    consoleSurfaceActive: 'rgba(255, 255, 255, 0.08)',
-    consoleSurfaceStrong: 'rgba(255, 255, 255, 0.12)',
-    consoleSurfaceSoft: 'rgba(255, 255, 255, 0.05)',
-    consoleBorder: 'rgba(255, 255, 255, 0.16)',
-    consoleBorderStrong: 'rgba(255, 255, 255, 0.28)',
-    consoleTrack: 'rgba(255, 255, 255, 0.1)',
+    quizText: 'rgba(10, 10, 10, 0.82)',
+    quizMutedText: 'rgba(10, 10, 10, 0.62)',
+    quizStrongText: '#050505',
+    quizBorder: 'rgba(10, 10, 10, 0.14)',
+    quizBorderStrong: 'rgba(10, 10, 10, 0.28)',
+    consoleText: 'rgba(10, 10, 10, 0.82)',
+    consoleMutedText: 'rgba(10, 10, 10, 0.56)',
+    consoleStrongText: '#050505',
+    consoleSurface: 'rgba(255, 255, 255, 0.64)',
+    consoleSurfaceActive: 'rgba(255, 255, 255, 0.78)',
+    consoleSurfaceStrong: 'rgba(255, 255, 255, 0.92)',
+    consoleSurfaceSoft: 'rgba(10, 10, 10, 0.04)',
+    consoleBorder: 'rgba(10, 10, 10, 0.1)',
+    consoleBorderStrong: 'rgba(10, 10, 10, 0.22)',
+    consoleTrack: 'rgba(10, 10, 10, 0.08)',
   },
 }
 
@@ -62,6 +62,19 @@ function deepMerge(base, override) {
   })
 
   return merged
+}
+
+function hasOwnPath(object, path) {
+  let current = object
+
+  for (const key of path) {
+    if (!isObject(current) || !Object.prototype.hasOwnProperty.call(current, key)) {
+      return false
+    }
+    current = current[key]
+  }
+
+  return true
 }
 
 function sanitizeBrandId(value = '') {
@@ -147,6 +160,10 @@ async function fetchBrandConfig(brandId) {
 }
 
 async function resolveAssetUrl(primaryUrl, fallbackUrl) {
+  if (primaryUrl === false || primaryUrl === null) {
+    return ''
+  }
+
   if (primaryUrl && await assetExists(primaryUrl)) {
     return resolvePublicUrl(primaryUrl)
   }
@@ -197,6 +214,14 @@ export async function loadBrandExperience() {
   }
 
   const mergedBrand = deepMerge(defaultBrand, overrideBrand)
+  if (requestedBrandId !== DEFAULT_BRAND_ID && !hasOwnPath(overrideBrand, ['copy', 'intro'])) {
+    mergedBrand.copy = {
+      ...(mergedBrand.copy || {}),
+      intro: {
+        enabled: false,
+      },
+    }
+  }
   const resolvedAssets = {}
   const assetKeys = new Set([
     ...Object.keys(defaultBrand.assets || {}),
@@ -287,6 +312,16 @@ export function applyBrandTheme(brand) {
   root.style.setProperty('--question-panel-bg', colors.questionPanel || 'rgba(0, 0, 0, 0.5)')
   root.style.setProperty('--question-panel-border', colors.questionPanelBorder || 'rgba(255, 255, 255, 0.18)')
   root.style.setProperty('--question-option-bg', colors.questionOption || 'rgba(10, 10, 10, 0.58)')
+  root.style.setProperty('--question-selected-bg', colors.questionSelected || accentColor)
+  root.style.setProperty('--question-selected-text', colors.questionSelectedText || accentContrast)
+  root.style.setProperty('--question-selected-border', colors.questionSelectedBorder || 'var(--quiz-border-strong)')
+  root.style.setProperty('--app-logo-height', theme.logoHeight || '6vh')
+  root.style.setProperty('--app-logo-margin', theme.logoMargin || '1vh 3vh')
+  root.style.setProperty('--app-logo-top', theme.logoTop || '0')
+  root.style.setProperty('--app-logo-left', theme.logoLeft || '0')
+  root.style.setProperty('--app-logo-transform', theme.logoTransform || 'none')
+  root.style.setProperty('--background-image-opacity', theme.backgroundImageOpacity ?? 0.42)
+  root.style.setProperty('--background-video-opacity', theme.backgroundVideoOpacity ?? 0.44)
   root.style.setProperty('--app-font-family', fontFamily)
   root.style.setProperty('--app-heading-font-family', headingFontFamily)
   root.style.setProperty('--app-heading-text-transform', theme.headingTextTransform || 'none')

@@ -9,21 +9,29 @@ export default function Attract({ attract, quizData, brand, consoleEnabled = tru
     brand?.copy?.attractSubtitle || 'Discover your personality type by answering {questionCount} questions.',
     { questionCount: quizData.questions.length },
   )
+  const attractCtaLabel = brand?.copy?.attractCtaLabel
 
   return (
-    <div className={`attract ${consoleEnabled ? '' : 'attract--full-height'} ${attract ? '' : 'hidden'}`}>
-      <video
-        className="attract-blob"
-        src={brand?.assets?.attractVideo}
-        autoPlay
-        loop
-        muted
-        playsInline
-      />
+    <div className={`attract attract--brand-${brand?.id || 'default'} ${consoleEnabled ? '' : 'attract--full-height'} ${attract ? '' : 'hidden'}`}>
+      {brand?.assets?.attractVideo ? (
+        <video
+          className="attract-blob"
+          src={brand.assets.attractVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+      ) : null}
       <div className="attract-copy">
         <h1>{renderSuperscriptMarks(attractTitle)}</h1>
         <p>{renderSuperscriptMarks(attractSubtitle)}</p>
       </div>
+      {attractCtaLabel ? (
+        <button className="attract-cta" type="button">
+          {renderSuperscriptMarks(attractCtaLabel)}
+        </button>
+      ) : null}
     </div>
   )
 }

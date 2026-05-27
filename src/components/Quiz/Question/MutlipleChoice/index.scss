@@ -37,9 +37,9 @@
       }
 
       &.selected {
-        background: var(--accent);
-        border-color: var(--quiz-border-strong);
-        color: var(--accent-contrast);
+        background: var(--question-selected-bg);
+        border-color: var(--question-selected-border);
+        color: var(--question-selected-text);
         box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.34);
         opacity: 1;
         // transform: scale(1.05);

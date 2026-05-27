@@ -1,0 +1,161 @@
+{
+  "quizId": "ideally-distinctiveness-v1",
+  "useadvancedTelemetry": false,
+  "features": {
+    "faceAnalysis": true
+  },
+  "console": {
+    "face": true,
+    "signals": true
+  },
+  "personalities": [
+    {
+      "id": "free-pour",
+      "name": "The Free Pour",
+      "color": "#EF94E1",
+      "description": "You take your distinctiveness undiluted. Great work, for you, starts with conviction, not a chart. The brave idea lives in the room, in the gut, in the felt sense of what's different. Data has its uses, but it can't pick the swing for you, and it shouldn't get the final word. Your drink: Hibiscus Limeade. Bold up front. Doesn't apologise for itself.",
+      "drinkRecommendation": "Hibiscus Limeade"
+    },
+    {
+      "id": "measured-pour",
+      "name": "The Measured Pour",
+      "color": "#CFB80E",
+      "description": "You take your distinctiveness precisely, every ingredient accounted for. Great work, for you, starts with a strong read of the numbers. Distinctiveness isn't a leap, it's what you find when you read the data deeper than everyone else. The brave ideas are the ones the evidence supports. The rest is risk you don't need to carry. Your drink: Chamomile Citrus Highball. Patient, layered, rewards the people willing to wait for the second sip.",
+      "drinkRecommendation": "Chamomile Citrus Highball"
+    },
+    {
+      "id": "mixer",
+      "name": "The Mixer",
+      "color": "#1E9BD0",
+      "description": "You take your distinctiveness mixed. Data shows you the opening, instinct picks the swing, data tells you it landed. You don't choose between brave and informed, you use one to power the other. Your drink: Lavender Lemon Spritz. Several different ingredients, working as one.",
+      "drinkRecommendation": "Lavender Lemon Spritz"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "label": "Generic Work",
+      "text": "A piece of work tests well on every metric but feels generic. The room's happy. You:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Push back. If it doesn't feel distinctive, it isn't, no matter what the test says.",
+          "personalityId": "free-pour"
+        },
+        {
+          "id": "B",
+          "content": "Ship it. Strong scores are strong scores, and \"feels generic\" isn't a measure.",
+          "personalityId": "measured-pour"
+        },
+        {
+          "id": "C",
+          "content": "Use the strong scores to buy room to push for a sharper version. The data gives you the runway, instinct shapes what flies on it.",
+          "personalityId": "mixer"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "Two Routes",
+      "text": "Two routes on the table. One is a proven format with strong benchmarks. One is a fresh take with nothing to compare it to. You:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Take the fresh one. You'd rather be the benchmark than match it.",
+          "personalityId": "free-pour"
+        },
+        {
+          "id": "B",
+          "content": "Take the proven format. Strong benchmarks mean you know exactly what you're working with. Distinctiveness is an execution problem, not a format problem.",
+          "personalityId": "measured-pour"
+        },
+        {
+          "id": "C",
+          "content": "Take the fresh one - but spend real time on the benchmark first. Understanding exactly why the safe option is safe tells you precisely where the new one needs to be brave.",
+          "personalityId": "mixer"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "Audience Signal",
+      "text": "The data says your audience wants X. You:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Build the thing you actually believe in. Audience research is one input, not the brief.",
+          "personalityId": "free-pour"
+        },
+        {
+          "id": "B",
+          "content": "Build X. The data has done the work, your job is to execute it brilliantly.",
+          "personalityId": "measured-pour"
+        },
+        {
+          "id": "C",
+          "content": "Build the thing you actually believe in, and use the X signal to stress-test what your version isn't doing yet.",
+          "personalityId": "mixer"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "label": "Short-Term Miss",
+      "text": "A campaign you backed ships. Distinctive, talked about, didn't hit the short-term sales target. How do you call it?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "A win. Distinctive work earns things short-term numbers don't capture - and you backed it knowing that.",
+          "personalityId": "free-pour"
+        },
+        {
+          "id": "B",
+          "content": "A miss. The numbers are the brief. If we missed them, we missed.",
+          "personalityId": "measured-pour"
+        },
+        {
+          "id": "C",
+          "content": "Unfinished. The distinctiveness landed - that's the hard part. Now you have real data on what didn't convert, which means the next version is both brave and bulletproof.",
+          "personalityId": "mixer"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "label": "Best Work",
+      "text": "Think of the best work you've ever been part of. What made it great?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "No one asked permission. The room just believed in it.",
+          "personalityId": "free-pour"
+        },
+        {
+          "id": "B",
+          "content": "The team read the data so well, they spotted a gap no one else had.",
+          "personalityId": "measured-pour"
+        },
+        {
+          "id": "C",
+          "content": "The gut picked the swing. The data made the case so cleanly that no one could kill it.",
+          "personalityId": "mixer"
+        }
+      ]
+    }
+  ]
+}
