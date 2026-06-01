@@ -4,15 +4,15 @@
   "accentColor": "#0c0c0c",
   "theme": {
     "fontFamily": "Sohne",
-    "fontUrl": "/brands/ideally/fonts/So\u0308hne-Buch.otf",
+    "fontUrl": "/brands/ideally/fonts/Sohne-Buch.otf",
     "fontFaces": [
       {
-        "url": "/brands/ideally/fonts/So\u0308hne-Buch.otf",
+        "url": "/brands/ideally/fonts/Sohne-Buch.otf",
         "weight": 400,
         "style": "normal"
       },
       {
-        "url": "/brands/ideally/fonts/So\u0308hne-Halbfett.otf",
+        "url": "/brands/ideally/fonts/Sohne-Halbfett.otf",
         "weight": 700,
         "style": "normal"
       }
