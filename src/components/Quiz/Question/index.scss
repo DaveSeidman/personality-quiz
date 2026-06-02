@@ -109,7 +109,8 @@ $layout-padding: 1.5vh;
   .question-navigation-next-message {
     padding: 0.35vh 0.7vh;
     border-radius: 0.45vh;
-    background: rgba(239, 148, 225, 0.9);
-    color: var(--ideally-black);
+    background: var(--ideally-orange);
+    color: #ffffff;
+    font-weight: 700;
   }
 }

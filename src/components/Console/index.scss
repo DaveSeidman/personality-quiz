@@ -980,19 +980,21 @@
   }
 
   .console-feed-row.active {
-    background: rgba(255, 255, 255, 0.74);
+    background: var(--ideally-pink);
     border-color: rgba(5, 5, 5, 0.7);
   }
 
   .console-face-visual {
-    --console-surface-soft: #ef94e14a;
+    --console-surface-soft: var(--ideally-pink);
+    --console-face-particle-rgb: 255, 255, 255;
     border-width: 0.14vh;
     background: transparent;
   }
 
   .console-face-canvas {
-    --console-surface-soft: #ef94e14a;
-    background: #ef94e14a;
+    --console-surface-soft: var(--ideally-pink);
+    --console-face-particle-rgb: 255, 255, 255;
+    background: var(--ideally-pink);
   }
 
   .console-face-mood,

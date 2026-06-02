@@ -161,7 +161,7 @@
 
   .slide-select-row {
     border: 0.22vh solid var(--quiz-border);
-    background: var(--question-option-bg);
+    background: var(--question-selected-bg);
     color: var(--ideally-black);
     opacity: 1;
     backdrop-filter: none;
@@ -169,7 +169,7 @@
 
     &.selected,
     &.dragging {
-      background: var(--question-selected-bg);
+      background: var(--ideally-yellow);
       color: var(--ideally-black);
       border-color: var(--quiz-border-strong);
       box-shadow: 0.45vh 0.45vh 0 rgba(5, 5, 5, 0.22);

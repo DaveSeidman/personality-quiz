@@ -110,7 +110,7 @@
 
   .multiple-choice-answers-answer {
     border: 0.22vh solid var(--quiz-border);
-    background: var(--question-option-bg);
+    background: var(--question-selected-bg);
     color: var(--ideally-black);
     opacity: 1;
     box-shadow: none;
@@ -122,7 +122,7 @@
     }
 
     &.selected {
-      background: var(--question-selected-bg);
+      background: var(--ideally-yellow);
       border-color: var(--question-selected-border);
       color: var(--ideally-black);
       box-shadow: 0.45vh 0.45vh 0 rgba(5, 5, 5, 0.22);

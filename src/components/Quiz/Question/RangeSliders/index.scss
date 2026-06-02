@@ -73,12 +73,12 @@
 
   .range-sliders-row {
     border: 0.22vh solid var(--quiz-border);
-    background: var(--question-option-bg);
+    background: var(--question-selected-bg);
     color: var(--ideally-black);
     backdrop-filter: none;
 
     &.touched {
-      background: var(--question-selected-bg);
+      background: var(--ideally-yellow);
       border-color: var(--quiz-border-strong);
       color: var(--ideally-black);
     }

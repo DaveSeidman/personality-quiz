@@ -190,8 +190,11 @@ export default function App() {
   const { brand, quizData } = experienceState
 
   return (
-    <div className={`app app--brand-${brand.id}`}>
-      <Background brand={brand} />
+    <div className={`app app--brand-${brand.id} app--mode-${experienceMode}`}>
+      <Background
+        brand={brand}
+        showBackgroundVideo={!(brand.id === 'ideally' && experienceMode === 'quiz')}
+      />
 
       <div className="app-layout">
         <Quiz

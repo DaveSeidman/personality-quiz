@@ -45,19 +45,20 @@ function getFaceCanvasPalette(canvas) {
   const surface = computedStyle.getPropertyValue('--console-surface-soft').trim()
   const border = computedStyle.getPropertyValue('--console-border').trim()
   const mutedText = computedStyle.getPropertyValue('--console-muted-text').trim()
+  const particleRgb = computedStyle.getPropertyValue('--console-face-particle-rgb').trim()
 
   return isLightMode
     ? {
       background: surface || 'rgba(255, 255, 255, 0.035)',
       border: border || 'rgba(10, 10, 10, 0.1)',
       text: mutedText || 'rgba(10, 10, 10, 0.56)',
-      particleRgb: '10, 10, 10',
+      particleRgb: particleRgb || '10, 10, 10',
     }
     : {
       background: surface || 'rgba(255, 255, 255, 0.04)',
       border: border || 'rgba(255, 255, 255, 0.14)',
       text: 'rgba(255, 255, 255, 0.64)',
-      particleRgb: '243, 239, 230',
+      particleRgb: particleRgb || '243, 239, 230',
     }
 }
 

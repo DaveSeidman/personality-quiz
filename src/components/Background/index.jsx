@@ -326,7 +326,7 @@ function computeRippleInfluence(cellX, cellY, ripples, now, rippleLifetimeMs = R
   return clamp(rippleValue, 0, 1.4)
 }
 
-export default function Background({ brand }) {
+export default function Background({ brand, showBackgroundVideo = true }) {
   const isDeshawVariant = brand?.id === 'deshaw'
   const matrixEnabled = brand?.theme?.backgroundMatrix !== false
   const backgroundConfig = useMemo(() => (
@@ -705,7 +705,7 @@ export default function Background({ brand }) {
           aria-hidden="true"
         />
       ) : null}
-      {brand?.assets?.backgroundVideo ? (
+      {showBackgroundVideo && brand?.assets?.backgroundVideo ? (
         <video
           className="background-matrix-video"
           src={brand.assets.backgroundVideo}

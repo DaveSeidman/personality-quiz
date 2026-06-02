@@ -271,9 +271,10 @@ span {
 
 .app--brand-ideally {
   --ideally-black: #050505;
+  --ideally-beige: #fdfcf4;
   --ideally-yellow: #d7c406;
   --ideally-pink: #ef94e1;
-  --ideally-orange: #c96b00;
+  --ideally-orange: #d2b108;
   --ideally-blue: #0b95bd;
   --ideally-green: #00470d;
   --quiz-text: rgba(5, 5, 5, 0.9);
@@ -296,12 +297,19 @@ span {
   --console-border: rgba(5, 5, 5, 0.36);
   --console-border-strong: rgba(5, 5, 5, 0.72);
   --console-track: rgba(5, 5, 5, 0.18);
+  background: var(--ideally-beige);
 
   .app-logo {
     z-index: 55;
 
     img {
       object-position: center;
+    }
+  }
+
+  &.app--mode-quiz {
+    .background-matrix {
+      background: var(--ideally-beige);
     }
   }
 
@@ -359,6 +367,10 @@ span {
       opacity: 0.58;
       color: rgba(5, 5, 5, 0.58);
     }
+  }
+
+  .question-navigation-next-button {
+    background: var(--ideally-yellow);
   }
 }
 

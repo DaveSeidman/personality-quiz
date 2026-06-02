@@ -28,7 +28,7 @@
     "logoTransform": "translateX(-50%) translateY(25%)",
     "quizMode": "light",
     "colors": {
-      "appBg": "#f3f0e7",
+      "appBg": "#fdfcf4",
       "text": "#080808",
       "accent": "#0c0c0c",
       "accentContrast": "#ffffff",
