@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { renderSuperscriptMarks, shuffle } from '../../../utils'
 import './index.scss'
 
-export default function RangeSliders({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent, onAnalyticsPatch, animateAnswers = false }) {
+export default function RangeSliders({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent, onAnalyticsPatch, animateAnswers = false, hideInstructions = false }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
   const [values, setValues] = useState({})
   const [touched, setTouched] = useState({})
@@ -59,7 +59,9 @@ export default function RangeSliders({ question, sessionKey, onDraftChange, onRe
   return (
     <div className="range-sliders">
       <h2 className="range-sliders-title">{renderSuperscriptMarks(question.text)}</h2>
-      <p className="range-sliders-instruction">Slide each item to score it.</p>
+      {!hideInstructions ? (
+        <p className="range-sliders-instruction">Slide each item to score it.</p>
+      ) : null}
 
       <div className="range-sliders-list">
         {orderedOptions.map((option, index) => (

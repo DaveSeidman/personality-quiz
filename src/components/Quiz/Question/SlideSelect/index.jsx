@@ -11,7 +11,7 @@ import './index.scss'
 
 const CONFIRM_THRESHOLD = 0.5
 
-export default function SlideSelect({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent, onAnalyticsPatch, animateAnswers = false }) {
+export default function SlideSelect({ question, sessionKey, onDraftChange, onReadyChange, onAnalyticsEvent, onAnalyticsPatch, animateAnswers = false, hideInstructions = false }) {
   const [orderedOptions, setOrderedOptions] = useState(() => shuffle(question.answers))
   const [progressById, setProgressById] = useState({})
   const [confirmedIds, setConfirmedIds] = useState([])
@@ -205,7 +205,9 @@ export default function SlideSelect({ question, sessionKey, onDraftChange, onRea
   return (
     <div className="slide-select">
       <h2 className="slide-select-title">{renderSuperscriptMarks(question.text)}</h2>
-      <p className="slide-select-subtitle">select {question.select} answer{question.select > 1 ? 's' : ''} by sliding</p>
+      {!hideInstructions ? (
+        <p className="slide-select-subtitle">select {question.select} answer{question.select > 1 ? 's' : ''} by sliding</p>
+      ) : null}
 
       <div className="slide-select-list">
         {orderedOptions.map((option, index) => {

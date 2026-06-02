@@ -253,7 +253,7 @@ export default function App() {
           onClick={() => setCameraEnabled((enabled) => !enabled)}
           data-exit-button="true"
         >
-          {cameraEnabled ? 'Cam On' : 'Cam Off'}
+          {cameraEnabled ? 'Camera active' : 'Activate camera'}
         </button>
       ) : null}
 

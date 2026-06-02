@@ -99,12 +99,10 @@ $layout-padding: 1.5vh;
     border: 0.48vh solid var(--question-panel-border);
     background: transparent;
     box-shadow: none;
+    margin-top: calc(8vh + 30px);
 
     h2 {
       font-weight: 700;
-      text-shadow:
-        0.08vh 0.08vh 0 rgba(255, 255, 255, 0.6),
-        -0.08vh -0.08vh 0 rgba(255, 255, 255, 0.42);
     }
   }
 

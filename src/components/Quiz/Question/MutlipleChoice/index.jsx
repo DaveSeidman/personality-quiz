@@ -7,7 +7,7 @@ function getOrderedAnswers(question) {
   return shuffle(question.answers || [])
 }
 
-export default function MultipleChoice({ question, answer, setAnswers, sessionKey, onAnalyticsEvent, onAnalyticsPatch, animateAnswers = false }) {
+export default function MultipleChoice({ question, answer, setAnswers, sessionKey, onAnalyticsEvent, onAnalyticsPatch, animateAnswers = false, hideInstructions = false }) {
   const [orderedOptions, setOrderedOptions] = useState(() => getOrderedAnswers(question))
   const selectRule = useMemo(() => getSelectRule(question.select), [question.select])
   const selections = normalizeSelections(answer)
@@ -78,7 +78,9 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
   return (
     <div className={`multiple-choice ${isPhotoQuestion ? 'photo' : ''}`}>
       <h2>{renderSuperscriptMarks(question.text)}</h2>
-      <p className="multiple-choice-instruction">{getSelectionInstruction(question.select)}</p>
+      {!hideInstructions ? (
+        <p className="multiple-choice-instruction">{getSelectionInstruction(question.select)}</p>
+      ) : null}
       <div className="multiple-choice-answers">
         {orderedOptions.map((option, index) => {
           const animateClass = animateAnswers ? 'answer-animate' : ''

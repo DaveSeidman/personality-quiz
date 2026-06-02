@@ -985,8 +985,14 @@
   }
 
   .console-face-visual {
+    --console-surface-soft: #ef94e14a;
     border-width: 0.14vh;
-    background: rgba(255, 255, 255, 0.58);
+    background: transparent;
+  }
+
+  .console-face-canvas {
+    --console-surface-soft: #ef94e14a;
+    background: #ef94e14a;
   }
 
   .console-face-mood,
@@ -997,9 +1003,9 @@
   }
 
   .console-aggregate-distribution {
-    background: rgba(255, 255, 255, 0.42);
+    background: rgba(255, 255, 255, 0.82);
     border: 0.24vh solid rgba(5, 5, 5, 0.8);
-    box-shadow: 0.55vh 0.55vh 0 rgba(239, 148, 225, 0.58);
+    box-shadow: 0.45vh 0.45vh 0 rgba(239, 148, 225, 0.5);
   }
 
   .console-aggregate-chart,
@@ -1022,10 +1028,11 @@
   .console-aggregate-distribution-label,
   .console-aggregate-distribution-value {
     color: var(--ideally-black);
+    font-weight: 800;
   }
 
   .console-aggregate-distribution-track {
-    background: rgba(5, 5, 5, 0.18);
+    background: rgba(5, 5, 5, 0.3);
   }
 
   .console-aggregate-chart-track {

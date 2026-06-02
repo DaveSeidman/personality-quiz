@@ -315,7 +315,7 @@ export function applyBrandTheme(brand) {
   root.style.setProperty('--question-selected-bg', colors.questionSelected || accentColor)
   root.style.setProperty('--question-selected-text', colors.questionSelectedText || accentContrast)
   root.style.setProperty('--question-selected-border', colors.questionSelectedBorder || 'var(--quiz-border-strong)')
-  root.style.setProperty('--app-logo-height', theme.logoHeight || '6vh')
+  root.style.setProperty('--app-logo-height', theme.logoHeight || '10.5vh')
   root.style.setProperty('--app-logo-margin', theme.logoMargin || '1vh 3vh')
   root.style.setProperty('--app-logo-top', theme.logoTop || '0')
   root.style.setProperty('--app-logo-left', theme.logoLeft || '0')

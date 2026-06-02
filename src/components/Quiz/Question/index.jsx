@@ -19,6 +19,7 @@ export default function Question({
   sessionKey,
   isActive = false,
   hasVisited = false,
+  hideInstructions = false,
   onExit = () => { }
 }) {
   const [draftAnswer, setDraftAnswer] = useState(null)
@@ -113,6 +114,7 @@ export default function Question({
             onAnalyticsEvent={onAnalyticsEvent}
             onAnalyticsPatch={onAnalyticsPatch}
             animateAnswers={!hasVisited}
+            hideInstructions={hideInstructions}
           />
         ) : question.type === 'ranked-choice' ? (
           <RankedChoice
@@ -132,6 +134,7 @@ export default function Question({
             onAnalyticsEvent={onAnalyticsEvent}
             onAnalyticsPatch={onAnalyticsPatch}
             animateAnswers={!hasVisited}
+            hideInstructions={hideInstructions}
           />
         ) : question.type === 'slide-select' || question.type === 'SlideSelect' ? (
           <SlideSelect
@@ -142,6 +145,7 @@ export default function Question({
             onAnalyticsEvent={onAnalyticsEvent}
             onAnalyticsPatch={onAnalyticsPatch}
             animateAnswers={!hasVisited}
+            hideInstructions={hideInstructions}
           />
         ) : null
         }

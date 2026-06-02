@@ -356,6 +356,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
             sessionKey={sessionKey}
             isActive={currentStep === index}
             hasVisited={Boolean(visitedQuestions[String(question.id)])}
+            hideInstructions={Boolean(brand?.copy?.hideQuestionInstructions)}
             onExit={onExit}
           />
         </div>
@@ -375,6 +376,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
           answers={answers}
           onSubmit={handleSubmit}
           onStartOver={handleStartOver}
+          onExit={onExit}
         />
       </div>
     </div>

@@ -24,7 +24,7 @@ const QUESTION_POLYGON_STYLES = [
   { dash: [14, 5, 3, 5], fillAlpha: 0.11, strokeAlpha: 0.7 },
 ]
 
-function RadarCanvas({ composite, byQuestion, legend, colorMap }) {
+function RadarCanvas({ composite, byQuestion, legend, colorMap, showData = true }) {
   const [canvasId] = useState(() => `radar-${Math.random().toString(36).slice(2)}`)
 
   useEffect(() => {
@@ -38,8 +38,9 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap }) {
     const width = canvas.width
     const height = canvas.height
     const cx = width / 2
-    const cy = height / 2
-    const radius = Math.min(width, height) * 0.36
+    const isTriangleRadar = legend.length === 3
+    const cy = isTriangleRadar ? height * 0.56 : height / 2
+    const radius = Math.min(width, height) * (isTriangleRadar ? 0.4 : 0.37)
     const isLightMode = getComputedStyle(canvas).getPropertyValue('--quiz-mode').trim() === 'light'
     const radarInk = isLightMode ? '5,5,5' : '255,255,255'
 
@@ -82,14 +83,14 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap }) {
       for (let y = cy - radius - tile; y < cy + radius + tile; y += tile) {
         for (let x = cx - radius - tile; x < cx + radius + tile; x += tile) {
           const isEven = ((Math.floor((x - (cx - radius)) / tile) + Math.floor((y - (cy - radius)) / tile)) % 2) === 0
-          ctx.fillStyle = isEven ? `rgba(${radarInk},0.055)` : `rgba(${radarInk},0.09)`
+          ctx.fillStyle = isEven ? `rgba(${radarInk},0.08)` : `rgba(${radarInk},0.14)`
           ctx.fillRect(x, y, tile, tile)
         }
       }
       ctx.restore()
 
       // concentric grid polygons
-      ctx.strokeStyle = `rgba(${radarInk},0.24)`
+      ctx.strokeStyle = `rgba(${radarInk},0.38)`
       ctx.lineWidth = 1
       for (let level = 1; level <= 4; level++) {
         const r = (radius * level) / 4
@@ -103,16 +104,17 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap }) {
         ctx.beginPath()
         ctx.moveTo(cx, cy)
         ctx.lineTo(cx + Math.cos(axis.angle) * radius, cy + Math.sin(axis.angle) * radius)
-        ctx.strokeStyle = `rgba(${radarInk},0.32)`
+        ctx.strokeStyle = `rgba(${radarInk},0.5)`
         ctx.lineWidth = 1
         ctx.stroke()
 
         ctx.beginPath()
         ctx.arc(cx + Math.cos(axis.angle) * (radius + 8), cy + Math.sin(axis.angle) * (radius + 8), 4, 0, Math.PI * 2)
-        ctx.fillStyle = colorMap[axis.id] || 'rgba(255,255,255,0.8)'
+        ctx.fillStyle = colorMap[axis.id] || `rgba(${radarInk},0.9)`
         ctx.fill()
       })
 
+      if (showData) {
         // per-question polygons (staggered animation)
         ; (byQuestion || []).forEach((entry, qi) => {
           const progress = clamp(elapsed - qi * 0.18)
@@ -138,68 +140,84 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap }) {
           })
         })
 
-      // composite polygon (delayed until after per-question)
-      const compDelay = (byQuestion?.length || 0) * 0.18 + 0.2
-      const compProgress = clamp(elapsed - compDelay)
-      const compPts = polygonPoints(composite, compProgress)
+        // composite polygon (delayed until after per-question)
+        const compDelay = (byQuestion?.length || 0) * 0.18 + 0.2
+        const compProgress = clamp(elapsed - compDelay)
+        const compPts = polygonPoints(composite, compProgress)
 
-      compPts.forEach((p) => {
+        compPts.forEach((p) => {
+          ctx.beginPath()
+          ctx.moveTo(cx, cy)
+          ctx.lineTo(p.x, p.y)
+          ctx.strokeStyle = colorMap[p.axis.id] || `rgba(${radarInk},0.9)`
+          ctx.lineWidth = 2.2
+          ctx.stroke()
+        })
+
         ctx.beginPath()
-        ctx.moveTo(cx, cy)
-        ctx.lineTo(p.x, p.y)
-        ctx.strokeStyle = colorMap[p.axis.id] || 'rgba(255,255,255,0.8)'
-        ctx.lineWidth = 2.2
-        ctx.stroke()
-      })
-
-      ctx.beginPath()
-      compPts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
-      ctx.closePath()
-      ctx.fillStyle = getDominantColor(composite, colorMap, 0.42)
-      ctx.fill()
-      ctx.strokeStyle = getDominantColor(composite, colorMap, 0.96)
-      ctx.lineWidth = 2.8
-      ctx.stroke()
-
-      compPts.forEach((p) => {
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, 5, 0, Math.PI * 2)
-        ctx.fillStyle = colorMap[p.axis.id] || 'rgba(255,255,255,0.8)'
+        compPts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y))
+        ctx.closePath()
+        ctx.fillStyle = getDominantColor(composite, colorMap, 0.42)
         ctx.fill()
-      })
+        ctx.strokeStyle = getDominantColor(composite, colorMap, 0.96)
+        ctx.lineWidth = 2.8
+        ctx.stroke()
 
-      const totalDuration = compDelay + 0.8
+        compPts.forEach((p) => {
+          ctx.beginPath()
+          ctx.arc(p.x, p.y, 5, 0, Math.PI * 2)
+          ctx.fillStyle = colorMap[p.axis.id] || `rgba(${radarInk},0.9)`
+          ctx.fill()
+        })
+      }
+
+      ctx.save()
+      ctx.font = '700 20px sans-serif'
+      ctx.fillStyle = `rgba(${radarInk},0.98)`
+      ctx.textBaseline = 'middle'
+      axes.forEach((axis) => {
+        const labelRadius = radius + (isTriangleRadar ? 38 : 28)
+        const x = cx + Math.cos(axis.angle) * labelRadius
+        const y = cy + Math.sin(axis.angle) * labelRadius
+        const cos = Math.cos(axis.angle)
+        const isTriangleBottomAxis = isTriangleRadar && Math.sin(axis.angle) > 0.28
+        ctx.textAlign = isTriangleBottomAxis || Math.abs(cos) < 0.28 ? 'center' : cos > 0 ? 'right' : 'left'
+        ctx.fillText(axis.label, x, y)
+      })
+      ctx.restore()
+
+      const totalDuration = showData ? ((byQuestion?.length || 0) * 0.18 + 1) : 0
       if (elapsed < totalDuration) raf = requestAnimationFrame(draw)
     }
 
     raf = requestAnimationFrame(draw)
     return () => { if (raf) cancelAnimationFrame(raf) }
-  }, [canvasId, colorMap, composite, byQuestion, legend])
+  }, [canvasId, colorMap, composite, byQuestion, legend, showData])
 
   return (
     <div className="results-status-radar">
       <p className="results-status-radar-title">Composite Signal Radar</p>
-      <canvas id={canvasId} width={560} height={480} />
+      <canvas id={canvasId} width={680} height={480} />
     </div>
   )
 }
 
 function renderStatement(text, highlights) {
   if (!text) return null
-  const valid = highlights.filter(Boolean)
+  const valid = highlights.filter(({ value }) => Boolean(value))
   if (!valid.length) return <>{text}</>
-  const escaped = valid.map(h => h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  const escaped = valid.map(({ value }) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
   const regex = new RegExp(`(${escaped.join('|')})`, 'gi')
   const parts = text.split(regex)
   return parts.map((part, i) => {
-    const isHighlight = valid.some(h => h.toLowerCase() === part.toLowerCase())
-    return isHighlight
-      ? <span key={i} className="results-status-statement-highlight">{part}</span>
+    const highlight = valid.find(({ value }) => value.toLowerCase() === part.toLowerCase())
+    return highlight
+      ? <span key={i} className={`results-status-statement-highlight results-status-statement-highlight--${highlight.kind}`}>{part}</span>
       : <span key={i}>{part}</span>
   })
 }
 
-export default function Results({ brand, result, status = 'idle', analytics, questions, personalities, answers, onSubmit, onStartOver }) {
+export default function Results({ brand, result, status = 'idle', analytics, questions, personalities, answers, onSubmit, onStartOver, onExit }) {
   const cards = useMemo(() => buildQuestionCards(analytics, questions, answers), [analytics, questions, answers])
   const legend = useMemo(() => getPersonalityLegend(personalities || []), [personalities])
   const colorMap = useMemo(() => buildPersonalityColorMap(personalities || [], 1), [personalities])
@@ -220,19 +238,7 @@ export default function Results({ brand, result, status = 'idle', analytics, que
           <div className={`results-screen ${!isSubmitted ? 'in' : 'out'}`}>
             <h2 className="results-title">{renderSuperscriptMarks(copy.resultsTitle || 'Analyzing your answers...')}</h2>
             <p className="results-instruction">{renderSuperscriptMarks(copy.resultsInstruction || 'Hang tight while we process your responses.')}</p>
-            <div className="results-blob-placeholder">
-              {brand?.assets?.loadingVideo ? (
-                <video
-                  className={`results-blob-video ${isSubmitting ? 'blob-active' : 'blob-idle'}`}
-                  src={brand.assets.loadingVideo}
-                  autoPlay muted loop playsInline
-                />
-              ) : null}
-              <div className={`results-blob-overlay ${isSubmitting ? 'visible' : ''}`}>
-                <p>{renderSuperscriptMarks(copy.loadingTitle || 'Translating your signals...')}</p>
-                <span>{renderSuperscriptMarks(copy.loadingBody || 'Syncing with the cocktail oracle. This usually takes a beat.')}</span>
-              </div>
-            </div>
+            <RadarCanvas composite={{}} byQuestion={[]} legend={radarData.legend} colorMap={colorMap} showData={false} />
           </div>
 
           {/* Screen B: submitted */}
@@ -242,52 +248,54 @@ export default function Results({ brand, result, status = 'idle', analytics, que
                 {result?.result ? (
                   <>
                     <p className="results-status-match">
-                      Top match: <strong>{renderSuperscriptMarks(result.result.personalityName)}</strong>
+                      <strong>{renderSuperscriptMarks(result.result.personalityName)}</strong>
                       <span className="results-status-confidence">{Math.round((result.result.confidence || 0) * 100)}% Match</span>
                     </p>
                     <p className="results-status-statement">
-                      {renderStatement(
-                        result.result.statement || result.result.reasoning || 'No AI statement returned yet.',
-                        [result.result.personalityName, result.result.drinkRecommendation]
-                      )}
+	                      {renderStatement(
+	                        result.result.statement || result.result.reasoning || 'No AI statement returned yet.',
+	                        [
+	                          { value: result.result.personalityName, kind: 'persona' },
+	                          { value: result.result.drinkRecommendation, kind: 'drink' },
+	                        ]
+	                      )}
                     </p>
-                    <RadarCanvas composite={radarData.composite} byQuestion={radarData.byQuestion} legend={radarData.legend} colorMap={colorMap} />
+                    <RadarCanvas composite={radarData.composite} byQuestion={radarData.byQuestion} legend={radarData.legend} colorMap={colorMap} showData={isSubmitted} />
                   </>
                 ) : null}
-              </div>
-              <div className="results-status-legend">
-                {legend.map((entry) => (
-                  <div key={entry.id} className="results-status-legend-item">
-                    <span className="results-status-legend-swatch" style={{ background: colorMap[entry.id] || '#9fb4dc' }} />
-                    <span>{entry.label}</span>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
 
         </div>
 
-        {/* ── Nav (always visible) ── */}
         {isError && <p className="results-error">Submit failed. Try again.</p>}
-        <div className="results-content-nav">
-          {isSubmitted ? (
-            <button className="question-navigation-prev-button" onClick={onStartOver} onPointerDown={triggerActivePress}>
-              {copy.startOverLabel || 'Start Over'}
-            </button>
-          ) : isError ? (
-            <>
-              <button className="question-navigation-prev-button" onClick={onStartOver} onPointerDown={triggerActivePress}>
-                {copy.startOverLabel || 'Start Over'}
-              </button>
-              <button className="question-navigation-next-button" onClick={onSubmit} onPointerDown={triggerActivePress} disabled={isSubmitting}>
-                Retry
-              </button>
-            </>
-          ) : null}
-        </div>
-
       </div>
+
+      {(isSubmitted || isError) ? (
+        <div className="question-navigation results-navigation">
+          <div className="question-navigation-prev">
+            <button
+              className="question-navigation-prev-button question-navigation-exit-button"
+              onClick={(event) => { event.stopPropagation(); onExit?.(); }}
+              onPointerDown={triggerActivePress}
+              data-exit-button="true"
+            >
+              Exit
+            </button>
+          </div>
+          <div className="question-navigation-next">
+            <button
+              className="question-navigation-next-button"
+              onClick={isError ? onSubmit : onStartOver}
+              onPointerDown={triggerActivePress}
+              disabled={isSubmitting}
+            >
+              {isError ? 'Retry' : (copy.startOverLabel || 'Start Over')}
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }

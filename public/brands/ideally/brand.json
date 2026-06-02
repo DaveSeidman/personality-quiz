@@ -21,11 +21,11 @@
     "headingTextTransform": "none",
     "backgroundMatrix": false,
     "backgroundVideoOpacity": 1,
-    "logoHeight": "4.35vh",
+    "logoHeight": "7.83vh",
     "logoMargin": "0",
     "logoTop": "calc(5vh - 45px)",
     "logoLeft": "50%",
-    "logoTransform": "translateX(-50%)",
+    "logoTransform": "translateX(-50%) translateY(25%)",
     "quizMode": "light",
     "colors": {
       "appBg": "#f3f0e7",
@@ -34,23 +34,24 @@
       "accentContrast": "#ffffff",
       "questionPanel": "transparent",
       "questionPanelBorder": "rgba(5, 5, 5, 0.78)",
-      "questionOption": "rgba(239, 148, 225, 0.86)",
-      "questionSelected": "rgba(215, 196, 6, 0.92)",
+      "questionOption": "rgba(215, 196, 6, 0.86)",
+      "questionSelected": "rgba(239, 148, 225, 0.86)",
       "questionSelectedText": "#050505",
       "questionSelectedBorder": "rgba(5, 5, 5, 0.9)"
     }
   },
   "assets": {
     "logo": "/brands/ideally/images/Ideally_Wordmark_Black.png",
-    "attractImage": "/brands/ideally/images/eye.png",
-    "attractVideo": false,
+    "attractImage": false,
+    "attractVideo": "/brands/ideally/videos/eye-animation.mp4",
     "loadingVideo": false,
     "backgroundVideo": "/brands/ideally/videos/eye-animation-2.mp4"
   },
   "copy": {
     "attractTitle": "On the menu,\ndistinctiveness.",
     "attractSubtitle": "Neat, measured, or mixed -\nwhich one are you?",
-    "attractCtaLabel": "Find out ->",
+    "attractCtaLabel": "Find Out",
+    "hideQuestionInstructions": true,
     "intro": {
       "enabled": true,
       "title": "",
@@ -58,7 +59,7 @@
         "The best ideas don't ship because someone won an argument. They ship because someone took a calculated risk.",
         "Answer five questions and find out where you sit, and which cocktail you're drinking tonight."
       ],
-      "buttonLabel": "Play ->"
+      "buttonLabel": "Play"
     },
     "resultsTitle": "Finding your pour...",
     "resultsInstruction": "Hang tight while we match your answers.",

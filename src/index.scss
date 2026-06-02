@@ -111,6 +111,15 @@ h3 {
   text-transform: var(--app-heading-text-transform);
 }
 
+h1,
+h2,
+h3,
+p,
+button,
+span {
+  text-wrap: pretty;
+}
+
 .registered-mark {
   font-size: 0.42em;
   line-height: 0;
@@ -189,7 +198,7 @@ h3 {
   position: absolute;
   top: var(--app-logo-top, 0);
   left: var(--app-logo-left, 0);
-  height: var(--app-logo-height, 6vh);
+  height: var(--app-logo-height, 10.5vh);
   margin: var(--app-logo-margin, 1vh 3vh);
   transform: var(--app-logo-transform, none);
   pointer-events: none;
@@ -273,8 +282,8 @@ h3 {
   --quiz-border: rgba(5, 5, 5, 0.58);
   --quiz-border-strong: rgba(5, 5, 5, 0.92);
   --question-panel-border: rgba(5, 5, 5, 0.78);
-  --question-option-bg: rgba(239, 148, 225, 0.86);
-  --question-selected-bg: rgba(215, 196, 6, 0.92);
+  --question-option-bg: rgba(215, 196, 6, 0.86);
+  --question-selected-bg: rgba(239, 148, 225, 0.86);
   --question-selected-text: #050505;
   --question-selected-border: rgba(5, 5, 5, 0.92);
   --console-text: rgba(5, 5, 5, 0.84);
@@ -314,7 +323,7 @@ h3 {
 
   .intro p {
     color: #050505;
-    font-size: clamp(2.65vh, 6.2vw, 4vh);
+    font-size: clamp(2.9vh, 6.8vw, 4.35vh);
     line-height: 1.12;
     letter-spacing: 0;
   }
@@ -386,16 +395,17 @@ h3 {
   bottom: 2vh;
   left: 2vh;
   z-index: 100;
-  min-width: 8vh;
-  height: 4.5vh;
-  padding: 0 1.4vh;
-  border-radius: 999vh;
   @include ui-pill-button-secondary;
+  min-width: 0;
+  height: 3.3vh;
+  padding: 0 1vh;
   border-color: rgba(255, 255, 255, 0.18);
   background: rgba(8, 8, 8, 0.72);
   color: rgba(243, 239, 230, 0.78);
   backdrop-filter: blur(0.5vh);
-  font-size: .8vh;
+  font-size: .78vh;
+  letter-spacing: 0;
+  text-transform: none;
   transition: opacity .3s linear, border-color .3s linear, color .3s linear, visibility .3s linear;
 
   &.is-active {
