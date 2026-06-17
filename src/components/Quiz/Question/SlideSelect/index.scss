@@ -4,7 +4,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.1vh;
+  gap: var(--question-answer-gap, 1.1vh);
 
   &-title {
     margin: 0;
@@ -20,13 +20,13 @@
   &-list {
     display: flex;
     flex-direction: column;
-    gap: 1.1vh;
+    gap: var(--question-answer-gap, 1.1vh);
   }
 
   &-row {
     --slide-progress: 0;
     margin: 0;
-    padding: 1.3vh 1.5vh;
+    padding: var(--question-slider-row-padding, 1.3vh 1.5vh);
     border-radius: var(--radius-sm);
     border: .1vh solid var(--quiz-border);
     background: var(--question-answer-backing);
@@ -36,7 +36,7 @@
     backdrop-filter: blur(.1vh);
     display: flex;
     flex-direction: column;
-    gap: .75vh;
+    gap: var(--question-slider-row-gap, .75vh);
     cursor: pointer;
 
     &.selected {
@@ -73,7 +73,7 @@
 
     &-label {
       display: block;
-      font-size: clamp(1vh, 1.25vh, 1.5vh);
+      font-size: var(--question-answer-font-size, clamp(1vh, 1.25vh, 1.5vh));
       line-height: 1.35;
       text-wrap: pretty;
       transition: color .18s ease;

@@ -198,7 +198,7 @@ span {
   position: absolute;
   top: var(--app-logo-top, 0);
   left: var(--app-logo-left, 0);
-  height: var(--app-logo-height, 10.5vh);
+  height: var(--app-logo-height, 6vh);
   margin: var(--app-logo-margin, 1vh 3vh);
   transform: var(--app-logo-transform, none);
   pointer-events: none;
@@ -210,6 +210,22 @@ span {
     object-fit: contain;
     object-position: left center;
   }
+}
+
+.app--brand-lightbox {
+  --app-logo-height: 4.2vh;
+  --question-shell-margin: 0.7vh;
+  --question-shell-padding: 0.9vh;
+  --question-content-padding: 1vh;
+  --question-content-width-offset: 2vh;
+  --question-content-margin-top: 3vh;
+  --question-navigation-padding: 0.8vh 1vh 1vh;
+  --question-answer-gap: 0.78vh;
+  --question-answer-padding: 1.08vh 1.45vh;
+  --question-answer-font-size: clamp(0.94vh, 1.16vh, 1.38vh);
+  --question-photo-answer-min: 13.4vh;
+  --question-slider-row-padding: 0.92vh 1.08vh;
+  --question-slider-row-gap: 0.54vh;
 }
 
 .hidden {

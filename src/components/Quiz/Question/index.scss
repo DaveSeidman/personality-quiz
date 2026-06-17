@@ -1,16 +1,13 @@
 @use '../../../index.scss' as src;
 
-$layout-margin: 1.2vh;
-$layout-padding: 1.5vh;
-
 .question {
   --question-answer-backing: var(--question-option-bg);
   --question-answer-blur: blur(.14vh);
-  width: calc(100% - $layout-padding);
+  width: calc(100% - var(--question-shell-padding, 1.5vh));
   height: 100%;
   box-sizing: border-box;
-  margin: $layout-margin auto;
-  padding: $layout-padding;
+  margin: var(--question-shell-margin, 1.2vh) auto;
+  padding: var(--question-shell-padding, 1.5vh);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -18,19 +15,18 @@ $layout-padding: 1.5vh;
   color: var(--quiz-text);
 
   &-content {
-    width: calc(100% - 3vh);
+    width: calc(100% - var(--question-content-width-offset, 3vh));
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: $layout-padding;
+    padding: var(--question-content-padding, 1.5vh);
     border-radius: var(--radius-sm);
     background: transparent;
     border: 0.35vh solid var(--question-panel-border);
     box-shadow: none;
-    margin: 4vh 0 0;
+    margin: var(--question-content-margin-top, 4vh) 0 0;
 
     h2 {
-      // margin: 0 0 1.5vh;
       font-size: clamp(1.3vh, 1.6vh, 2.3vh);
       line-height: 1.25;
       color: var(--quiz-strong-text);
@@ -38,10 +34,10 @@ $layout-padding: 1.5vh;
   }
 
   &-navigation {
-    width: calc(100% - 3vh);
+    width: calc(100% - var(--question-content-width-offset, 3vh));
     display: flex;
     justify-content: space-between;
-    padding: 1.5vh;
+    padding: var(--question-navigation-padding, 1.5vh);
 
     &-prev-button {
       @include src.ui-pill-button-secondary;
@@ -89,6 +85,12 @@ $layout-padding: 1.5vh;
 .question.build-on {}
 
 .question-content.before-visited {}
+
+.app--brand-lightbox {
+  .question-content h2 {
+    margin: 0 0 0.8vh;
+  }
+}
 
 .app--brand-ideally {
   .question {

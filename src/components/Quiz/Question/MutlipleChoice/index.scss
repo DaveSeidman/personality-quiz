@@ -12,11 +12,11 @@
   &-answers {
     display: flex;
     flex-direction: column;
-    gap: 1.11vh;
+    gap: var(--question-answer-gap, 1.11vh);
 
     &-answer {
       margin: 0;
-      padding: 1.63vh 2.22vh;
+      padding: var(--question-answer-padding, 1.63vh 2.22vh);
       border-radius: 0.74vh;
       border: 0.09vh solid var(--quiz-border);
       background: var(--question-answer-backing);
@@ -25,7 +25,7 @@
       cursor: pointer;
       text-align: left;
       opacity: 0.9;
-      font-size: clamp(1.0vh, 1.34vh, 1.52vh);
+      font-size: var(--question-answer-font-size, clamp(1.0vh, 1.34vh, 1.52vh));
       line-height: 1.5;
       transition: background-color .28s ease, border-color .28s ease, transform .18s ease, color .28s ease, opacity .28s ease;
       text-wrap: pretty;
@@ -50,8 +50,8 @@
   &.photo {
     .multiple-choice-answers {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(14.81vh, 1fr));
-      gap: 1.11vh;
+      grid-template-columns: repeat(auto-fit, minmax(var(--question-photo-answer-min, 14.81vh), 1fr));
+      gap: var(--question-answer-gap, 1.11vh);
 
       &-answer {
         margin: 0;

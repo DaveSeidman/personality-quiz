@@ -4,7 +4,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.11vh;
+  gap: var(--question-answer-gap, 1.11vh);
 
   &-title {
     margin: 0;
@@ -20,7 +20,7 @@
   &-list {
     display: flex;
     flex-direction: column;
-    gap: 1.11vh;
+    gap: var(--question-answer-gap, 1.11vh);
     touch-action: none;
     user-select: none;
   }
@@ -33,11 +33,11 @@
     backdrop-filter: var(--question-answer-blur);
     border: 0.09vh solid var(--quiz-border);
     border-radius: 0.74vh;
-    padding: 1.63vh 2.0vh;
+    padding: var(--question-answer-padding, 1.63vh 2.0vh);
     color: var(--quiz-text);
     cursor: grab;
     opacity: 0.9;
-    font-size: clamp(1.0vh, 1.34vh, 1.52vh);
+    font-size: var(--question-answer-font-size, clamp(1.0vh, 1.34vh, 1.52vh));
     line-height: 1.45;
     transition: transform .22s ease, background-color .28s ease, box-shadow .28s ease, color .28s ease, border-color .28s ease, opacity .28s ease;
     position: relative;
