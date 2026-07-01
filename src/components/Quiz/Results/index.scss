@@ -14,13 +14,13 @@ $layout-padding-compact: 1.45vh;
   justify-content: center;
   box-sizing: border-box;
   padding: 1.45vh 2vh;
-  padding-top: calc(6.4vh + 125px);
+  padding-top: calc(2.9vh + 125px);
   justify-content: flex-start;
 
   &-content {
     width: 100%;
     max-width: 60vh;
-    height: 41.5vh;
+    height: 43.5vh;
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;
@@ -256,13 +256,6 @@ $layout-padding-compact: 1.45vh;
       align-items: center;
       width: 100%;
       gap: 0.12vh;
-
-      &-title {
-        margin: 0;
-        font-size: .9vh;
-        @include src.ui-label(.06em);
-        color: var(--quiz-muted-text);
-      }
 
       canvas {
         width: auto;

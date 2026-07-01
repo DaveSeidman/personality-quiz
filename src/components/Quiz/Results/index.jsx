@@ -24,7 +24,7 @@ const QUESTION_POLYGON_STYLES = [
   { dash: [14, 5, 3, 5], fillAlpha: 0.11, strokeAlpha: 0.7 },
 ]
 
-function RadarCanvas({ composite, byQuestion, legend, colorMap, showData = true }) {
+function RadarCanvas({ composite, byQuestion, legend, colorMap, showData = true, drawingScale = 1 }) {
   const [canvasId] = useState(() => `radar-${Math.random().toString(36).slice(2)}`)
 
   useEffect(() => {
@@ -40,7 +40,7 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap, showData = true 
     const cx = width / 2
     const isTriangleRadar = legend.length === 3
     const cy = isTriangleRadar ? height * 0.56 : height / 2
-    const radius = Math.min(width, height) * (isTriangleRadar ? 0.4 : 0.37)
+    const radius = Math.min(width, height) * (isTriangleRadar ? 0.4 : 0.37) * drawingScale
     const isLightMode = getComputedStyle(canvas).getPropertyValue('--quiz-mode').trim() === 'light'
     const radarInk = isLightMode ? '5,5,5' : '255,255,255'
 
@@ -181,7 +181,7 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap, showData = true 
         const y = cy + Math.sin(axis.angle) * labelRadius
         const cos = Math.cos(axis.angle)
         const isTriangleBottomAxis = isTriangleRadar && Math.sin(axis.angle) > 0.28
-        ctx.textAlign = isTriangleBottomAxis || Math.abs(cos) < 0.28 ? 'center' : cos > 0 ? 'right' : 'left'
+        ctx.textAlign = isTriangleBottomAxis || Math.abs(cos) < 0.28 ? 'center' : cos > 0 ? 'left' : 'right'
         ctx.fillText(axis.label, x, y)
       })
       ctx.restore()
@@ -192,11 +192,10 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap, showData = true 
 
     raf = requestAnimationFrame(draw)
     return () => { if (raf) cancelAnimationFrame(raf) }
-  }, [canvasId, colorMap, composite, byQuestion, legend, showData])
+  }, [canvasId, colorMap, composite, byQuestion, legend, showData, drawingScale])
 
   return (
     <div className="results-status-radar">
-      <p className="results-status-radar-title">Composite Signal Radar</p>
       <canvas id={canvasId} width={680} height={480} />
     </div>
   )
@@ -260,7 +259,7 @@ export default function Results({ brand, result, status = 'idle', analytics, que
 	                        ]
 	                      )}
                     </p>
-                    <RadarCanvas composite={radarData.composite} byQuestion={radarData.byQuestion} legend={radarData.legend} colorMap={colorMap} showData={isSubmitted} />
+                    <RadarCanvas composite={radarData.composite} byQuestion={radarData.byQuestion} legend={radarData.legend} colorMap={colorMap} showData={isSubmitted} drawingScale={0.8} />
                   </>
                 ) : null}
               </div>
