@@ -621,6 +621,10 @@ $layout-padding-compact: 1.45vh;
 }
 
 .app--brand-ideally {
+  .results {
+    padding-top: calc(4.2vh + 125px);
+  }
+
   .results-content {
     border: 0.24vh solid rgba(5, 5, 5, 0.8);
     color: var(--ideally-black);
