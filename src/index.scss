@@ -65,9 +65,9 @@ $green: #040404;
 
 @mixin ui-pill-button-secondary {
   @include ui-pill-button-base;
-  border: .1vh solid rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(243, 239, 230, 0.92);
+  border: .1vh solid var(--quiz-border-strong);
+  background: var(--console-surface-soft);
+  color: var(--quiz-strong-text);
   transition: border-color .5s linear, background-color .5s linear, transform .18s ease, opacity .5s linear;
 }
 
