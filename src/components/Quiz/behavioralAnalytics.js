@@ -74,7 +74,7 @@ export function getPersonalityLegend(personalities = []) {
   if (Array.isArray(personalities) && personalities.length) {
     return personalities.map((personality) => ({
       id: personality.id,
-      label: personality.name || titleCase(humanizePersonality(personality.id)),
+      label: personality.chartLabel || personality.name || titleCase(humanizePersonality(personality.id)),
       color: personality.color,
     }))
   }

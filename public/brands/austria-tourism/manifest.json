@@ -1,0 +1,61 @@
+{
+  "id": "austria-tourism",
+  "displayName": "Austria Tourism",
+  "accentColor": "#DC0000",
+  "theme": {
+    "fontFamily": "Nunito Sans",
+    "fontFaces": [
+      {
+        "url": "/brands/austria-tourism/fonts/NunitoSans10pt-Regular.woff2",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "url": "/brands/austria-tourism/fonts/NunitoSans10pt-Bold.woff2",
+        "weight": 700,
+        "style": "normal"
+      }
+    ],
+    "fontFallback": "Arial, Helvetica, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "headingFontFamily": "Alaska Contrast",
+    "headingFontFaces": [
+      {
+        "url": "/brands/austria-tourism/fonts/Alaska-MediumContrast.woff2",
+        "weight": 500,
+        "style": "normal"
+      }
+    ],
+    "headingFontFallback": "Arial, Helvetica, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "backgroundMatrix": false,
+    "quizMode": "light",
+    "colors": {
+      "appBg": "#E9F4F8",
+      "text": "#101820",
+      "accent": "#DC0000",
+      "accentContrast": "#FFFFFF",
+      "questionPanel": "rgba(255, 255, 255, 0.72)",
+      "questionPanelBorder": "rgba(16, 24, 32, 0.12)",
+      "questionOption": "rgba(255, 255, 255, 0.82)",
+      "questionSelected": "#DC0000",
+      "questionSelectedText": "#FFFFFF"
+    }
+  },
+  "assets": {
+    "logo": "/brands/austria-tourism/images/logo.svg",
+    "attractVideo": false,
+    "loadingVideo": false
+  },
+  "copy": {
+    "attractTitle": "FIND YOUR AUSTRIAN APRÈS PERSONALITY",
+    "attractSubtitle": "Every great ski story deserves the perfect drink. Answer three fun questions and discover which Austrian-inspired cocktail best matches your piste personality.",
+    "resultsTitle": "Finding your Austrian après personality...",
+    "resultsInstruction": "Hang tight while we match your piste personality to the perfect pour.",
+    "loadingTitle": "Mixing your mountain match...",
+    "loadingBody": "Blending your answers into an Austrian-inspired cocktail personality.",
+    "reviewLabel": "Review",
+    "submitLabel": "Reveal Match",
+    "submittingLabel": "Mixing...",
+    "startOverLabel": "Start Over"
+  },
+  "quizUrl": "/brands/austria-tourism/quiz.json"
+}

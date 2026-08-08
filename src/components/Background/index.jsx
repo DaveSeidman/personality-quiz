@@ -328,6 +328,8 @@ function computeRippleInfluence(cellX, cellY, ripples, now, rippleLifetimeMs = R
 
 export default function Background({ brand, showBackgroundVideo = true }) {
   const isDeshawVariant = brand?.id === 'deshaw'
+  const isAustriaTourism = brand?.id === 'austria-tourism'
+  const brandClassName = brand?.id ? ` background-matrix--${brand.id}` : ''
   const matrixEnabled = brand?.theme?.backgroundMatrix !== false
   const backgroundConfig = useMemo(() => (
     isDeshawVariant
@@ -693,7 +695,20 @@ export default function Background({ brand, showBackgroundVideo = true }) {
   }, [depthBuckets, gridColumns, gridRows, isDeshawVariant, matrixEnabled])
 
   return (
-    <div className={`background-matrix${isDeshawVariant ? ' background-matrix--deshaw' : ''}`}>
+    <div className={`background-matrix${brandClassName}`}>
+      {isAustriaTourism ? (
+        <svg
+          className="background-matrix-austria-vibe"
+          viewBox="0 0 1600 1000"
+          preserveAspectRatio="xMidYMid slice"
+          aria-hidden="true"
+        >
+          <g className="background-matrix-austria-vibe-lines">
+            <path d="M 1670 -130 C 1390 40 1440 265 1160 365 C 870 470 850 720 565 800 C 355 860 170 990 -85 1170" />
+            <path d="M 1745 -55 C 1465 115 1515 340 1235 440 C 945 545 925 795 640 875 C 430 935 245 1065 -10 1245" />
+          </g>
+        </svg>
+      ) : null}
       {matrixEnabled ? (
         <canvas ref={canvasRef} className="background-matrix-canvas" />
       ) : null}

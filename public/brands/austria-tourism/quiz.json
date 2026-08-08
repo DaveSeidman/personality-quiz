@@ -1,0 +1,113 @@
+{
+  "quizId": "austria-tourism-apres-v1",
+  "features": {
+    "faceAnalysis": false
+  },
+  "console": {
+    "face": false,
+    "signals": true
+  },
+  "personalities": [
+    {
+      "id": "fuzzy-ski-bunny",
+      "name": "🥂 You’re a Fuzzy Ski Bunny",
+      "chartLabel": "Fuzzy Ski Bunny",
+      "color": "#C9A227",
+      "description": "You bring the sparkle. You’re all about fun, laughter and making memories with friends. Whether you’re celebrating on a sunny terrace or dancing in ski boots, your energy is contagious.",
+      "drinkRecommendation": "Fuzzy Ski Bunny"
+    },
+    {
+      "id": "alpine-affair",
+      "name": "🍸 You’re an Alpine Affair",
+      "chartLabel": "Alpine Affair",
+      "color": "#4FA8D8",
+      "description": "You love adventure—with style. You appreciate fresh mountain air, beautiful views and experiences that feel just a little elevated. Curious, confident and effortlessly cool—that’s your Austrian Lebensgefühl.",
+      "drinkRecommendation": "Alpine Affair"
+    },
+    {
+      "id": "last-runm",
+      "name": "🥃 You’re a Last Ru(n)m",
+      "chartLabel": "Last Ru(n)m",
+      "color": "#B23A48",
+      "description": "You live for the final run — the one with real stakes, real nerve, and a finish worth toasting. Your Lebensgefühl is rich, bold, and built to be remembered.",
+      "drinkRecommendation": "Last Ru(n)m"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "label": "Perfect Ski Day",
+      "text": "What’s your perfect ski day?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Fresh corduroy from first lift to last run",
+          "personalityId": "fuzzy-ski-bunny"
+        },
+        {
+          "id": "B",
+          "content": "A mix of skiing, cozy huts and great company",
+          "personalityId": "alpine-affair"
+        },
+        {
+          "id": "C",
+          "content": "Long lunches, mountain views and taking it all in",
+          "personalityId": "last-runm"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "Last Lift",
+      "text": "Where do we find you when the last lift closes?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Dancing on the table at the Hüttenparty",
+          "personalityId": "fuzzy-ski-bunny"
+        },
+        {
+          "id": "B",
+          "content": "Flirting with the ski instructor",
+          "personalityId": "alpine-affair"
+        },
+        {
+          "id": "C",
+          "content": "Toasting the day’s boldest run",
+          "personalityId": "last-runm"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "Lebensgefühl",
+      "text": "Your Lebensgefühl this season is best described as:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Light, bubbly, impossible to bring down",
+          "personalityId": "fuzzy-ski-bunny"
+        },
+        {
+          "id": "B",
+          "content": "Fresh, flirty, a little unpredictable",
+          "personalityId": "alpine-affair"
+        },
+        {
+          "id": "C",
+          "content": "Bold, rich, built for the big finish",
+          "personalityId": "last-runm"
+        }
+      ]
+    }
+  ]
+}
