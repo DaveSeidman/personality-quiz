@@ -4,6 +4,9 @@ const DEFAULT_FONT_STACK = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe
 const BRAND_FONT_ALIAS = '"Brand Experience Font"'
 const BRAND_HEADING_FONT_ALIAS = '"Brand Experience Heading Font"'
 const BRAND_CONFIG_FILENAMES = ['brand.json', 'manifest.json']
+const BRAND_ID_ALIASES = {
+  austria: 'austria-tourism',
+}
 const BASE_URL = import.meta.env.BASE_URL || '/'
 
 const QUIZ_MODE_TOKENS = {
@@ -197,7 +200,8 @@ async function resolveFontFaces(fontFaces = [], fallbackUrl = '') {
 
 export function getRequestedBrandId() {
   const params = new URLSearchParams(window.location.search)
-  return sanitizeBrandId(params.get('brand') || DEFAULT_BRAND_ID)
+  const requestedId = sanitizeBrandId(params.get('brand') || DEFAULT_BRAND_ID)
+  return BRAND_ID_ALIASES[requestedId] || requestedId
 }
 
 export async function loadBrandExperience() {

@@ -50,13 +50,14 @@
   &.photo {
     .multiple-choice-answers {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(var(--question-photo-answer-min, 14.81vh), 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: var(--question-answer-gap, 1.11vh);
 
       &-answer {
         margin: 0;
         padding: 0;
-        aspect-ratio: 1;
+        aspect-ratio: 3 / 2;
+        max-height: var(--question-photo-answer-max-height, 18vh);
         overflow: hidden;
         border-radius: 0.74vh;
         border: 0.19vh solid var(--quiz-border);
@@ -73,8 +74,8 @@
 
         &.selected {
           transform: translateY(-0.19vh);
-          border-color: var(--quiz-border-strong);
-          box-shadow: 0 0 0 0.18vh var(--quiz-border);
+          border-color: var(--accent);
+          box-shadow: 0 0 0 0.18vh var(--accent);
           opacity: 1;
         }
 

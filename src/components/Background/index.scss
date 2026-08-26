@@ -17,30 +17,6 @@
       radial-gradient(circle at 76% 18%, rgba(255, 255, 255, 0.92), transparent 18%),
       radial-gradient(circle at 18% 72%, rgba(79, 168, 216, 0.24), transparent 34%),
       linear-gradient(155deg, #f9fcfd 0%, #e9f4f8 48%, #d6e8ef 100%);
-
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      inset: -35% 0 0;
-      z-index: 1;
-      pointer-events: none;
-      background-image:
-        radial-gradient(circle, rgba(255, 255, 255, 0.96) 0 0.12vh, transparent 0.16vh),
-        radial-gradient(circle, rgba(255, 255, 255, 0.82) 0 0.18vh, transparent 0.22vh),
-        radial-gradient(circle, rgba(255, 255, 255, 0.72) 0 0.09vh, transparent 0.14vh);
-      background-position: 0 0, 7vh 11vh, 15vh 4vh;
-      background-size: 18vh 22vh, 27vh 31vh, 22vh 26vh;
-      animation: austria-snowfall 18s linear infinite;
-    }
-
-    &::after {
-      opacity: 0.58;
-      filter: blur(0.05vh);
-      transform: translateX(5vh);
-      animation-duration: 29s;
-      animation-delay: -11s;
-    }
   }
 
   &-austria-vibe {
@@ -98,16 +74,6 @@
   }
 }
 
-@keyframes austria-snowfall {
-  from {
-    background-position: 0 0, 7vh 11vh, 15vh 4vh;
-  }
-
-  to {
-    background-position: 5vh 52vh, 1vh 67vh, 20vh 58vh;
-  }
-}
-
 @keyframes austria-vibe-flow {
   from {
     transform: translate3d(2.5%, -2%, 0) scale(1.015);
@@ -119,13 +85,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .background-matrix--austria-tourism {
-    &::before,
-    &::after {
-      animation: none;
-    }
-  }
-
   .background-matrix-austria-vibe {
     animation: none;
   }

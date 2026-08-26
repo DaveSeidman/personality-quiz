@@ -108,6 +108,36 @@
           "personalityId": "last-runm"
         }
       ]
+    },
+    {
+      "id": 4,
+      "label": "Austria Vibe",
+      "text": "Which Austria moment are you stepping into first?",
+      "type": "multiple-choice-image",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "/personality-quiz/brands/austria-tourism/images/vibe-terrace.jpg",
+          "personalityId": "fuzzy-ski-bunny"
+        },
+        {
+          "id": "B",
+          "content": "/personality-quiz/brands/austria-tourism/images/vibe-mountains.jpg",
+          "personalityId": "alpine-affair"
+        },
+        {
+          "id": "C",
+          "content": "/personality-quiz/brands/austria-tourism/images/vibe-apres.jpg",
+          "personalityId": "last-runm"
+        },
+        {
+          "id": "D",
+          "content": "/personality-quiz/brands/austria-tourism/images/vibe-landscape.jpg",
+          "personalityId": "alpine-affair"
+        }
+      ]
     }
   ]
 }
