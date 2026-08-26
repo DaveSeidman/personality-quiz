@@ -67,6 +67,9 @@
 
       &-button {
         @include src.ui-pill-button-primary;
+        // Keep touch-driven state changes from producing a visible opacity
+        // pulse on the Next / result action buttons.
+        transition: none;
 
         &.disabled {
           opacity: 0.45;
