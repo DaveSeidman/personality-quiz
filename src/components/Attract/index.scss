@@ -156,6 +156,18 @@
   .attract-copy {
     gap: 1.8vh;
     text-shadow: none;
+    isolation: isolate;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -1.2vh -2.2vh;
+      z-index: -1;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.62);
+      filter: blur(1.25vh);
+      pointer-events: none;
+    }
   }
 
   h1 {

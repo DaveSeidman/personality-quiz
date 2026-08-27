@@ -28,6 +28,16 @@ const DESHAW_CIRCLE_COLOR = '#2050e0'
 const DESHAW_BACKGROUND_COLOR = '#2b2b2b'
 const DESHAW_MIN_WIDTH_SCALE = 0.035
 const DESHAW_NOISE_TIME_SCALE = 0.00022
+const AUSTRIA_RIBBON_WIDTH = 10
+const AUSTRIA_RIBBON_HEIGHT = 200
+const AUSTRIA_CANVAS_PADDING = 200
+const AUSTRIA_TARGET_MIN_INTERVAL_MS = 1000
+const AUSTRIA_TARGET_MAX_INTERVAL_MS = 3000
+const AUSTRIA_MAX_ANGULAR_VELOCITY = Math.PI * 0.75
+const AUSTRIA_ANGULAR_RESPONSE = 1.35
+const AUSTRIA_ANGULAR_SMOOTHING = 3.5
+const AUSTRIA_CAMERA_SPEED = 120
+const AUSTRIA_RIBBON_SRC = `${import.meta.env.BASE_URL}brands/austria-tourism/images/ribbon.png`
 
 const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value))
 const easeInOutQuint = (value) => (
@@ -324,6 +334,236 @@ function computeRippleInfluence(cellX, cellY, ripples, now, rippleLifetimeMs = R
   }
 
   return clamp(rippleValue, 0, 1.4)
+}
+
+function AustriaRibbonPrototype() {
+  const trailCanvasRef = useRef(null)
+  const ribbonRef = useRef(null)
+
+  useEffect(() => {
+    const trailCanvas = trailCanvasRef.current
+    const ribbon = ribbonRef.current
+    if (!trailCanvas || !ribbon) return undefined
+
+    const trailContext = trailCanvas.getContext('2d')
+    if (!trailContext) return undefined
+
+    const randomTarget = (cameraX, allowDoubleBack = true) => {
+      const width = window.innerWidth
+      const height = window.innerHeight
+      const margin = Math.min(90, width * 0.2, height * 0.2)
+      const minY = Math.max(height * 0.5, margin)
+      const maxY = Math.max(minY, height - margin)
+      const doublesBack = allowDoubleBack && Math.random() < 0.18
+      const targetScreenX = doublesBack
+        ? width * (0.08 + (Math.random() * 0.4))
+        : width * (0.58 + (Math.random() * 0.4))
+
+      return {
+        x: cameraX + targetScreenX,
+        y: minY + (Math.random() * Math.max(maxY - minY, 1)),
+      }
+    }
+
+    const randomTargetInterval = () => (
+      AUSTRIA_TARGET_MIN_INTERVAL_MS
+      + (Math.random() * (AUSTRIA_TARGET_MAX_INTERVAL_MS - AUSTRIA_TARGET_MIN_INTERVAL_MS))
+    )
+
+    const initialX = window.innerWidth * 0.5
+    const initialTarget = randomTarget(0, false)
+    const state = {
+      x: initialX,
+      y: window.innerHeight * 0.5,
+      velocityX: 135,
+      velocityY: -70,
+      heading: Math.atan2(-70, 135),
+      angularVelocity: 0,
+      cameraX: 0,
+      canvasPixelRatio: 1,
+      pendingCameraShift: 0,
+      targetX: initialTarget.x,
+      targetY: initialTarget.y,
+      nextTargetAt: performance.now() + randomTargetInterval(),
+      lastFrameAt: null,
+    }
+    let animationFrameId = null
+
+    const resizeTrailCanvas = () => {
+      const canvasWidth = window.innerWidth + (AUSTRIA_CANVAS_PADDING * 2)
+      const canvasHeight = window.innerHeight + (AUSTRIA_CANVAS_PADDING * 2)
+      const pixelRatio = Math.min(
+        window.devicePixelRatio || 1,
+        2,
+        8192 / canvasWidth,
+        8192 / canvasHeight,
+      )
+      trailCanvas.width = Math.floor(canvasWidth * pixelRatio)
+      trailCanvas.height = Math.floor(canvasHeight * pixelRatio)
+      trailCanvas.style.left = `${-AUSTRIA_CANVAS_PADDING}px`
+      trailCanvas.style.top = `${-AUSTRIA_CANVAS_PADDING}px`
+      trailCanvas.style.width = `${canvasWidth}px`
+      trailCanvas.style.height = `${canvasHeight}px`
+      trailContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0)
+      state.canvasPixelRatio = pixelRatio
+      state.pendingCameraShift = 0
+    }
+
+    const shiftTrailForCamera = (cameraMovement) => {
+      state.pendingCameraShift += cameraMovement * state.canvasPixelRatio
+      const pixelShift = Math.floor(state.pendingCameraShift)
+      if (pixelShift < 1) return
+
+      state.pendingCameraShift -= pixelShift
+      if (pixelShift >= trailCanvas.width) {
+        trailContext.clearRect(0, 0, trailCanvas.width, trailCanvas.height)
+        return
+      }
+
+      trailContext.save()
+      trailContext.setTransform(1, 0, 0, 1, 0, 0)
+      trailContext.globalCompositeOperation = 'copy'
+      trailContext.drawImage(
+        trailCanvas,
+        pixelShift,
+        0,
+        trailCanvas.width - pixelShift,
+        trailCanvas.height,
+        0,
+        0,
+        trailCanvas.width - pixelShift,
+        trailCanvas.height,
+      )
+      trailContext.globalCompositeOperation = 'source-over'
+      trailContext.clearRect(trailCanvas.width - pixelShift, 0, pixelShift, trailCanvas.height)
+      trailContext.restore()
+    }
+
+    const chooseNextTarget = (now) => {
+      const nextTarget = randomTarget(state.cameraX)
+      state.targetX = nextTarget.x
+      state.targetY = nextTarget.y
+      state.nextTargetAt = now + randomTargetInterval()
+    }
+
+    const containRibbon = () => {
+      const margin = (AUSTRIA_RIBBON_HEIGHT / 2) + 4
+      const maxY = Math.max(margin, window.innerHeight - margin)
+
+      if (state.y < margin) {
+        state.y = margin
+        state.velocityY = Math.abs(state.velocityY) * 0.72
+      } else if (state.y > maxY) {
+        state.y = maxY
+        state.velocityY = -Math.abs(state.velocityY) * 0.72
+      }
+    }
+
+    const render = (now) => {
+      if (state.lastFrameAt === null) state.lastFrameAt = now
+      const deltaSeconds = Math.min((now - state.lastFrameAt) / 1000, 0.034)
+      state.lastFrameAt = now
+
+      const cameraMovement = AUSTRIA_CAMERA_SPEED * deltaSeconds
+      state.cameraX += cameraMovement
+      shiftTrailForCamera(cameraMovement)
+
+      if (now >= state.nextTargetAt) chooseNextTarget(now)
+
+      const deltaX = state.targetX - state.x
+      const deltaY = state.targetY - state.y
+      const distance = Math.hypot(deltaX, deltaY)
+      const proximity = 1 - clamp(distance / 320)
+      const damping = 0.1 + (proximity * 0.28)
+      let accelerationX = (deltaX * 0.82) - (state.velocityX * damping)
+      let accelerationY = (deltaY * 0.82) - (state.velocityY * damping)
+      const acceleration = Math.hypot(accelerationX, accelerationY)
+      const maxAcceleration = 250
+
+      if (acceleration > maxAcceleration) {
+        const accelerationScale = maxAcceleration / acceleration
+        accelerationX *= accelerationScale
+        accelerationY *= accelerationScale
+      }
+
+      state.velocityX += accelerationX * deltaSeconds
+      state.velocityY += accelerationY * deltaSeconds
+
+      const speed = Math.hypot(state.velocityX, state.velocityY)
+      const maxSpeed = 320
+      if (speed > maxSpeed) {
+        const speedScale = maxSpeed / speed
+        state.velocityX *= speedScale
+        state.velocityY *= speedScale
+      }
+
+      state.x += state.velocityX * deltaSeconds
+      state.y += state.velocityY * deltaSeconds
+      containRibbon()
+
+      const targetHeading = Math.atan2(state.velocityY, state.velocityX)
+      const headingDelta = Math.atan2(
+        Math.sin(targetHeading - state.heading),
+        Math.cos(targetHeading - state.heading),
+      )
+      const targetAngularVelocity = AUSTRIA_MAX_ANGULAR_VELOCITY
+        * Math.tanh(headingDelta * AUSTRIA_ANGULAR_RESPONSE)
+      const angularVelocityBlend = 1 - Math.exp(-AUSTRIA_ANGULAR_SMOOTHING * deltaSeconds)
+      state.angularVelocity += (targetAngularVelocity - state.angularVelocity) * angularVelocityBlend
+      state.heading += state.angularVelocity * deltaSeconds
+      const ribbonScreenX = state.x - state.cameraX
+      ribbon.style.transform = `translate3d(${ribbonScreenX - (AUSTRIA_RIBBON_WIDTH / 2)}px, ${state.y - (AUSTRIA_RIBBON_HEIGHT / 2)}px, 0) rotate(${state.heading}rad)`
+
+      if (ribbon.complete && ribbon.naturalWidth > 0) {
+        trailContext.save()
+        trailContext.translate(
+          ribbonScreenX + AUSTRIA_CANVAS_PADDING,
+          state.y + AUSTRIA_CANVAS_PADDING,
+        )
+        trailContext.rotate(state.heading)
+        trailContext.drawImage(
+          ribbon,
+          -(AUSTRIA_RIBBON_WIDTH / 2),
+          -(AUSTRIA_RIBBON_HEIGHT / 2),
+          AUSTRIA_RIBBON_WIDTH,
+          AUSTRIA_RIBBON_HEIGHT,
+        )
+        trailContext.restore()
+      }
+
+      animationFrameId = requestAnimationFrame(render)
+    }
+
+    const handleResize = () => {
+      state.targetX = state.cameraX + clamp(state.targetX - state.cameraX, 0, window.innerWidth)
+      state.targetY = clamp(state.targetY, 0, window.innerHeight)
+      containRibbon()
+      resizeTrailCanvas()
+    }
+
+    resizeTrailCanvas()
+    animationFrameId = requestAnimationFrame(render)
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      if (animationFrameId) cancelAnimationFrame(animationFrameId)
+    }
+  }, [])
+
+  return (
+    <div className="background-matrix-austria-ribbon-prototype" aria-hidden="true" data-testid="austria-ribbon-prototype">
+      <canvas ref={trailCanvasRef} className="background-matrix-austria-ribbon-trail" data-testid="austria-ribbon-trail" />
+      <img
+        ref={ribbonRef}
+        className="background-matrix-austria-ribbon"
+        src={AUSTRIA_RIBBON_SRC}
+        alt=""
+        draggable="false"
+        data-testid="austria-ribbon"
+      />
+    </div>
+  )
 }
 
 export default function Background({ brand, showBackgroundVideo = true }) {
@@ -696,19 +936,7 @@ export default function Background({ brand, showBackgroundVideo = true }) {
 
   return (
     <div className={`background-matrix${brandClassName}`}>
-      {isAustriaTourism ? (
-        <svg
-          className="background-matrix-austria-vibe"
-          viewBox="0 0 1600 1000"
-          preserveAspectRatio="xMidYMid slice"
-          aria-hidden="true"
-        >
-          <g className="background-matrix-austria-vibe-lines">
-            <path d="M 1670 -130 C 1390 40 1440 265 1160 365 C 870 470 850 720 565 800 C 355 860 170 990 -85 1170" />
-            <path d="M 1707.5 -92.5 C 1427.5 77.5 1477.5 302.5 1197.5 402.5 C 907.5 507.5 887.5 757.5 602.5 837.5 C 392.5 897.5 207.5 1027.5 -47.5 1207.5" />
-          </g>
-        </svg>
-      ) : null}
+      {isAustriaTourism ? <AustriaRibbonPrototype /> : null}
       {matrixEnabled ? (
         <canvas ref={canvasRef} className="background-matrix-canvas" />
       ) : null}

@@ -22,6 +22,8 @@
     padding: var(--question-content-padding, 1.5vh);
     border-radius: var(--radius-sm);
     background: transparent;
+    -webkit-backdrop-filter: blur(0.55vh) brightness(1.08);
+    backdrop-filter: blur(0.55vh) brightness(1.08);
     border: 0.35vh solid var(--question-panel-border);
     box-shadow: none;
     margin: var(--question-content-margin-top, 4vh) 0 0;
@@ -41,6 +43,8 @@
 
     &-prev-button {
       @include src.ui-pill-button-secondary;
+      -webkit-backdrop-filter: blur(0.55vh) brightness(1.08);
+      backdrop-filter: blur(0.55vh) brightness(1.08);
 
       &:disabled {
         opacity: 0.35;
