@@ -40,3 +40,16 @@
   opacity: 0;
   pointer-events: none;
 }
+
+.quiz.fade-in {
+  .quiz-step:nth-child(n + 3) {
+    opacity: 0;
+    animation: quiz-return-step-enter 300ms ease 500ms forwards;
+  }
+}
+
+@keyframes quiz-return-step-enter {
+  to {
+    opacity: 1;
+  }
+}

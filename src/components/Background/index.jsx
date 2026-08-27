@@ -705,7 +705,7 @@ export default function Background({ brand, showBackgroundVideo = true }) {
         >
           <g className="background-matrix-austria-vibe-lines">
             <path d="M 1670 -130 C 1390 40 1440 265 1160 365 C 870 470 850 720 565 800 C 355 860 170 990 -85 1170" />
-            <path d="M 1745 -55 C 1465 115 1515 340 1235 440 C 945 545 925 795 640 875 C 430 935 245 1065 -10 1245" />
+            <path d="M 1707.5 -92.5 C 1427.5 77.5 1477.5 302.5 1197.5 402.5 C 907.5 507.5 887.5 757.5 602.5 837.5 C 392.5 897.5 207.5 1027.5 -47.5 1207.5" />
           </g>
         </svg>
       ) : null}

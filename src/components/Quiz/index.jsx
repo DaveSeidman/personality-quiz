@@ -325,7 +325,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
         setQuizTransition('')
         isResettingRef.current = false
         setIsResetting(false)
-      }, 500)
+      }, 1000)
     }, 200)
   }
 
