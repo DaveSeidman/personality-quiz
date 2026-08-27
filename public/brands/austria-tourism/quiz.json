@@ -5,7 +5,7 @@
   },
   "console": {
     "face": false,
-    "signals": true
+    "signals": false
   },
   "personalities": [
     {
@@ -13,7 +13,7 @@
       "name": "🥂 You’re a Fuzzy Ski Bunny",
       "chartLabel": "Fuzzy Ski Bunny",
       "color": "#C9A227",
-      "description": "You bring the sparkle. You’re all about fun, laughter and making memories with friends. Whether you’re celebrating on a sunny terrace or dancing in ski boots, your energy is contagious.",
+      "description": "You bring the sparkle. You’re all about fun, laughter and making memories with friends. Whether you’re celebrating on a sunny terrace or dancing in ski boots, your energy is contagious. Your cocktail: Lingonberry purée. Aperol. Lemon juice. Sparkling wine. Garnished with orange twist.",
       "drinkRecommendation": "Fuzzy Ski Bunny"
     },
     {
@@ -21,7 +21,7 @@
       "name": "🍸 You’re an Alpine Affair",
       "chartLabel": "Alpine Affair",
       "color": "#4FA8D8",
-      "description": "You love adventure—with style. You appreciate fresh mountain air, beautiful views and experiences that feel just a little elevated. Curious, confident and effortlessly cool—that’s your Austrian Lebensgefühl.",
+      "description": "You love adventure—with style. You appreciate fresh mountain air, beautiful views and experiences that feel just a little elevated. Curious, confident and effortlessly cool—that’s your Austrian Lebensgefühl. Your cocktail: Gin. Elderflower liqueur. Lemon juice. Tonic water. Garnish with lemon wheel.",
       "drinkRecommendation": "Alpine Affair"
     },
     {
@@ -29,7 +29,7 @@
       "name": "🥃 You’re a Last Ru(n)m",
       "chartLabel": "Last Ru(n)m",
       "color": "#B23A48",
-      "description": "You live for the final run — the one with real stakes, real nerve, and a finish worth toasting. Your Lebensgefühl is rich, bold, and built to be remembered.",
+      "description": "You live for the final run — the one with real stakes, real nerve, and a finish worth toasting. Your Lebensgefühl is rich, bold, and built to be remembered. Your cocktail: Rum. Apple cider. Toasted cinnamon Demerara syrup. Lemon juice. Garnish with cinnamon stick.",
       "drinkRecommendation": "Last Ru(n)m"
     }
   ],
