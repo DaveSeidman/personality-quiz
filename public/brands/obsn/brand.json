@@ -59,8 +59,8 @@
     "loadingVideo": false
   },
   "copy": {
-    "attractTitle": "Personality Quiz",
-    "attractSubtitle": "Answer {questionCount} questions to discover your personality type.",
+    "attractTitle": "THE OBSESSION QUIZ",
+    "attractSubtitle": "Everyone has a thing. Answer {questionCount} questions to reveal what level of OBSESSED you are.",
     "resultsTitle": "Finding your match...",
     "resultsInstruction": "Hang tight while we match your answers.",
     "loadingTitle": "Analyzing your answers...",

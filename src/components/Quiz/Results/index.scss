@@ -677,3 +677,21 @@ $layout-padding-compact: 1.45vh;
 .app.app--brand-obsn .results-screen:first-child {
   justify-content: center;
 }
+
+.quiz--full-height {
+  .results {
+    padding-top: 1.45vh;
+    justify-content: center;
+  }
+
+  .results-navigation {
+    position: absolute;
+    right: 0;
+    top: calc(50% + 22.5vh);
+    bottom: auto;
+    left: 0;
+    max-width: 63vh;
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
+}
