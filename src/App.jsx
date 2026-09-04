@@ -246,9 +246,11 @@ export default function App() {
         consoleEnabled={consoleSettings.enabled}
       />
 
-      <div className="app-logo">
-        <img src={brand.assets.logo} alt={`${brand.displayName || 'Quiz'} logo`} />
-      </div>
+      {brand.assets.logo ? (
+        <div className="app-logo">
+          <img src={brand.assets.logo} alt={`${brand.displayName || 'Quiz'} logo`} />
+        </div>
+      ) : null}
 
       {faceAnalysisEnabled ? (
         <button

@@ -1,0 +1,74 @@
+{
+  "id": "obsn",
+  "displayName": "OBSN",
+  "accentColor": "#FA451D",
+  "theme": {
+    "fontFamily": "Hanken Grotesk",
+    "fontUrl": false,
+    "fontFaces": [
+      {
+        "url": "/brands/obsn/fonts/HankenGrotesk-Variable.ttf",
+        "weight": "100 900",
+        "style": "normal"
+      }
+    ],
+    "fontFallback": "Arial, Helvetica, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "headingFontFamily": "Barlow Condensed",
+    "headingFontUrl": false,
+    "headingFontFaces": [
+      {
+        "url": "/brands/obsn/fonts/BarlowCondensed-Regular.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "url": "/brands/obsn/fonts/BarlowCondensed-SemiBold.ttf",
+        "weight": 600,
+        "style": "normal"
+      }
+    ],
+    "headingFontFallback": "Arial Narrow, Arial, Helvetica, sans-serif",
+    "headingTextTransform": "uppercase",
+    "backgroundMatrix": false,
+    "backgroundVideoOpacity": 1,
+    "logoHeight": "4.7vh",
+    "logoMargin": "2.5vh 3vh",
+    "logoTop": "0",
+    "logoLeft": "0",
+    "logoTransform": "none",
+    "quizMode": "dark",
+    "colors": {
+      "appBg": "#050505",
+      "text": "#FFFFFF",
+      "accent": "#FA451D",
+      "accentContrast": "#050505",
+      "questionPanel": "rgba(35, 35, 35, 0.82)",
+      "questionPanelBorder": "rgba(200, 200, 200, 0.28)",
+      "questionOption": "rgba(35, 35, 35, 0.92)",
+      "questionSelected": "#FA451D",
+      "questionSelectedText": "#050505",
+      "questionSelectedBorder": "#FA451D"
+    }
+  },
+  "assets": {
+    "logo": "/brands/obsn/images/logo-red-white.png",
+    "backgroundImage": false,
+    "backgroundVideo": "/brands/obsn/videos/obsn-background.mp4",
+    "attractImage": false,
+    "attractVideo": false,
+    "loadingVideo": false
+  },
+  "copy": {
+    "attractTitle": "Personality Quiz",
+    "attractSubtitle": "Answer {questionCount} questions to discover your personality type.",
+    "resultsTitle": "Finding your match...",
+    "resultsInstruction": "Hang tight while we match your answers.",
+    "loadingTitle": "Analyzing your answers...",
+    "loadingBody": "Finding the personality that fits you best.",
+    "reviewLabel": "Review",
+    "submitLabel": "Reveal",
+    "submittingLabel": "Analyzing...",
+    "startOverLabel": "Start Over"
+  },
+  "quizUrl": "/brands/obsn/quiz.json"
+}

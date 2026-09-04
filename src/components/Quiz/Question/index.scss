@@ -99,6 +99,14 @@
   }
 }
 
+.app--brand-obsn {
+  .question-content {
+    border: 0;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
 .app--brand-ideally {
   .question {
     --question-answer-blur: none;

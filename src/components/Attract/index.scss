@@ -183,3 +183,15 @@
     line-height: 1.45;
   }
 }
+
+.attract--brand-obsn {
+  .attract-copy {
+    opacity: 1;
+    transition: opacity 600ms ease 400ms;
+  }
+
+  &.hidden .attract-copy {
+    opacity: 0;
+    transition-delay: 0ms;
+  }
+}

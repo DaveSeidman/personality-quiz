@@ -237,7 +237,6 @@ export default function Results({ brand, result, status = 'idle', analytics, que
           <div className={`results-screen ${!isSubmitted ? 'in' : 'out'}`}>
             <h2 className="results-title">{renderSuperscriptMarks(copy.resultsTitle || 'Analyzing your answers...')}</h2>
             <p className="results-instruction">{renderSuperscriptMarks(copy.resultsInstruction || 'Hang tight while we process your responses.')}</p>
-            <RadarCanvas composite={{}} byQuestion={[]} legend={radarData.legend} colorMap={colorMap} showData={false} />
           </div>
 
           {/* Screen B: submitted */}

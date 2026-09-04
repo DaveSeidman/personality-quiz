@@ -667,3 +667,13 @@ $layout-padding-compact: 1.45vh;
     justify-content: center;
   }
 }
+
+.app.app--brand-obsn .results-content {
+  border: 0;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.app.app--brand-obsn .results-screen:first-child {
+  justify-content: center;
+}
