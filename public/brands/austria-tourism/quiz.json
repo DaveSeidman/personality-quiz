@@ -112,7 +112,7 @@
     {
       "id": 4,
       "label": "Austria Vibe",
-      "text": "Which Austria moment are you stepping into first?",
+      "text": "Which Austrian ski moment are you craving the most?",
       "type": "multiple-choice-image",
       "select": 1,
       "shuffleAnswers": false,

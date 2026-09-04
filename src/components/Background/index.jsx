@@ -38,6 +38,7 @@ const AUSTRIA_ANGULAR_RESPONSE = 1.35
 const AUSTRIA_ANGULAR_SMOOTHING = 3.5
 const AUSTRIA_CAMERA_SPEED = 120
 const AUSTRIA_RIBBON_SRC = `${import.meta.env.BASE_URL}brands/austria-tourism/images/ribbon.png`
+const AUSTRIA_VIBE_SRC = `${import.meta.env.BASE_URL}brands/austria-tourism/images/vibe-vibe.svg`
 
 const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value))
 const easeInOutQuint = (value) => (
@@ -566,6 +567,24 @@ function AustriaRibbonPrototype() {
   )
 }
 
+function AustriaVibeStripe() {
+  return (
+    <div className="background-matrix-austria-vibe" aria-hidden="true">
+      <div className="background-matrix-austria-vibe-track">
+        {[0, 1].map((stripeIndex) => (
+          <img
+            key={stripeIndex}
+            className="background-matrix-austria-vibe-image"
+            src={AUSTRIA_VIBE_SRC}
+            alt=""
+            draggable="false"
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function Background({ brand, showBackgroundVideo = true }) {
   const isDeshawVariant = brand?.id === 'deshaw'
   const isAustriaTourism = brand?.id === 'austria-tourism'
@@ -936,7 +955,7 @@ export default function Background({ brand, showBackgroundVideo = true }) {
 
   return (
     <div className={`background-matrix${brandClassName}`}>
-      {isAustriaTourism ? <AustriaRibbonPrototype /> : null}
+      {isAustriaTourism ? <AustriaVibeStripe /> : null}
       {matrixEnabled ? (
         <canvas ref={canvasRef} className="background-matrix-canvas" />
       ) : null}

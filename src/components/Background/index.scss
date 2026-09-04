@@ -49,6 +49,33 @@
     will-change: transform;
   }
 
+  &-austria-vibe {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  &-austria-vibe-track {
+    position: absolute;
+    bottom: 2vh;
+    left: 0;
+    display: flex;
+    width: 2000vh;
+    max-width: none;
+    animation: austria-vibe-drift 180s linear infinite;
+    will-change: transform;
+  }
+
+  &-austria-vibe-image {
+    display: block;
+    flex: 0 0 1000vh;
+    width: 1000vh;
+    height: auto;
+    max-width: none;
+  }
+
   &-canvas,
   &-image,
   &-video {
@@ -81,5 +108,21 @@
     opacity: var(--background-video-opacity, 0.44);
     filter: saturate(1.06) contrast(1.04);
     z-index: 2;
+  }
+}
+
+@keyframes austria-vibe-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-1000vh, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .background-matrix-austria-vibe-track {
+    animation: none;
   }
 }
