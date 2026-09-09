@@ -59,19 +59,19 @@
 
   &-austria-vibe-track {
     position: absolute;
-    bottom: 2vh;
+    top: 66.666vh;
     left: 0;
     display: flex;
-    width: 2000vh;
+    width: 4000vh;
     max-width: none;
-    animation: austria-vibe-drift 180s linear infinite;
+    animation: austria-vibe-drift 360s linear infinite;
     will-change: transform;
   }
 
   &-austria-vibe-image {
     display: block;
-    flex: 0 0 1000vh;
-    width: 1000vh;
+    flex: 0 0 2000vh;
+    width: 2000vh;
     height: auto;
     max-width: none;
   }
@@ -113,11 +113,11 @@
 
 @keyframes austria-vibe-drift {
   from {
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(0, -50%, 0);
   }
 
   to {
-    transform: translate3d(-1000vh, 0, 0);
+    transform: translate3d(-2000vh, -50%, 0);
   }
 }
 
