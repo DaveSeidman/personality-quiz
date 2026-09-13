@@ -37,6 +37,12 @@ export default function Question({
   const isSlideSelectQuestion = question.type === 'slide-select' || question.type === 'SlideSelect'
   const isImmediateQuestion = question.type === 'multiple-choice-text' || question.type === 'multiple-choice-image'
   const isSelectableQuestion = isImmediateQuestion || isSlideSelectQuestion
+  const questionStyle = question.color ? {
+    '--accent': question.color,
+    '--question-selected-bg': question.color,
+    '--question-selected-border': question.color,
+    '--question-selected-text': question.colorContrast || '#ffffff',
+  } : undefined
 
   const committedAnswer = answers[question.id]
   const canProceed = isImmediateQuestion
@@ -103,7 +109,11 @@ export default function Question({
   }
 
   return (
-    <div className={`question ${!hasVisited ? 'before-visited' : ''} ${isBuilding ? 'build-on' : ''}`} id={`question-${question.id}`}>
+    <div
+      className={`question ${!hasVisited ? 'before-visited' : ''} ${isBuilding ? 'build-on' : ''}`}
+      id={`question-${question.id}`}
+      style={questionStyle}
+    >
       <div className={`question-content ${!hasVisited ? 'before-visited' : ''} ${isBuilding ? 'build-on' : ''}`}>
         {isImmediateQuestion ? (
           <MultipleChoice

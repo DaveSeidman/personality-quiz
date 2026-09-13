@@ -1,0 +1,120 @@
+{
+  "quizId": "cresta-cocktail-personality-v1",
+  "useadvancedTelemetry": false,
+  "features": {
+    "faceAnalysis": false
+  },
+  "console": {
+    "face": false,
+    "signals": false
+  },
+  "personalities": [
+    {
+      "id": "the-agent",
+      "name": "You’re...The Agent 🍸",
+      "chartLabel": "The Agent",
+      "color": "#205AE3",
+      "description": "You take charge and make big things look easy — set the goal and let it run. Your cocktail: The Agent (gin, bergamot, fig, soda), a clean, effortless pour that does the work for you. Like Cresta’s AI Agent, it handles the busywork so you can savor what matters.",
+      "drinkRecommendation": "The Agent"
+    },
+    {
+      "id": "the-assist",
+      "name": "You’re...The Assist 🥃",
+      "chartLabel": "The Assist",
+      "color": "#3D3D47",
+      "description": "You read the moment and give everything around you a boost. Your cocktail: The Assist (bourbon, lemon, tamarind, maple), a balanced blend that lifts every flavor it touches. Like Cresta’s real-time guidance, you make everyone better in the moment.",
+      "drinkRecommendation": "The Assist"
+    },
+    {
+      "id": "the-decoder",
+      "name": "You’re...The Decoder 🌵",
+      "chartLabel": "The Decoder",
+      "color": "#25252A",
+      "description": "You notice what others miss and read between the lines. Your cocktail: Decoder (mezcal, lime, prickly pear, agave), a layered, smoky pour that reveals more with every sip. Like Cresta’s conversation intelligence, you turn subtle cues into sharp insight.",
+      "drinkRecommendation": "Decoder"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "label": "Night One",
+      "text": "It’s night one in a new city — what’s your move?",
+      "color": "#205AE3",
+      "colorContrast": "#FFFFFF",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Rooftop bar, skyline, all the energy",
+          "personalityId": "the-agent"
+        },
+        {
+          "id": "B",
+          "content": "Wander with no plan and see what you find",
+          "personalityId": "the-assist"
+        },
+        {
+          "id": "C",
+          "content": "Track down the spot someone you trust swore by",
+          "personalityId": "the-decoder"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "Packing Style",
+      "text": "How do you pack for a trip?",
+      "color": "#3D3D47",
+      "colorContrast": "#FFFFFF",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Grab the essentials and wing it",
+          "personalityId": "the-agent"
+        },
+        {
+          "id": "B",
+          "content": "Leave room for whatever the trip brings",
+          "personalityId": "the-assist"
+        },
+        {
+          "id": "C",
+          "content": "Make a list for everything, nothing is forgotten",
+          "personalityId": "the-decoder"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "Customer Experience",
+      "text": "The best customer experience feels…",
+      "color": "#25252A",
+      "colorContrast": "#FFFFFF",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Bold and unforgettable",
+          "personalityId": "the-agent"
+        },
+        {
+          "id": "B",
+          "content": "Effortless and intuitive",
+          "personalityId": "the-assist"
+        },
+        {
+          "id": "C",
+          "content": "Personal and warm",
+          "personalityId": "the-decoder"
+        }
+      ]
+    }
+  ]
+}

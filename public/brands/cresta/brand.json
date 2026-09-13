@@ -1,0 +1,30 @@
+{
+  "id": "cresta",
+  "displayName": "Cresta",
+  "accentColor": "#205AE3",
+  "theme": {
+    "fontFamily": "Arial",
+    "fontUrl": false,
+    "fontFallback": "Helvetica, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "colors": {
+      "accent": "#205AE3",
+      "accentContrast": "#FFFFFF"
+    }
+  },
+  "assets": {
+    "logo": false
+  },
+  "copy": {
+    "attractTitle": "AI COCKTAIL QUIZ",
+    "attractSubtitle": "Discover your personality type by answering {questionCount} questions.",
+    "resultsTitle": "Finding your cocktail personality...",
+    "resultsInstruction": "Hang tight while we match your answers.",
+    "loadingTitle": "Mixing your match...",
+    "loadingBody": "Turning your choices into a cocktail personality.",
+    "reviewLabel": "Review",
+    "submitLabel": "Reveal",
+    "submittingLabel": "Mixing...",
+    "startOverLabel": "Start Over"
+  },
+  "quizUrl": "/brands/cresta/quiz.json"
+}

@@ -23,11 +23,6 @@
       "id": "connector",
       "name": "You're a Connector",
       "description": "You're obsessed with people and shared experiences. A great plan is only as good as the people around you, and you have a talent for turning a moment into a memory."
-    },
-    {
-      "id": "optimizer",
-      "name": "You're an Optimizer",
-      "description": "You're obsessed with getting it just right. You spot the better way, the missing detail, and the little upgrade everyone else overlooked. Good is nice. Great is the goal."
     }
   ],
   "questions": [
@@ -40,8 +35,7 @@
       "answers": [
         { "id": "A", "content": "Finding the perfect spot", "personalityId": "curator" },
         { "id": "B", "content": "Discovering what's next", "personalityId": "explorer" },
-        { "id": "C", "content": "Planning the perfect gathering", "personalityId": "connector" },
-        { "id": "D", "content": "Making something just right", "personalityId": "optimizer" }
+        { "id": "C", "content": "Planning the perfect gathering", "personalityId": "connector" }
       ]
     },
     {
@@ -53,8 +47,7 @@
       "answers": [
         { "id": "A", "content": "Wandering somewhere beautiful", "personalityId": "curator" },
         { "id": "B", "content": "Chasing a new recommendation", "personalityId": "explorer" },
-        { "id": "C", "content": "Getting everyone together", "personalityId": "connector" },
-        { "id": "D", "content": "Perfecting a personal project", "personalityId": "optimizer" }
+        { "id": "C", "content": "Getting everyone together", "personalityId": "connector" }
       ]
     },
     {
@@ -66,8 +59,7 @@
       "answers": [
         { "id": "A", "content": "Every detail feels considered", "personalityId": "curator" },
         { "id": "B", "content": "It makes you want to know more", "personalityId": "explorer" },
-        { "id": "C", "content": "You can't wait to share it", "personalityId": "connector" },
-        { "id": "D", "content": "You immediately want to improve it", "personalityId": "optimizer" }
+        { "id": "C", "content": "You can't wait to share it", "personalityId": "connector" }
       ]
     }
   ]
