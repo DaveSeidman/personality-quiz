@@ -12,17 +12,23 @@
     {
       "id": "curator",
       "name": "You're a Curator",
-      "description": "You're obsessed with taste. The perfect detail, hidden gem, beautiful space, or beautifully made thing can stop you in your tracks. You don't just notice what's good—you know why it's good."
+      "description": "You're obsessed with taste. The perfect detail, hidden gem, beautiful space, or beautifully made thing can stop you in your tracks. You don't just notice what's good—you know why it's good.",
+      "drinkRecommendation": "Bellini",
+      "drinkEmoji": "🍑"
     },
     {
       "id": "explorer",
       "name": "You're an Explorer",
-      "description": "You're obsessed with what's next. New places, ideas, trends, flavors, and experiences keep you curious. Your happy place is somewhere between ‘I've never tried this’ and ‘I need to know more.’"
+      "description": "You're obsessed with what's next. New places, ideas, trends, flavors, and experiences keep you curious. Your happy place is somewhere between ‘I've never tried this’ and ‘I need to know more.’",
+      "drinkRecommendation": "Espresso Martini",
+      "drinkEmoji": "🍸"
     },
     {
       "id": "connector",
       "name": "You're a Connector",
-      "description": "You're obsessed with people and shared experiences. A great plan is only as good as the people around you, and you have a talent for turning a moment into a memory."
+      "description": "You're obsessed with people and shared experiences. A great plan is only as good as the people around you, and you have a talent for turning a moment into a memory.",
+      "drinkRecommendation": "Mimosa",
+      "drinkEmoji": "🥂"
     }
   ],
   "questions": [

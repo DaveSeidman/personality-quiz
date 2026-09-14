@@ -225,6 +225,12 @@ export default function Results({ brand, result, status = 'idle', analytics, que
   const isSubmitted = status === 'submitted'
   const isSubmitting = status === 'submitting'
   const isError = status === 'error'
+  const matchedPersonality = (personalities || []).find(
+    (personality) => personality.id === result?.result?.personalityId,
+  )
+  const drinkRecommendation = result?.result?.drinkRecommendation
+    || matchedPersonality?.drinkRecommendation
+  const drinkEmoji = result?.result?.drinkEmoji || matchedPersonality?.drinkEmoji
 
   return (
     <div className="results">
@@ -254,10 +260,18 @@ export default function Results({ brand, result, status = 'idle', analytics, que
 	                        result.result.statement || result.result.reasoning || 'No AI statement returned yet.',
 	                        [
 	                          { value: result.result.personalityName, kind: 'persona' },
-	                          { value: result.result.drinkRecommendation, kind: 'drink' },
+	                          { value: drinkRecommendation, kind: 'drink' },
 	                        ]
 	                      )}
                     </p>
+                    {drinkRecommendation ? (
+                      <p className="results-status-drink">
+                        Your cocktail:{' '}
+                        <strong>
+                          {renderSuperscriptMarks(`${drinkRecommendation}${drinkEmoji ? ` ${drinkEmoji}` : ''}`)}
+                        </strong>
+                      </p>
+                    ) : null}
                     <RadarCanvas composite={radarData.composite} byQuestion={radarData.byQuestion} legend={radarData.legend} colorMap={colorMap} showData={isSubmitted} drawingScale={0.8} />
                   </>
                 ) : null}
