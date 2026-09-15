@@ -47,7 +47,11 @@
   }
 
   &-austria-vibe {
-    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    overflow: hidden;
+    pointer-events: none;
   }
 
   &-austria-vibe-track {
