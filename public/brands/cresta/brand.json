@@ -9,10 +9,12 @@
     "colors": {
       "accent": "#205AE3",
       "accentContrast": "#FFFFFF"
-    }
+    },
+    "logoHeight": "4.5vh",
+    "logoMargin": "2.5vh 3vh"
   },
   "assets": {
-    "logo": false
+    "logo": "/brands/cresta/images/logo.png"
   },
   "copy": {
     "attractTitle": "AI COCKTAIL QUIZ",
