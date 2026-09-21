@@ -1,0 +1,65 @@
+{
+  "id": "frontify",
+  "displayName": "Frontify",
+  "accentColor": "#B60AE3",
+  "theme": {
+    "fontFamily": "ABC Diatype",
+    "fontUrl": false,
+    "fontFallback": "Inter, Arial, Helvetica, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "headingFontFamily": "Cranny",
+    "headingFontUrl": false,
+    "headingFontFallback": "Georgia, \"Times New Roman\", serif",
+    "headingTextTransform": "none",
+    "backgroundMatrix": false,
+    "backgroundImageOpacity": 1,
+    "logoHeight": "4.2vh",
+    "logoMargin": "2.5vh 3vh",
+    "logoTop": "0",
+    "logoLeft": "0",
+    "logoTransform": "none",
+    "quizMode": "light",
+    "colors": {
+      "appBg": "#F0F0EB",
+      "text": "#111110",
+      "accent": "#B60AE3",
+      "accentContrast": "#FFFFFF",
+      "questionPanel": "rgba(240, 240, 235, 0.84)",
+      "questionPanelBorder": "rgba(17, 17, 16, 0.82)",
+      "questionOption": "rgba(240, 240, 235, 0.92)",
+      "questionSelected": "#B60AE3",
+      "questionSelectedText": "#FFFFFF",
+      "questionSelectedBorder": "#111110"
+    }
+  },
+  "assets": {
+    "logo": "/brands/frontify/images/logo.svg",
+    "backgroundImage": "/brands/frontify/images/background.svg",
+    "backgroundVideo": false,
+    "attractImage": false,
+    "attractVideo": false,
+    "loadingVideo": false
+  },
+  "copy": {
+    "attractTitle": "Step into the lab.",
+    "attractSubtitle": "Let’s see what the results reveal.",
+    "attractCtaLabel": "Begin",
+    "intro": {
+      "enabled": true,
+      "title": "What’s your approach to AI?",
+      "body": [
+        "AI is changing the way we build brands — but what’s your approach? Are you an AI Analyst, Experimenter, or Innovator?",
+        "Answer a few questions to discover where you land, and which drink we recommend for your style."
+      ],
+      "buttonLabel": "Enter the lab"
+    },
+    "resultsTitle": "Analyzing your approach...",
+    "resultsInstruction": "We’re matching your answers to your AI style.",
+    "loadingTitle": "Running the results...",
+    "loadingBody": "Calibrating the signal from analyst to innovator.",
+    "reviewLabel": "Review",
+    "submitLabel": "Reveal result",
+    "submittingLabel": "Analyzing...",
+    "startOverLabel": "Start over"
+  },
+  "quizUrl": "/brands/frontify/quiz.json"
+}

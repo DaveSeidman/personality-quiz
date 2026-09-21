@@ -1,0 +1,108 @@
+{
+  "quizId": "frontify-ai-lab-v1",
+  "useadvancedTelemetry": false,
+  "features": {
+    "faceAnalysis": false
+  },
+  "console": null,
+  "personalities": [
+    {
+      "id": "analyst",
+      "name": "The Analyst",
+      "color": "#B60AE3",
+      "description": "Some would say you’re a skeptic, but you say you’re just immune to hype. For you, quality comes first, and you need proof that AI can deliver to your standards.",
+      "drinkRecommendation": "The Control Group"
+    },
+    {
+      "id": "experimenter",
+      "name": "The Experimenter",
+      "color": "#FFCB0F",
+      "description": "You’re figuring how AI fits into your workflow, one test at a time. You might not have all the answers yet, but curiosity is driving you forwards.",
+      "drinkRecommendation": "The Test & Tonic"
+    },
+    {
+      "id": "innovator",
+      "name": "The Innovator",
+      "color": "#4EFF00",
+      "description": "You’re clear on AI’s potential and you’re forging a new approach with AI as part of your brand roadmap.",
+      "drinkRecommendation": "The Future Forward"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "label": "The no-risk test",
+      "text": "You have a no-risk chance to test anything about your brand. What do you test?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "A known variable that you’ve always wanted to understand better.",
+          "personalityId": "analyst"
+        },
+        {
+          "id": "B",
+          "content": "Something unexpected, just to see what happens.",
+          "personalityId": "experimenter"
+        },
+        {
+          "id": "C",
+          "content": "An existing brand idea pushed into new territory, to see how far it can go.",
+          "personalityId": "innovator"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "The tool decision",
+      "text": "Your team needs a new tool. There are several options on the table. How do you choose the right one?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Research is key. Read product documentation, explore case studies, and – most importantly – see what other users have to say.",
+          "personalityId": "analyst"
+        },
+        {
+          "id": "B",
+          "content": "Hands-on testing is the way to go. Nothing compares to trying things for yourself. Test a few options and compare the results.",
+          "personalityId": "experimenter"
+        },
+        {
+          "id": "C",
+          "content": "Think beyond the immediate need. Consider which option could create the most value for your brand or impact the goals of other teams.",
+          "personalityId": "innovator"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "The unexpected result",
+      "text": "The lab results are in. Your AI experiment has produced something unexpected. You…",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Look back through your data and try to figure out what happened.",
+          "personalityId": "analyst"
+        },
+        {
+          "id": "B",
+          "content": "Run the experiment again to see if you get the same result.",
+          "personalityId": "experimenter"
+        },
+        {
+          "id": "C",
+          "content": "Take what you learned and consider where else these results might be useful.",
+          "personalityId": "innovator"
+        }
+      ]
+    }
+  ]
+}
