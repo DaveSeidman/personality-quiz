@@ -11,21 +11,24 @@
       "name": "The Analyst",
       "color": "#B60AE3",
       "description": "Some would say you’re a skeptic, but you say you’re just immune to hype. For you, quality comes first, and you need proof that AI can deliver to your standards.",
-      "drinkRecommendation": "The Control Group"
+      "drinkRecommendation": "The Mulled Apple",
+      "drinkEmoji": "🍎"
     },
     {
       "id": "experimenter",
       "name": "The Experimenter",
       "color": "#FFCB0F",
       "description": "You’re figuring how AI fits into your workflow, one test at a time. You might not have all the answers yet, but curiosity is driving you forwards.",
-      "drinkRecommendation": "The Test & Tonic"
+      "drinkRecommendation": "The Passion",
+      "drinkEmoji": "🍹"
     },
     {
       "id": "innovator",
       "name": "The Innovator",
       "color": "#4EFF00",
       "description": "You’re clear on AI’s potential and you’re forging a new approach with AI as part of your brand roadmap.",
-      "drinkRecommendation": "The Future Forward"
+      "drinkRecommendation": "Lychee Lime Mezcal (LLM)",
+      "drinkEmoji": "🌶️"
     }
   ],
   "questions": [
