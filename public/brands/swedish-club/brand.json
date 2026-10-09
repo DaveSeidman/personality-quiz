@@ -9,27 +9,28 @@
     "fontFallback": "Helvetica, sans-serif",
     "headingFontFamily": "Arial",
     "backgroundMatrix": false,
+    "backgroundVideoOpacity": 1,
     "quizMode": "light",
     "radarBackgroundColor": "#EBE6E6",
     "logoHeight": "9vh",
     "logoMargin": "1.5vh 2vh",
     "colors": {
-      "appBg": "#F3F2F2",
-      "text": "#042948",
+      "appBg": "#042948",
+      "text": "#FFFFFF",
       "accent": "#042948",
       "accentContrast": "#FFFFFF",
       "questionPanel": "#FFFFFF",
       "questionPanelBorder": "#DBD7D7",
-      "questionOption": "#F9F6F6",
-      "questionSelected": "#042948",
-      "questionSelectedText": "#FFFFFF",
-      "questionSelectedBorder": "#042948"
+      "questionOption": "#042948",
+      "questionSelected": "#F9F6F6",
+      "questionSelectedText": "#042948",
+      "questionSelectedBorder": "#F9F6F6"
     }
   },
   "assets": {
-    "logo": "/brands/swedish-club/images/logo-black.png",
+    "logo": "/brands/swedish-club/images/logo-white.png",
     "backgroundImage": false,
-    "backgroundVideo": false,
+    "backgroundVideo": "/brands/swedish-club/videos/water.mp4",
     "attractImage": false,
     "attractVideo": false,
     "loadingVideo": false
