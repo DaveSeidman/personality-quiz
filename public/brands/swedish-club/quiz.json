@@ -1,0 +1,175 @@
+{
+  "quizId": "swedish-club-cocktail-compass-v1",
+  "useadvancedTelemetry": false,
+  "features": {
+    "faceAnalysis": false
+  },
+  "console": {
+    "face": false,
+    "signals": false
+  },
+  "personalities": [
+    {
+      "id": "norseman",
+      "name": "The Norseman’s Old Fashioned",
+      "chartLabel": "Norseman",
+      "color": "#245278",
+      "description": "You bring a steady hand and a strong sense of direction. You value experience, keep your promises, and know when a time-tested approach deserves a fresh twist. Your match blends aquavit, brown sugar and bitters with smoked oak and orange: a classic with Nordic character.",
+      "drinkRecommendation": "The Norseman’s Old Fashioned"
+    },
+    {
+      "id": "port-in-a-storm",
+      "name": "Port in a Storm",
+      "chartLabel": "Port in a Storm",
+      "color": "#DBD7D7",
+      "description": "You’re the person people are glad to have beside them when plans change. You listen, bring people together, and make the busiest room feel a little calmer. Your match combines port, blackberry, warming spice and lemon: rich, smooth and welcoming, like reaching a sheltered harbour.",
+      "drinkRecommendation": "Port in a Storm"
+    },
+    {
+      "id": "fjord-martini",
+      "name": "The Fjord Martini",
+      "chartLabel": "Fjord Martini",
+      "color": "#64DFEB",
+      "description": "You bring a clear head and a fresh perspective. Curious and observant, you spot the small details that help everyone see the way ahead. Your match pairs aquavit with elderflower, dry vermouth and lemon peel: crisp, floral and bright as a Nordic dawn.",
+      "drinkRecommendation": "The Fjord Martini"
+    },
+    {
+      "id": "arctic-negroni",
+      "name": "Arctic Negroni",
+      "chartLabel": "Arctic Negroni",
+      "color": "#F56B3D",
+      "description": "You bring curiosity, conviction and a taste for a different point of view. You enjoy connecting ideas and finding a new direction worth exploring together. Your match gives an Italian classic a Nordic turn with aquavit, Campari, sweet vermouth and orange: bold, bittersweet and full of character.",
+      "drinkRecommendation": "Arctic Negroni"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "label": "Your place on the crew",
+      "text": "You’re bringing a team together for a new voyage. What do you naturally contribute?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": true,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Experience and a dependable plan everyone can trust.",
+          "personalityId": "norseman"
+        },
+        {
+          "id": "B",
+          "content": "A welcoming atmosphere where everyone feels part of the crew.",
+          "personalityId": "port-in-a-storm"
+        },
+        {
+          "id": "C",
+          "content": "Thoughtful questions that make the way ahead clearer.",
+          "personalityId": "fjord-martini"
+        },
+        {
+          "id": "D",
+          "content": "A fresh idea that gets everyone excited about the possibilities.",
+          "personalityId": "arctic-negroni"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "When the wind changes",
+      "text": "A last-minute change reshuffles your day. What’s your first instinct?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": true,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Check in with everyone and help them regroup.",
+          "personalityId": "port-in-a-storm"
+        },
+        {
+          "id": "B",
+          "content": "Look for an unexpected opportunity in the new plan.",
+          "personalityId": "arctic-negroni"
+        },
+        {
+          "id": "C",
+          "content": "Draw on what’s worked before and take the next practical step.",
+          "personalityId": "norseman"
+        },
+        {
+          "id": "D",
+          "content": "Get a clear picture of what’s changed before deciding.",
+          "personalityId": "fjord-martini"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "Your maritime moment",
+      "text": "Which scene captures your ideal maritime moment?",
+      "type": "multiple-choice-image",
+      "select": 1,
+      "shuffleAnswers": true,
+      "answers": [
+        {
+          "id": "A",
+          "content": "/personality-quiz/brands/swedish-club/images/people-ocean-sea.jpg",
+          "personalityId": "fjord-martini",
+          "caption": "A quiet moment by the sea",
+          "alt": "A person in an orange jacket looking out across the sea."
+        },
+        {
+          "id": "B",
+          "content": "/personality-quiz/brands/swedish-club/images/ship-sea-sunset.jpg",
+          "personalityId": "norseman",
+          "caption": "A steady course at sunset",
+          "alt": "A ship sailing across the sea under a glowing sunset."
+        },
+        {
+          "id": "C",
+          "content": "/personality-quiz/brands/swedish-club/images/container-ship-harbour.jpg",
+          "personalityId": "arctic-negroni",
+          "caption": "A harbour full of possibilities",
+          "alt": "An illuminated container port with cranes and ships at night."
+        },
+        {
+          "id": "D",
+          "content": "/personality-quiz/brands/swedish-club/images/woman-smiling-people.jpg",
+          "personalityId": "port-in-a-storm",
+          "caption": "Good company ashore",
+          "alt": "A smiling woman in conversation with others around a table."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "label": "Worth a toast",
+      "text": "At the end of a successful voyage, what feels most worth celebrating?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": true,
+      "answers": [
+        {
+          "id": "A",
+          "content": "We discovered something new and opened up possibilities.",
+          "personalityId": "arctic-negroni"
+        },
+        {
+          "id": "B",
+          "content": "We learned something useful to carry into the next voyage.",
+          "personalityId": "fjord-martini"
+        },
+        {
+          "id": "C",
+          "content": "We looked after each other and came back a closer crew.",
+          "personalityId": "port-in-a-storm"
+        },
+        {
+          "id": "D",
+          "content": "We delivered what we promised, from start to finish.",
+          "personalityId": "norseman"
+        }
+      ]
+    }
+  ]
+}

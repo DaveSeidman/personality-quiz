@@ -1,0 +1,48 @@
+{
+  "id": "swedish-club",
+  "displayName": "The Swedish Club",
+  "accentColor": "#042948",
+  "accentContrast": "#FFFFFF",
+  "theme": {
+    "fontFamily": "Arial",
+    "fontUrl": false,
+    "fontFallback": "Helvetica, sans-serif",
+    "headingFontFamily": "Arial",
+    "backgroundMatrix": false,
+    "quizMode": "light",
+    "radarBackgroundColor": "#EBE6E6",
+    "logoHeight": "9vh",
+    "logoMargin": "1.5vh 2vh",
+    "colors": {
+      "appBg": "#F3F2F2",
+      "text": "#042948",
+      "accent": "#042948",
+      "accentContrast": "#FFFFFF",
+      "questionPanel": "#FFFFFF",
+      "questionPanelBorder": "#DBD7D7",
+      "questionOption": "#F9F6F6",
+      "questionSelected": "#042948",
+      "questionSelectedText": "#FFFFFF",
+      "questionSelectedBorder": "#042948"
+    }
+  },
+  "assets": {
+    "logo": "/brands/swedish-club/images/logo-black.png",
+    "backgroundImage": false,
+    "backgroundVideo": false,
+    "attractImage": false,
+    "attractVideo": false,
+    "loadingVideo": false
+  },
+  "copy": {
+    "attractTitle": "Find your cocktail compass",
+    "attractSubtitle": "Answer {questionCount} questions to discover your Nordic cocktail match.",
+    "resultsTitle": "Charting your cocktail course...",
+    "resultsInstruction": "Hang tight while we find your match.",
+    "loadingTitle": "Your cocktail is on the horizon...",
+    "loadingBody": "Matching your choices to a Nordic-inspired pour.",
+    "submitLabel": "Reveal my cocktail",
+    "submittingLabel": "Finding your match..."
+  },
+  "quizUrl": "/brands/swedish-club/quiz.json"
+}

@@ -24,7 +24,7 @@ const QUESTION_POLYGON_STYLES = [
   { dash: [14, 5, 3, 5], fillAlpha: 0.11, strokeAlpha: 0.7 },
 ]
 
-function RadarCanvas({ composite, byQuestion, legend, colorMap, showData = true, drawingScale = 1 }) {
+function RadarCanvas({ composite, byQuestion, legend, colorMap, showData = true, drawingScale = 1, backgroundColor }) {
   const [canvasId] = useState(() => `radar-${Math.random().toString(36).slice(2)}`)
 
   useEffect(() => {
@@ -79,12 +79,17 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap, showData = true,
       drawRadarPath(radius)
       ctx.clip()
 
-      const tile = 22
-      for (let y = cy - radius - tile; y < cy + radius + tile; y += tile) {
-        for (let x = cx - radius - tile; x < cx + radius + tile; x += tile) {
-          const isEven = ((Math.floor((x - (cx - radius)) / tile) + Math.floor((y - (cy - radius)) / tile)) % 2) === 0
-          ctx.fillStyle = isEven ? `rgba(${radarInk},0.08)` : `rgba(${radarInk},0.14)`
-          ctx.fillRect(x, y, tile, tile)
+      if (backgroundColor) {
+        ctx.fillStyle = backgroundColor
+        ctx.fillRect(0, 0, width, height)
+      } else {
+        const tile = 22
+        for (let y = cy - radius - tile; y < cy + radius + tile; y += tile) {
+          for (let x = cx - radius - tile; x < cx + radius + tile; x += tile) {
+            const isEven = ((Math.floor((x - (cx - radius)) / tile) + Math.floor((y - (cy - radius)) / tile)) % 2) === 0
+            ctx.fillStyle = isEven ? `rgba(${radarInk},0.08)` : `rgba(${radarInk},0.14)`
+            ctx.fillRect(x, y, tile, tile)
+          }
         }
       }
       ctx.restore()
@@ -192,7 +197,7 @@ function RadarCanvas({ composite, byQuestion, legend, colorMap, showData = true,
 
     raf = requestAnimationFrame(draw)
     return () => { if (raf) cancelAnimationFrame(raf) }
-  }, [canvasId, colorMap, composite, byQuestion, legend, showData, drawingScale])
+  }, [canvasId, colorMap, composite, byQuestion, legend, showData, drawingScale, backgroundColor])
 
   return (
     <div className="results-status-radar">
@@ -272,7 +277,7 @@ export default function Results({ brand, result, status = 'idle', analytics, que
                         </strong>
                       </p>
                     ) : null}
-                    <RadarCanvas composite={radarData.composite} byQuestion={radarData.byQuestion} legend={radarData.legend} colorMap={colorMap} showData={isSubmitted} drawingScale={0.8} />
+                    <RadarCanvas composite={radarData.composite} byQuestion={radarData.byQuestion} legend={radarData.legend} colorMap={colorMap} showData={isSubmitted} drawingScale={0.8} backgroundColor={brand?.theme?.radarBackgroundColor} />
                   </>
                 ) : null}
               </div>

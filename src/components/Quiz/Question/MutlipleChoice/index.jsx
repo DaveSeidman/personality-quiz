@@ -107,11 +107,15 @@ export default function MultipleChoice({ question, answer, setAnswers, sessionKe
                   <img
                     className="multiple-choice-answers-answer-image"
                     src={`${option.content}`}
+                    alt={option.alt || option.caption || ''}
                   />
                 )
               ) : (
                 option.content
               )}
+              {isPhotoQuestion && option.caption ? (
+                <span className="multiple-choice-answers-answer-caption">{option.caption}</span>
+              ) : null}
             </button>
           )
         })}

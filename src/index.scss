@@ -390,6 +390,62 @@ span {
   }
 }
 
+.app--brand-swedish-club {
+  --quiz-strong-text: #042948;
+  --console-strong-text: #042948;
+
+  .background-matrix {
+    background: var(--app-bg);
+  }
+
+  .attract-copy {
+    text-shadow: none;
+  }
+
+  .attract p {
+    color: var(--quiz-muted-text);
+  }
+
+  .attract h1 {
+    padding-bottom: 1.2vh;
+    border-bottom: .35vh solid #f56b3d;
+  }
+
+  .question-content,
+  .results-content {
+    background: var(--question-panel-bg);
+    border-top-color: #f56b3d;
+  }
+
+  .results-status-drink {
+    color: #042948;
+  }
+
+  .results-status-statement-highlight--drink {
+    background: #f56b3d;
+    color: #042948;
+  }
+
+  .multiple-choice.photo .multiple-choice-answers-answer {
+    position: relative;
+
+    &.selected {
+      border-color: #f56b3d;
+      box-shadow: 0 0 0 .18vh #f56b3d;
+    }
+  }
+
+  .multiple-choice-answers-answer-caption {
+    position: absolute;
+    inset: auto 0 0;
+    padding: .7vh 1vh;
+    background: rgba(4, 41, 72, .92);
+    color: #fff;
+    font-size: 1.15vh;
+    line-height: 1.3;
+  }
+}
+
 .app--brand-frontify {
   --quiz-text: rgba(17, 17, 16, .86);
   --quiz-muted-text: rgba(17, 17, 16, .62);
