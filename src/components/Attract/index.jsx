@@ -1,9 +1,14 @@
-import React from "react"
+import React, { useRef } from "react"
 import { formatBrandCopy } from '../../branding'
 import { renderSuperscriptMarks } from '../utils'
+import useWaterFloat from '../useWaterFloat'
 import './index.scss'
 
 export default function Attract({ attract, quizData, brand, consoleEnabled = true }) {
+  const copyRef = useRef(null)
+
+  useWaterFloat(copyRef, brand?.id === 'swedish-club' && attract)
+
   const attractTitle = brand?.copy?.attractTitle || 'AI Cocktail Quiz'
   const attractSubtitle = formatBrandCopy(
     brand?.copy?.attractSubtitle || 'Discover your personality type by answering {questionCount} questions.',
@@ -31,7 +36,7 @@ export default function Attract({ attract, quizData, brand, consoleEnabled = tru
           aria-hidden="true"
         />
       ) : null}
-      <div className="attract-copy">
+      <div ref={copyRef} className="attract-copy">
         <h1>{renderSuperscriptMarks(attractTitle)}</h1>
         <p>{renderSuperscriptMarks(attractSubtitle)}</p>
       </div>

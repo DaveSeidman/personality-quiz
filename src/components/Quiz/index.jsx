@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import Question from "./Question"
 import Results from "./Results"
+import useWaterFloat from '../useWaterFloat'
 import { CONFIDENCE_WEIGHTS, finalizeAnalytics } from "./analytics"
 import "./index.scss"
 
@@ -16,6 +17,8 @@ const createSessionId = () => (
 )
 
 const ATTRACT_SPACER_ID = 'step-attract-spacer'
+const WATER_SINK_MS = 650
+const WATER_RISE_MS = 800
 
 async function submitAnswersToBackend(payload) {
   const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -45,6 +48,12 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
   const [visitedQuestions, setVisitedQuestions] = useState({})
   const [quizTransition, setQuizTransition] = useState('')
   const [isResetting, setIsResetting] = useState(false)
+  const [waterTransition, setWaterTransition] = useState('')
+  const waterTransitionsEnabled = brand?.id === 'swedish-club'
+  const waterTransitionTimerRef = useRef(null)
+  const waterTransitionLockedRef = useRef(false)
+  const quizRef = useRef(null)
+  useWaterFloat(quizRef, waterTransitionsEnabled && !attract, `#step-${currentStep} .question-content, #step-${currentStep} .results-content`)
 
   const totalSteps = questions.length + 1
   const resultsStepIndex = questions.length
@@ -54,6 +63,15 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
   const latestAnswersRef = useRef(answers)
   const latestAnalyticsRef = useRef(analytics)
   const questionTypeById = useRef(Object.fromEntries(questions.map(question => [String(question.id), question.type])))
+
+  useEffect(() => {
+    if (attract) {
+      clearTimeout(waterTransitionTimerRef.current)
+      waterTransitionLockedRef.current = false
+      setWaterTransition('')
+    }
+    return () => clearTimeout(waterTransitionTimerRef.current)
+  }, [attract])
 
   useEffect(() => {
     latestAnswersRef.current = answers
@@ -148,7 +166,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
   }, [])
 
   useEffect(() => {
-    if (!attract) return
+    if (!attract || waterTransitionsEnabled) return
 
     const element = document.getElementById(ATTRACT_SPACER_ID)
     if (!element) return
@@ -158,7 +176,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
       block: 'start',
       inline: 'nearest',
     })
-  }, [attract, sessionKey])
+  }, [attract, sessionKey, waterTransitionsEnabled])
 
   useEffect(() => {
     if (attract) return
@@ -166,7 +184,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
     const element = document.getElementById(`step-${currentStep}`)
     if (!element) return
 
-    element.scrollIntoView({
+    if (!waterTransitionsEnabled) element.scrollIntoView({
       behavior: (isResettingRef.current || currentStep === 0) ? 'auto' : 'smooth',
       block: 'center',
       inline: 'center'
@@ -226,7 +244,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
         setVisitedQuestions(prev => (prev[questionId] ? prev : { ...prev, [questionId]: true }))
       }
     }
-  }, [attract, currentStep, questions, sessionKey, setAnalytics])
+  }, [attract, currentStep, questions, sessionKey, setAnalytics, waterTransitionsEnabled])
 
   useEffect(() => {
     if (!questions || questions.length === 0) {
@@ -246,12 +264,33 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
     onAnalysisCompleteChange(Boolean(submissionResult))
   }, [submissionResult, onAnalysisCompleteChange])
 
+  const transitionToStep = (step, onArrive) => {
+    if (waterTransitionLockedRef.current || step === currentStep) return
+    if (!waterTransitionsEnabled || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setCurrentStep(step)
+      onArrive?.()
+      return
+    }
+
+    waterTransitionLockedRef.current = true
+    setWaterTransition('sinking')
+    waterTransitionTimerRef.current = setTimeout(() => {
+      setCurrentStep(step)
+      setWaterTransition('rising')
+      onArrive?.()
+      waterTransitionTimerRef.current = setTimeout(() => {
+        waterTransitionLockedRef.current = false
+        setWaterTransition('')
+      }, WATER_RISE_MS)
+    }, WATER_SINK_MS)
+  }
+
   const goToPrevious = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 0))
+    transitionToStep(Math.max(currentStep - 1, 0))
   }
 
   const goToNext = () => {
-    setCurrentStep(prev => Math.min(prev + 1, totalSteps - 1))
+    transitionToStep(Math.min(currentStep + 1, totalSteps - 1))
   }
 
   const handleSubmit = async () => {
@@ -291,14 +330,15 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
   }
 
   const handleLastQuestionSubmit = () => {
-    setCurrentStep(resultsStepIndex)
-    if (pendingSubmitTimeoutRef.current) {
-      clearTimeout(pendingSubmitTimeoutRef.current)
-    }
-    pendingSubmitTimeoutRef.current = setTimeout(() => {
-      pendingSubmitTimeoutRef.current = null
-      void handleSubmit()
-    }, 0)
+    transitionToStep(resultsStepIndex, () => {
+      if (pendingSubmitTimeoutRef.current) {
+        clearTimeout(pendingSubmitTimeoutRef.current)
+      }
+      pendingSubmitTimeoutRef.current = setTimeout(() => {
+        pendingSubmitTimeoutRef.current = null
+        void handleSubmit()
+      }, 0)
+    })
   }
 
   const handleStartOver = () => {
@@ -330,7 +370,11 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
   }
 
   return (
-    <div className={`quiz ${consoleEnabled ? '' : 'quiz--full-height'} ${quizTransition} ${isResetting ? 'quiz--hidden' : ''}`}>
+    <div
+      ref={quizRef}
+      className={`quiz ${consoleEnabled ? '' : 'quiz--full-height'} ${quizTransition} ${isResetting ? 'quiz--hidden' : ''} ${waterTransitionsEnabled ? `quiz--water ${attract ? 'quiz--submerged' : ''} ${waterTransition ? `quiz--${waterTransition}` : ''}` : ''}`}
+      style={waterTransitionsEnabled ? { '--water-sink-duration': `${WATER_SINK_MS}ms`, '--water-rise-duration': `${WATER_RISE_MS}ms` } : undefined}
+    >
       <div
         className="quiz-step quiz-step--attract-spacer"
         id={ATTRACT_SPACER_ID}
@@ -339,9 +383,11 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
 
       {questions.map((question, index) => (
         <div
-          className="quiz-step"
+          className={`quiz-step ${currentStep === index ? 'quiz-step--active' : ''}`}
           id={`step-${index}`}
           key={question.id}
+          aria-hidden={waterTransitionsEnabled ? attract || currentStep !== index : undefined}
+          inert={waterTransitionsEnabled ? attract || currentStep !== index || Boolean(waterTransition) : undefined}
         >
           <Question
             question={question}
@@ -363,8 +409,10 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
       ))}
 
       <div
-        className="quiz-step"
+        className={`quiz-step ${currentStep === resultsStepIndex ? 'quiz-step--active' : ''}`}
         id={`step-${resultsStepIndex}`}
+        aria-hidden={waterTransitionsEnabled ? attract || currentStep !== resultsStepIndex : undefined}
+        inert={waterTransitionsEnabled ? attract || currentStep !== resultsStepIndex || Boolean(waterTransition) : undefined}
       >
         <Results
           brand={brand}

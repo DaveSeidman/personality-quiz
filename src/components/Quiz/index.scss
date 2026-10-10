@@ -53,3 +53,160 @@
     opacity: 1;
   }
 }
+
+// Swedish Club panels share one position; navigation changes their depth.
+.quiz.quiz--water {
+  overflow: hidden;
+  scroll-behavior: auto;
+
+  .quiz-step--attract-spacer {
+    display: none;
+  }
+
+  .quiz-step {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+    pointer-events: none;
+    animation: none;
+    opacity: 0;
+  }
+
+  .quiz-step--active {
+    visibility: visible;
+    pointer-events: auto;
+    opacity: 1;
+  }
+
+  .question-content,
+  .results-content {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    transform-origin: center;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow: inset 0 0 0 0 rgba(4, 41, 72, 0);
+    }
+  }
+
+  &:not(.quiz--submerged) .quiz-step--active {
+    .question-content,
+    .results-content {
+      animation: water-panel-rise var(--water-rise-duration) ease-out both;
+
+      &::after {
+        animation: water-panel-clear var(--water-rise-duration) ease-out both;
+      }
+    }
+
+    .question-navigation {
+      animation: water-navigation-show var(--water-rise-duration) ease-out both;
+    }
+  }
+
+  &.quiz--sinking .quiz-step--active {
+    .question-content,
+    .results-content {
+      animation: water-panel-depth var(--water-sink-duration) ease-in both;
+
+      &::after {
+        animation: water-panel-flood var(--water-sink-duration) ease-in both;
+      }
+    }
+
+    .question-navigation {
+      animation: water-navigation-fade var(--water-sink-duration) ease-in both;
+    }
+  }
+
+  &.quiz--submerged .quiz-step {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  &.quiz--sinking,
+  &.quiz--rising {
+    .quiz-step {
+      pointer-events: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .quiz-step--active .question-content,
+    .quiz-step--active .results-content,
+    .quiz-step--active .question-content::after,
+    .quiz-step--active .results-content::after,
+    .quiz-step--active .question-navigation {
+      animation: none !important;
+    }
+  }
+}
+
+@keyframes water-panel-depth {
+  0% {
+    transform: var(--float-transform, perspective(1100px)) translateZ(0) rotateX(0);
+    clip-path: inset(0 round var(--radius-sm));
+    opacity: 1;
+  }
+  45% {
+    opacity: .8;
+  }
+  100% {
+    transform: var(--float-transform, perspective(1100px)) translateZ(-380px) rotateX(12deg);
+    clip-path: inset(12% 8% round 3vh);
+    opacity: 0;
+  }
+}
+
+@keyframes water-panel-flood {
+  0% {
+    box-shadow: inset 0 0 0 0 rgba(4, 41, 72, 0);
+    background: rgba(4, 41, 72, 0);
+  }
+  100% {
+    box-shadow: inset 0 0 5vh 18vh rgba(4, 41, 72, .95);
+    background: rgba(4, 41, 72, .7);
+  }
+}
+
+@keyframes water-navigation-fade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes water-panel-rise {
+  0% {
+    transform: var(--float-transform, perspective(1100px)) translateZ(-380px) rotateX(12deg);
+    clip-path: inset(12% 8% round 3vh);
+    opacity: 0;
+  }
+  55% { opacity: .8; }
+  100% {
+    transform: var(--float-transform, perspective(1100px)) translateZ(0) rotateX(0);
+    clip-path: inset(0 round var(--radius-sm));
+    opacity: 1;
+  }
+}
+
+@keyframes water-panel-clear {
+  from {
+    box-shadow: inset 0 0 5vh 18vh rgba(4, 41, 72, .95);
+    background: rgba(4, 41, 72, .7);
+  }
+  to {
+    box-shadow: inset 0 0 0 0 rgba(4, 41, 72, 0);
+    background: rgba(4, 41, 72, 0);
+  }
+}
+
+@keyframes water-navigation-show {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

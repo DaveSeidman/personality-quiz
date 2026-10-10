@@ -420,16 +420,39 @@ span {
     padding: 3vh;
     gap: 1.2vh;
     align-items: center;
-    border: .1vh solid rgba(255, 255, 255, .18);
+    border: .1vh solid rgba(255, 255, 255, .7);
     border-radius: 1.5vh;
-    background: rgba(4, 41, 72, .28);
-    -webkit-backdrop-filter: blur(1vh);
-    backdrop-filter: blur(1vh);
-    text-shadow: 0 .2vh .8vh rgba(4, 41, 72, .8);
+    text-shadow: none;
+  }
+
+  .attract-copy,
+  .question-content,
+  .results-content {
+    background: linear-gradient(
+      var(--float-light-angle, 135deg),
+      rgba(255, 255, 255, .95) 8%,
+      rgba(var(--float-gray, 185), var(--float-gray, 185), var(--float-gray, 185), .95) 100%
+    );
+    box-shadow:
+      0 var(--float-shadow-y, 1.2vh) var(--float-shadow-blur, 2.5vh) rgba(4, 41, 72, .24),
+      inset 0 .1vh .15vh rgba(255, 255, 255, .8);
+    color: #042948;
+    transform: var(--float-transform, none);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    will-change: transform;
   }
 
   .attract p {
-    color: rgba(255, 255, 255, .88);
+    color: #042948;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .attract-copy,
+    .question-content,
+    .results-content {
+      will-change: auto;
+    }
   }
 
   .attract h1 {
@@ -439,31 +462,34 @@ span {
 
   .question-content,
   .results-content {
-    background: var(--question-panel-bg);
     border-top-color: #f56b3d;
   }
 
   .question-content {
-    --quiz-strong-text: #fff;
-    --quiz-muted-text: rgba(255, 255, 255, .8);
-    background: rgba(4, 41, 72, .3);
-    -webkit-backdrop-filter: blur(.3vh);
-    backdrop-filter: blur(.3vh);
-    border-color: rgba(255, 255, 255, .25);
+    --quiz-text: #042948;
+    --quiz-strong-text: #042948;
+    --quiz-muted-text: rgba(4, 41, 72, .75);
+    --quiz-border: rgba(4, 41, 72, .2);
+    --quiz-border-strong: rgba(4, 41, 72, .55);
+    --question-answer-backing: rgba(255, 255, 255, .55);
+    --question-answer-blur: none;
+    border-color: rgba(255, 255, 255, .7);
     border-top-color: #f56b3d;
   }
 
   .multiple-choice-answers-answer {
-    color: #fff;
+    color: #042948;
   }
 
   .multiple-choice-answers-answer:hover {
-    color: #fff;
+    color: #042948;
   }
 
   .multiple-choice-answers-answer.selected,
   .multiple-choice-answers-answer.selected:hover {
-    color: #042948;
+    background: #042948;
+    border-color: #f56b3d;
+    color: #fff;
   }
 
   .question-navigation-prev-button {
