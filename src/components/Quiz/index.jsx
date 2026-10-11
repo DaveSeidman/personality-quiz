@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react"
 import Question from "./Question"
 import Results from "./Results"
 import useWaterFloat from '../useWaterFloat'
+import { shouldAnimateWater, WATER_SINK_MS, WATER_RISE_MS } from '../waterTransitions'
 import { CONFIDENCE_WEIGHTS, finalizeAnalytics } from "./analytics"
 import "./index.scss"
 
@@ -17,8 +18,6 @@ const createSessionId = () => (
 )
 
 const ATTRACT_SPACER_ID = 'step-attract-spacer'
-const WATER_SINK_MS = 650
-const WATER_RISE_MS = 800
 
 async function submitAnswersToBackend(payload) {
   const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -39,7 +38,7 @@ async function submitAnswersToBackend(payload) {
   return response.json()
 }
 
-export default function Quiz({ brand, attract, quizId, features = {}, consoleConfig = null, consoleEnabled = true, questions, personalities, answers, setAnswers, analytics, setAnalytics, onActiveQuestionChange = () => {}, onExit = () => {}, onAnalysisCompleteChange = () => {} }) {
+export default function Quiz({ brand, attract, modeSinking = false, quizId, features = {}, consoleConfig = null, consoleEnabled = true, questions, personalities, answers, setAnswers, analytics, setAnalytics, onActiveQuestionChange = () => {}, onExit = () => {}, onAnalysisCompleteChange = () => {} }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [sessionKey, setSessionKey] = useState(0)
   const [sessionId, setSessionId] = useState(() => createSessionId())
@@ -60,18 +59,30 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
   const seenQuestionIdsRef = useRef(new Set())
   const isResettingRef = useRef(false)
   const pendingSubmitTimeoutRef = useRef(null)
+  const submissionGenerationRef = useRef(0)
   const latestAnswersRef = useRef(answers)
   const latestAnalyticsRef = useRef(analytics)
   const questionTypeById = useRef(Object.fromEntries(questions.map(question => [String(question.id), question.type])))
 
   useEffect(() => {
     if (attract) {
+      submissionGenerationRef.current += 1
       clearTimeout(waterTransitionTimerRef.current)
       waterTransitionLockedRef.current = false
       setWaterTransition('')
     }
     return () => clearTimeout(waterTransitionTimerRef.current)
   }, [attract])
+
+  useEffect(() => {
+    if (!modeSinking) {
+      waterTransitionLockedRef.current = false
+      return
+    }
+    clearTimeout(waterTransitionTimerRef.current)
+    waterTransitionLockedRef.current = true
+    setWaterTransition('')
+  }, [modeSinking])
 
   useEffect(() => {
     latestAnswersRef.current = answers
@@ -142,6 +153,19 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
         clearTimeout(pendingSubmitTimeoutRef.current)
         pendingSubmitTimeoutRef.current = null
       }
+      if (waterTransitionsEnabled) {
+        setCurrentStep(0)
+        setSessionKey(prev => prev + 1)
+        setSessionId(createSessionId())
+        seenQuestionIdsRef.current = new Set()
+        setAnalytics({})
+        setSubmissionResult(null)
+        setSubmissionStatus('idle')
+        setVisitedQuestions({})
+        onAnalysisCompleteChange(false)
+        setQuizTransition('')
+        return
+      }
       setQuizTransition('fade-out')
       setTimeout(() => {
         setCurrentStep(0)
@@ -157,9 +181,10 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
         setTimeout(() => setQuizTransition(''), 1500)
       }, 500)
     }
-  }, [attract, setAnalytics, onAnalysisCompleteChange])
+  }, [attract, setAnalytics, onAnalysisCompleteChange, waterTransitionsEnabled])
 
   useEffect(() => () => {
+    submissionGenerationRef.current += 1
     if (pendingSubmitTimeoutRef.current) {
       clearTimeout(pendingSubmitTimeoutRef.current)
     }
@@ -266,7 +291,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
 
   const transitionToStep = (step, onArrive) => {
     if (waterTransitionLockedRef.current || step === currentStep) return
-    if (!waterTransitionsEnabled || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!shouldAnimateWater(brand)) {
       setCurrentStep(step)
       onArrive?.()
       return
@@ -295,6 +320,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
 
   const handleSubmit = async () => {
     if (submissionStatus === 'submitting') return
+    const submissionGeneration = ++submissionGenerationRef.current
 
     setSubmissionStatus('submitting')
     setSubmissionResult(null)
@@ -320,10 +346,12 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
 
     try {
       const result = await submitAnswersToBackend(payload)
+      if (submissionGeneration !== submissionGenerationRef.current) return
       setSubmissionResult(result)
       setSubmissionStatus('submitted')
       console.log('Backend analysis result:', result)
     } catch (error) {
+      if (submissionGeneration !== submissionGenerationRef.current) return
       setSubmissionStatus('error')
       console.error(error)
     }
@@ -342,10 +370,28 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
   }
 
   const handleStartOver = () => {
+    if (waterTransitionsEnabled) {
+      transitionToStep(0, () => {
+        submissionGenerationRef.current += 1
+        clearTimeout(pendingSubmitTimeoutRef.current)
+        pendingSubmitTimeoutRef.current = null
+        setAnswers({})
+        setAnalytics({})
+        setSubmissionResult(null)
+        setSubmissionStatus('idle')
+        onAnalysisCompleteChange(false)
+        setSessionKey(prev => prev + 1)
+        setSessionId(createSessionId())
+        seenQuestionIdsRef.current = new Set()
+        setVisitedQuestions({})
+      })
+      return
+    }
     if (pendingSubmitTimeoutRef.current) {
       clearTimeout(pendingSubmitTimeoutRef.current)
       pendingSubmitTimeoutRef.current = null
     }
+    submissionGenerationRef.current += 1
     setQuizTransition('fade-out')
     isResettingRef.current = true
     setIsResetting(true)
@@ -372,8 +418,7 @@ export default function Quiz({ brand, attract, quizId, features = {}, consoleCon
   return (
     <div
       ref={quizRef}
-      className={`quiz ${consoleEnabled ? '' : 'quiz--full-height'} ${quizTransition} ${isResetting ? 'quiz--hidden' : ''} ${waterTransitionsEnabled ? `quiz--water ${attract ? 'quiz--submerged' : ''} ${waterTransition ? `quiz--${waterTransition}` : ''}` : ''}`}
-      style={waterTransitionsEnabled ? { '--water-sink-duration': `${WATER_SINK_MS}ms`, '--water-rise-duration': `${WATER_RISE_MS}ms` } : undefined}
+      className={`quiz ${consoleEnabled ? '' : 'quiz--full-height'} ${quizTransition} ${isResetting ? 'quiz--hidden' : ''} ${waterTransitionsEnabled ? `quiz--water ${attract ? 'quiz--submerged' : ''} ${modeSinking ? 'quiz--sinking' : waterTransition ? `quiz--${waterTransition}` : ''}` : ''}`}
     >
       <div
         className="quiz-step quiz-step--attract-spacer"

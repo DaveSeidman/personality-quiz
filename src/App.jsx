@@ -4,6 +4,7 @@ import Attract from './components/Attract'
 import Console from './components/Console'
 import Background from './components/Background'
 import useFaceAnalysis from './components/useFaceAnalysis'
+import { shouldAnimateWater, WATER_SINK_MS, WATER_RISE_MS } from './components/waterTransitions'
 import { applyBrandTheme, loadBrandExperience } from './branding'
 import { renderSuperscriptMarks, triggerActivePress } from './components/utils'
 import './index.scss'
@@ -58,6 +59,9 @@ export default function App() {
     error: null,
   })
   const [experienceMode, setExperienceMode] = useState('attract')
+  const [modeSinking, setModeSinking] = useState(false)
+  const modeTransitionTimerRef = useRef(null)
+  const modeTransitionLockedRef = useRef(false)
   const [answers, setAnswers] = useState({})
   const [analytics, setAnalytics] = useState({})
   const [activeQuestionId, setActiveQuestionId] = useState(null)
@@ -110,11 +114,32 @@ export default function App() {
     }
   }, [])
 
+  useEffect(() => () => clearTimeout(modeTransitionTimerRef.current), [])
+
+  const changeExperienceMode = (nextMode, onArrive) => {
+    if (modeTransitionLockedRef.current || nextMode === experienceMode) return
+    const arrive = () => {
+      setExperienceMode(nextMode)
+      setModeSinking(false)
+      modeTransitionLockedRef.current = false
+      onArrive?.()
+    }
+    if (!shouldAnimateWater(experienceState.brand)) {
+      arrive()
+      return
+    }
+    modeTransitionLockedRef.current = true
+    setModeSinking(true)
+    modeTransitionTimerRef.current = setTimeout(arrive, WATER_SINK_MS)
+  }
+
   const activityTimeout = () => {
-    setExperienceMode('attract')
-    setAnswers({})
-    setAnalytics({})
-    setAnalysisComplete(false)
+    changeExperienceMode('attract', () => {
+      setAnswers({})
+      setAnalytics({})
+      setAnalysisComplete(false)
+      setActiveQuestionId(null)
+    })
   }
 
   const resetInactivityTimeout = () => {
@@ -124,12 +149,12 @@ export default function App() {
 
   const startExperience = () => {
     const introEnabled = experienceState.brand?.copy?.intro?.enabled === true
-    setExperienceMode(introEnabled ? 'intro' : 'quiz')
+    changeExperienceMode(introEnabled ? 'intro' : 'quiz')
     resetInactivityTimeout()
   }
 
   const startQuiz = () => {
-    setExperienceMode('quiz')
+    changeExperienceMode('quiz')
     resetInactivityTimeout()
   }
 
@@ -139,12 +164,12 @@ export default function App() {
       activityTimeoutRef.current = null
     }
     activityTimeout()
-    setActiveQuestionId(null)
-    setAnalysisComplete(false)
   }
 
   useEffect(() => {
+    if (experienceMode !== 'attract') resetInactivityTimeout()
     const handleGlobalClick = (event) => {
+      if (modeTransitionLockedRef.current) return
       if (event.target.closest('[data-exit-button="true"]')) {
         return
       }
@@ -190,7 +215,11 @@ export default function App() {
   const { brand, quizData } = experienceState
 
   return (
-    <div className={`app app--brand-${brand.id} app--mode-${experienceMode}`}>
+    <div
+      className={`app app--brand-${brand.id} app--mode-${experienceMode} ${modeSinking ? 'app--water-sinking' : ''}`}
+      inert={modeSinking || undefined}
+      style={brand.id === 'swedish-club' ? { '--water-sink-duration': `${WATER_SINK_MS}ms`, '--water-rise-duration': `${WATER_RISE_MS}ms` } : undefined}
+    >
       <Background
         brand={brand}
         showBackgroundVideo={!(brand.id === 'ideally' && experienceMode === 'quiz')}
@@ -200,6 +229,7 @@ export default function App() {
         <Quiz
           brand={brand}
           attract={quizInactive}
+          modeSinking={modeSinking}
           quizId={quizData.quizId}
           features={quizData.features || {}}
           consoleConfig={quizData.console ?? null}

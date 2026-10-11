@@ -210,3 +210,46 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+.app--brand-swedish-club {
+  .attract {
+    transition: none;
+  }
+
+  .attract-copy {
+    isolation: isolate;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+  }
+
+  .attract:not(.hidden) .attract-copy {
+    animation: water-panel-rise var(--water-rise-duration) ease-out both;
+
+    &::after {
+      animation: water-panel-clear var(--water-rise-duration) ease-out both;
+    }
+  }
+
+  &.app--water-sinking .attract:not(.hidden) .attract-copy {
+    animation: water-panel-depth var(--water-sink-duration) ease-in both;
+
+    &::after {
+      animation: water-panel-flood var(--water-sink-duration) ease-in both;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .attract:not(.hidden) .attract-copy,
+    .attract:not(.hidden) .attract-copy::after {
+      animation: none !important;
+    }
+  }
+}
