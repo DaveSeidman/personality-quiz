@@ -73,6 +73,20 @@
   }
 }
 
+.attract--brand-intenseye {
+  .attract-copy {
+    align-items: center;
+    gap: 1.5vh;
+    text-shadow: none;
+  }
+
+  p {
+    color: var(--app-text);
+    max-width: 56vh;
+    line-height: 1.5;
+  }
+}
+
 .attract--brand-ideally {
   height: 100%;
   justify-content: flex-start;

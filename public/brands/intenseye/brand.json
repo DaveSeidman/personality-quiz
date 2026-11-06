@@ -1,0 +1,41 @@
+{
+  "id": "intenseye",
+  "displayName": "Intenseye",
+  "accentColor": "#FF3D00",
+  "accentContrast": "#000000",
+  "theme": {
+    "quizMode": "light",
+    "backgroundMatrix": true,
+    "logoHeight": "4.5vh",
+    "logoMargin": "2.5vh 3vh",
+    "colors": {
+      "appBg": "#F1F0E5",
+      "text": "#000000",
+      "accent": "#FF3D00",
+      "accentContrast": "#000000",
+      "questionPanel": "rgba(241, 240, 229, 0.90)",
+      "questionPanelBorder": "rgba(0, 0, 0, 0.18)",
+      "questionOption": "rgba(255, 255, 255, 0.72)",
+      "questionSelected": "#FF3D00",
+      "questionSelectedText": "#000000",
+      "questionSelectedBorder": "#000000"
+    }
+  },
+  "assets": {
+    "logo": "/brands/intenseye/images/logo-black.png",
+    "attractVideo": false,
+    "loadingVideo": false
+  },
+  "copy": {
+    "attractTitle": "AI COCKTAIL QUIZ",
+    "attractSubtitle": "Discover your safety leadership type by answering 5 questions.",
+    "intro": {
+      "enabled": false
+    },
+    "resultsTitle": "Analyzing your safety leadership style...",
+    "resultsInstruction": "Hang tight while we analyze your responses.",
+    "loadingTitle": "Finding your safety leadership type...",
+    "loadingBody": "Matching your answers to your leadership style."
+  },
+  "quizUrl": "/brands/intenseye/quiz.json"
+}

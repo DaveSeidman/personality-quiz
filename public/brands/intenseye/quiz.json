@@ -1,0 +1,153 @@
+{
+  "quizId": "intenseye-safety-leadership-v1",
+  "useadvancedTelemetry": false,
+  "features": {
+    "faceAnalysis": false
+  },
+  "console": {
+    "face": false,
+    "signals": true
+  },
+  "personalities": [
+    {
+      "id": "culture-champion",
+      "name": "Culture Champion",
+      "description": "You lead through people. Crews trust you, speak up and own safety because you made it part of who they are.",
+      "color": "#007F66"
+    },
+    {
+      "id": "change-maker",
+      "name": "Change Maker",
+      "description": "You turn risk into action. You find what matters, fix it fast and make sure the fix holds on every shift.",
+      "color": "#FF3D00"
+    },
+    {
+      "id": "visionary",
+      "name": "Visionary",
+      "description": "You see where safety is heading. You use data to spot the next risk and shape how plants are built.",
+      "color": "#2E44E7"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "text": "The board wants your safety story in 60 seconds. You open with:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "A moment from the floor",
+          "personalityId": "culture-champion"
+        },
+        {
+          "id": "B",
+          "content": "A process we overhauled",
+          "personalityId": "change-maker"
+        },
+        {
+          "id": "C",
+          "content": "Where the trend line is heading",
+          "personalityId": "visionary"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "text": "Five new plants join your program. Your first move:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Spend a day with each team",
+          "personalityId": "culture-champion"
+        },
+        {
+          "id": "B",
+          "content": "Prioritize the top problems",
+          "personalityId": "change-maker"
+        },
+        {
+          "id": "C",
+          "content": "Share the long-term vision",
+          "personalityId": "visionary"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "text": "AI flags a new risk trend. You:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Assign an owner today",
+          "personalityId": "change-maker"
+        },
+        {
+          "id": "B",
+          "content": "Dig into the data",
+          "personalityId": "visionary"
+        },
+        {
+          "id": "C",
+          "content": "Ask the crew what changed",
+          "personalityId": "culture-champion"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "text": "When you walk the floor, you look for:",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "The next big risk",
+          "personalityId": "visionary"
+        },
+        {
+          "id": "B",
+          "content": "Fixes that held up",
+          "personalityId": "change-maker"
+        },
+        {
+          "id": "C",
+          "content": "Crews who speak up",
+          "personalityId": "culture-champion"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "text": "What does 2030 look like for you?",
+      "type": "multiple-choice-text",
+      "select": 1,
+      "shuffleAnswers": false,
+      "answers": [
+        {
+          "id": "A",
+          "content": "Safety shapes how plants are built",
+          "personalityId": "visionary"
+        },
+        {
+          "id": "B",
+          "content": "Crews take ownership on every shift",
+          "personalityId": "culture-champion"
+        },
+        {
+          "id": "C",
+          "content": "Incidents never repeat",
+          "personalityId": "change-maker"
+        }
+      ]
+    }
+  ]
+}

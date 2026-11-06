@@ -12,6 +12,16 @@
     background: #2b2b2b;
   }
 
+  &--intenseye {
+    background: var(--app-bg);
+
+    .background-matrix-canvas {
+      filter: invert(1);
+      mix-blend-mode: multiply;
+      opacity: 0.22;
+    }
+  }
+
   &--austria-tourism {
     background: #f7f7f5;
   }
