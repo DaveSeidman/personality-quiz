@@ -13,18 +13,21 @@
       "id": "culture-champion",
       "name": "Culture Champion",
       "description": "You lead through people. Crews trust you, speak up and own safety because you made it part of who they are.",
+      "drinkRecommendation": "Mule in the Village (vodka, lime, cranberry and ginger beer)",
       "color": "#007F66"
     },
     {
       "id": "change-maker",
       "name": "Change Maker",
       "description": "You turn risk into action. You find what matters, fix it fast and make sure the fix holds on every shift.",
+      "drinkRecommendation": "Watermelon Margarita (tequila, lime, orange liqueur, watermelon, agave and a Tajín rim)",
       "color": "#FF3D00"
     },
     {
       "id": "visionary",
       "name": "Visionary",
       "description": "You see where safety is heading. You use data to spot the next risk and shape how plants are built.",
+      "drinkRecommendation": "Blackberry Smash (bourbon, lemon, blackberry, mint syrup and club soda)",
       "color": "#2E44E7"
     }
   ],
